@@ -5,9 +5,8 @@ package("forge")
     set_license("MPL-2.0")
 
     add_urls("https://github.com/projectum-lunare/forge.git")
-    add_versions("master", "master")
     add_versions("v0.1.0", "v0.1.0")
 
-    on_install(function (package)
-        import("package.tools.xmake").install(package)
+    on_test(function (package)
+        assert(package:has_addon())
     end)

@@ -7,9 +7,7 @@ package("greatest")
     add_urls("https://raw.githubusercontent.com/silentbicycle/greatest/$(version)/greatest.h", {version = function (version) return version end})
     add_urls("https://github.com/silentbicycle/greatest.git")
 
-    add_versions("release", "dummy")
     add_versions("v1.5.0", "v1.5.0")
-    add_versions("master", "master")
 
     on_install(function (package)
         local incdir = package:installdir("include/greatest")

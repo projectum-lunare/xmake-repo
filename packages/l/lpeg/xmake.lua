@@ -16,6 +16,9 @@ package("lpeg")
     add_versions("v1.0.2", "48d66576051b6c78388faad09b70493093264588fcd0f258ddaab1cdd4a15ffe")
 
     add_deps("lua")
+    if is_plat("dos", "os2", "wince") then
+        add_deps("forge", {kind = "addon"})
+    end
 
     add_includedirs("include")
 
@@ -81,6 +84,10 @@ int luaopen_lpeg(lua_State *L);
         io.writefile("xmake.lua", format([[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
+            if is_plat("dos", "os2", "wince") then
+                add_addons("forge")
+                includes("@addon/forge/forge.lua")
+            end
 
             target("lpeg")
                 set_kind("%s")
@@ -93,7 +100,11 @@ int luaopen_lpeg(lua_State *L);
                 %s
                 %s
 
-                if is_plat("windows", "mingw") and is_kind("shared") then
+                if is_plat("wince") then
+                    add_rules("forge.evc3", {override = true})
+                elseif is_plat("dos", "os2") then
+                    add_rules("forge.watcom", {override = true})
+                elseif is_plat("windows", "mingw") and is_kind("shared") then
                     add_rules("utils.symbols.export_all")
                     add_shflags("/export:luaopen_lpeg")
                 end
