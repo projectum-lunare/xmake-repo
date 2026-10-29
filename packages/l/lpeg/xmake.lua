@@ -16,9 +16,7 @@ package("lpeg")
     add_versions("v1.0.2", "48d66576051b6c78388faad09b70493093264588fcd0f258ddaab1cdd4a15ffe")
 
     add_deps("lua")
-    if is_plat("dos", "os2", "wince") then
-        add_deps("forge", {kind = "addon"})
-    end
+    add_deps("forge", {kind = "addon"})
 
     add_includedirs("include", "include/lpeg")
 
@@ -37,38 +35,18 @@ package("lpeg")
         local use_32b = package:is_plat("wince", "dos", "os2", "amiga", "atari", "kolibri", "plan9")
                      or package:is_arch("m68k.*", "i386", "x86", "mips.*", "ppc.*", "powerpc", "armv4.*", "armv5.*", "sh.*")
 
-        local luadep = package:dep("lua")
-        local luainfo = luadep and luadep:fetch()
-        local lua_includes = {}
-        if luainfo then
-            for _, inc in ipairs(table.wrap(luainfo.includedirs)) do
-                local inc_norm = inc:gsub("\\", "/")
-                table.insert(lua_includes, format('add_includedirs("%s")', inc_norm))
-                table.insert(lua_includes, format('add_includedirs("%s/lua")', inc_norm))
-            end
-            for _, inc in ipairs(table.wrap(luainfo.sysincludedirs)) do
-                local inc_norm = inc:gsub("\\", "/")
-                table.insert(lua_includes, format('add_sysincludedirs("%s")', inc_norm))
-                table.insert(lua_includes, format('add_sysincludedirs("%s/lua")', inc_norm))
-            end
-        end
-
         io.writefile("xmake.lua", format([[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            if is_plat("dos", "os2", "wince") then
-                add_addons("forge")
-                includes("@addon/forge/forge.lua")
-            end
+            add_addons("forge")
+            includes("@addon/forge/forge.lua")
 
             target("lpeg")
+                add_rules("forge.lua.module")
                 set_kind("%s")
-                set_basename("lpeg")
                 add_files("lpcap.c", "lpcode.c", "lpcset.c", "lpprint.c", "lptree.c", "lpvm.c")
                 add_headerfiles("*.h", {prefixdir = "lpeg"})
                 add_headerfiles("*.h")
-                add_packages("lua")
-                %s
 
                 %s
                 %s
@@ -77,13 +55,13 @@ package("lpeg")
                     add_rules("forge.evc3", {override = true})
                 elseif is_plat("dos", "os2") then
                     add_rules("forge.watcom", {override = true})
-                elseif is_plat("windows", "mingw") and is_kind("shared") then
-                    add_rules("utils.symbols.export_all")
-                    add_shflags("/export:luaopen_lpeg")
                 end
+
+            target("re")
+                add_rules("forge.lua.module")
+                add_files("re.lua")
         ]],
             package:config("shared") and "shared" or "static",
-            table.concat(lua_includes, "\n                "),
             use_c89 and 'add_defines("LUA_USE_C89")' or "",
             use_32b and 'add_defines("LUA_32BITS")' or ""))
 
@@ -93,13 +71,6 @@ package("lpeg")
         end
 
         import("package.tools.xmake").install(package, configs)
-        os.cp("*.h", package:installdir("include"))
-        os.mkdir(package:installdir("share/lua/lpeg"))
-        os.trycp("re.lua", package:installdir("share/lua"))
-        os.trycp("re.lua", package:installdir("share/lua/lpeg"))
-        os.mkdir(package:installdir("lib/lpeg"))
-        os.trycp("re.lua", package:installdir("lib"))
-        os.trycp("re.lua", package:installdir("lib/lpeg"))
     end)
 
     on_test(function (package)
