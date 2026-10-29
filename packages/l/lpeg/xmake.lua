@@ -53,8 +53,6 @@ package("lpeg")
             end
         end
 
-        os.cp(path.join(package:scriptdir(), "port/lpeg.h"), "lpeg.h")
-
         io.writefile("xmake.lua", format([[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
@@ -106,13 +104,8 @@ package("lpeg")
 
     on_test(function (package)
         assert(package:check_csnippets({test = [[
-            #include <lpeg/lpeg.h>
-            void test(void) {
-                luaopen_lpeg(0);
-            }
-        ]]}))
-        assert(package:check_csnippets({test = [[
-            #include <lpeg.h>
+            struct lua_State;
+            int luaopen_lpeg(struct lua_State *L);
             void test(void) {
                 luaopen_lpeg(0);
             }
