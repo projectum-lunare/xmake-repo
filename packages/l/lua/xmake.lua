@@ -38,7 +38,7 @@ package("lua")
     add_configs("32bits",    {description = "Enable 32-bit integers and floats (LUA_32BITS)", type = "boolean"})
     add_configs("no_parser", {description = "Disable compiler/parser (undump bytecode runtime only)", default = false, type = "boolean"})
 
-    add_includedirs("include")
+    add_includedirs("include", "include/lua")
     if not is_plat("windows", "mingw", "wince", "dos", "kolibri", "wasm", "wasi") then
         add_syslinks("dl", "m")
     end
@@ -74,6 +74,8 @@ package("lua")
                 set_basename("lua")
                 add_headerfiles(sourcedir .. "*.h", {prefixdir = "lua"})
                 add_headerfiles(sourcedir .. "lua.hpp", {prefixdir = "lua"})
+                add_headerfiles(sourcedir .. "*.h")
+                add_headerfiles(sourcedir .. "lua.hpp")
                 add_files(sourcedir .. "*.c|lua.c|luac.c|onelua.c%s")
                 add_defines("LUA_COMPAT_5_3")
 
@@ -134,4 +136,5 @@ package("lua")
             os.vrun("lua -e \"print('Projectum Lunare Lua ready!')\"")
         end
         assert(package:has_cfuncs("lua_getinfo", {includes = "lua/lua.h"}))
+        assert(package:has_cfuncs("lua_getinfo", {includes = "lua.h"}))
     end)

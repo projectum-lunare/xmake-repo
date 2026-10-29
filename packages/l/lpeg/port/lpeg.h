@@ -1,7 +1,15 @@
 #ifndef LPEG_H
 #define LPEG_H
 
-#include <lua/lua.h>
+#if defined(__has_include)
+#  if __has_include(<lua/lua.h>)
+#    include <lua/lua.h>
+#  else
+#    include <lua.h>
+#  endif
+#else
+#  include <lua.h>
+#endif
 
 #if defined(__cplusplus)
 extern "C" {

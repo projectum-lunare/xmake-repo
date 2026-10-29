@@ -20,7 +20,7 @@ package("lpeg")
         add_deps("forge", {kind = "addon"})
     end
 
-    add_includedirs("include")
+    add_includedirs("include", "include/lpeg")
 
     on_load(function (package)
         package:addenv("LUA_PATH", "share/lua/?.lua;;")
@@ -68,6 +68,7 @@ package("lpeg")
                 set_basename("lpeg")
                 add_files("lpcap.c", "lpcode.c", "lpcset.c", "lpprint.c", "lptree.c", "lpvm.c")
                 add_headerfiles("*.h", {prefixdir = "lpeg"})
+                add_headerfiles("*.h")
                 add_packages("lua")
                 %s
 
@@ -100,8 +101,13 @@ package("lpeg")
 
     on_test(function (package)
         assert(package:check_csnippets({test = [[
-            #include <lua/lua.h>
             #include <lpeg/lpeg.h>
+            void test(void) {
+                luaopen_lpeg(0);
+            }
+        ]]}))
+        assert(package:check_csnippets({test = [[
+            #include <lpeg.h>
             void test(void) {
                 luaopen_lpeg(0);
             }
