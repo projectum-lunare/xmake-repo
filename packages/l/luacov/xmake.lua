@@ -18,8 +18,8 @@ package("luacov")
 
     on_load(function (package)
         package:addenv("PATH", "bin")
-        package:addenv("LUA_PATH", "share/lua/?.lua;;")
-        package:addenv("LUA_PATH", "share/lua/?/init.lua;;")
+        package:addenv("LUA_PATH", "share/lua/?.lua")
+        package:addenv("LUA_PATH", "share/lua/?/init.lua")
         package:mark_as_pathenv("LUA_PATH")
     end)
 
@@ -40,7 +40,18 @@ package("luacov")
 
     on_test(function (package)
         if not package:is_cross() then
-            os.vrun("lua -e \"local luacov = require('luacov'); assert(luacov)\"")
-            os.vrun("luacov --help")
+            local envs = {}
+            local lua_path = os.getenv("LUA_PATH")
+            if lua_path then
+                if not package:is_plat("windows") and not package:is_plat("mingw") then
+                    lua_path = lua_path:gsub(":", ";")
+                end
+                if not lua_path:endswith(";;") then
+                    lua_path = lua_path .. ";;"
+                end
+                envs.LUA_PATH = lua_path
+            end
+            os.vrunv("lua", {"-e", "local luacov = require('luacov'); assert(luacov)"}, {envs = envs})
+            os.vrunv("luacov", {"--help"}, {envs = envs})
         end
     end)

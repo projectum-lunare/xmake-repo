@@ -21,11 +21,11 @@ package("lpeg")
     add_includedirs("include", "include/lpeg")
 
     on_load(function (package)
-        package:addenv("LUA_PATH", "share/lua/?.lua;;")
+        package:addenv("LUA_PATH", "share/lua/?.lua")
         package:mark_as_pathenv("LUA_PATH")
         if package:config("shared") then
             local ext = package:is_plat("windows", "mingw") and ".dll" or ".so"
-            package:addenv("LUA_CPATH", "lib/?" .. ext .. ";;")
+            package:addenv("LUA_CPATH", "lib/?" .. ext)
             package:mark_as_pathenv("LUA_CPATH")
         end
     end)
