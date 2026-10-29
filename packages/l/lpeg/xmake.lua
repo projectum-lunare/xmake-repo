@@ -19,13 +19,56 @@ package("lpeg")
 
     add_includedirs("include", "include/lpeg")
 
+    on_load(function (package)
+        package:addenv("LUA_PATH", "share/lua/?.lua;;")
+        package:mark_as_pathenv("LUA_PATH")
+        if package:config("shared") then
+            local ext = package:is_plat("windows", "mingw") and ".dll" or ".so"
+            package:addenv("LUA_CPATH", "lib/?" .. ext .. ";;")
+            package:mark_as_pathenv("LUA_CPATH")
+        end
+    end)
+
     on_install(function (package)
         local use_c89 = package:is_plat("wince", "dos", "os2", "amiga", "atari", "kolibri", "plan9")
         local use_32b = package:is_plat("wince", "dos", "os2", "amiga", "atari", "kolibri", "plan9")
                      or package:is_arch("m68k.*", "i386", "x86", "mips.*", "ppc.*", "powerpc", "armv4.*", "armv5.*", "sh.*")
 
+        local luadep = package:dep("lua")
+        local luainfo = luadep and luadep:fetch()
+        local lua_includes = {}
+        if luainfo then
+            for _, inc in ipairs(table.wrap(luainfo.includedirs)) do
+                table.insert(lua_includes, format('add_includedirs("%s")', (inc:gsub("\\", "/"))))
+            end
+            for _, inc in ipairs(table.wrap(luainfo.sysincludedirs)) do
+                table.insert(lua_includes, format('add_sysincludedirs("%s")', (inc:gsub("\\", "/"))))
+            end
+        end
+
+        local lpeg_h = [[
+#ifndef LPEG_H
+#define LPEG_H
+
+#include <lua.h>
+
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
+int luaopen_lpeg(lua_State *L);
+
+#if defined(__cplusplus)
+}
+#endif
+
+#endif
+]]
+        io.writefile("lpeg.h", lpeg_h)
+
         io.writefile("xmake.lua", format([[
             add_rules("mode.release", "mode.debug")
+            add_requires("lua")
 
             target("lpeg")
                 set_kind("%s")
@@ -34,6 +77,7 @@ package("lpeg")
                 add_headerfiles("*.h", {prefixdir = "lpeg"})
                 add_headerfiles("*.h")
                 add_packages("lua")
+                %s
 
                 %s
                 %s
@@ -44,6 +88,7 @@ package("lpeg")
                 end
         ]],
             package:config("shared") and "shared" or "static",
+            table.concat(lua_includes, "\n                "),
             use_c89 and 'add_defines("LUA_USE_C89")' or "",
             use_32b and 'add_defines("LUA_32BITS")' or ""))
 
@@ -53,6 +98,7 @@ package("lpeg")
         end
 
         import("package.tools.xmake").install(package, configs)
+        os.trycp("lpeg.h", package:installdir("include"))
         os.trycp("re.lua", package:installdir("share/lua"))
         os.trycp("re.lua", package:installdir("lib"))
     end)
