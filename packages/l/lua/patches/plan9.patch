@@ -1,0 +1,15 @@
+diff --git a/src/luaconf.h b/src/luaconf.h
+index 33bb580..731e9bf 100644
+--- a/src/luaconf.h
++++ b/src/luaconf.h
+@@ -639,6 +639,10 @@
+ #if defined(LUA_USE_C89) || (defined(HUGE_VAL) && !defined(HUGE_VALF))
+ #undef l_mathop  /* variants not available */
+ #undef lua_str2number
++#if (defined(__plan9__) || defined(_PLAN9_SOURCE) || defined(_PLAN9)) && defined(LUA_32BITS)
++#undef HUGE_VAL
++#define HUGE_VAL 3.402823466e+38
++#endif
+ #define l_mathop(op)		(lua_Number)op  /* no variant */
+ #define lua_str2number(s,p)	((lua_Number)strtod((s), (p)))
+ #endif

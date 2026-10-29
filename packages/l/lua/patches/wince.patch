@@ -1,0 +1,673 @@
+diff --git a/src/compat/wince/assert.h b/src/compat/wince/assert.h
+new file mode 100644
+index 0000000..dab5a83
+--- /dev/null
++++ b/src/compat/wince/assert.h
+@@ -0,0 +1,10 @@
++/*
++ * src/compat/wince/assert.h
++ * ANSI C assert.h compatibility for Windows CE
++ */
++#ifndef _WINCE_ASSERT_H_
++#define _WINCE_ASSERT_H_
++
++#define assert(exp) ((void)0)
++
++#endif /* _WINCE_ASSERT_H_ */
+diff --git a/src/compat/wince/ctype.h b/src/compat/wince/ctype.h
+new file mode 100644
+index 0000000..5a6a546
+--- /dev/null
++++ b/src/compat/wince/ctype.h
+@@ -0,0 +1,30 @@
++/*
++ * src/compat/wince/ctype.h
++ * ANSI C ctype.h compatibility for Windows CE
++ */
++#ifndef _WINCE_CTYPE_H_
++#define _WINCE_CTYPE_H_
++
++#include <stdlib.h>
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++int isalnum(int c);
++int isalpha(int c);
++int iscntrl(int c);
++int isdigit(int c);
++int isgraph(int c);
++int islower(int c);
++int isprint(int c);
++int ispunct(int c);
++int isspace(int c);
++int isupper(int c);
++int isxdigit(int c);
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif /* _WINCE_CTYPE_H_ */
+diff --git a/src/compat/wince/errno.h b/src/compat/wince/errno.h
+new file mode 100644
+index 0000000..89cf417
+--- /dev/null
++++ b/src/compat/wince/errno.h
+@@ -0,0 +1,27 @@
++/*
++ * src/compat/wince/errno.h
++ * ANSI C errno.h compatibility for Windows CE
++ */
++#ifndef _WINCE_ERRNO_H_
++#define _WINCE_ERRNO_H_
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++extern int _wince_errno;
++#undef errno
++#define errno _wince_errno
++
++#define ENOENT 2
++#define ENOMEM 12
++#define EACCES 13
++#define EEXIST 17
++#define EINVAL 22
++#define ERANGE 34
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif /* _WINCE_ERRNO_H_ */
+diff --git a/src/compat/wince/locale.h b/src/compat/wince/locale.h
+new file mode 100644
+index 0000000..8d5c0df
+--- /dev/null
++++ b/src/compat/wince/locale.h
+@@ -0,0 +1,50 @@
++/*
++ * src/compat/wince/locale.h
++ * ANSI C locale.h compatibility for Windows CE
++ */
++#ifndef _WINCE_LOCALE_H_
++#define _WINCE_LOCALE_H_
++
++#define LC_ALL      0
++#define LC_COLLATE  1
++#define LC_CTYPE    2
++#define LC_MONETARY 3
++#define LC_NUMERIC  4
++#define LC_TIME     5
++
++struct lconv {
++    char *decimal_point;
++    char *thousands_sep;
++    char *grouping;
++    char *int_curr_symbol;
++    char *currency_symbol;
++    char *mon_decimal_point;
++    char *mon_thousands_sep;
++    char *mon_grouping;
++    char *positive_sign;
++    char *negative_sign;
++    char int_frac_digits;
++    char frac_digits;
++    char p_cs_precedes;
++    char p_sep_by_space;
++    char n_cs_precedes;
++    char n_sep_by_space;
++    char p_sign_posn;
++    char n_sign_posn;
++};
++
++static char *setlocale(int category, const char *locale)
++{
++    (void)category;
++    (void)locale;
++    return "C";
++}
++
++static struct lconv *localeconv(void)
++{
++    static struct lconv c_locale = {".", "",  "",  "",  "",  "",  "",  "",  "",
++                                    "",  127, 127, 127, 127, 127, 127, 127, 127};
++    return &c_locale;
++}
++
++#endif /* _WINCE_LOCALE_H_ */
+diff --git a/src/compat/wince/signal.h b/src/compat/wince/signal.h
+new file mode 100644
+index 0000000..611da6a
+--- /dev/null
++++ b/src/compat/wince/signal.h
+@@ -0,0 +1,29 @@
++/*
++ * src/compat/wince/signal.h
++ * ANSI C signal.h compatibility for Windows CE
++ */
++#ifndef _WINCE_SIGNAL_H_
++#define _WINCE_SIGNAL_H_
++
++#define SIGINT  2
++#define SIGILL  4
++#define SIGFPE  8
++#define SIGSEGV 11
++#define SIGTERM 15
++#define SIGABRT 22
++
++typedef void (*__sighandler_t)(int);
++#define SIG_DFL ((__sighandler_t)0)
++#define SIG_IGN ((__sighandler_t)1)
++#define SIG_ERR ((__sighandler_t) - 1)
++
++typedef int sig_atomic_t;
++
++static __sighandler_t signal(int sig, __sighandler_t handler)
++{
++    (void)sig;
++    (void)handler;
++    return SIG_DFL;
++}
++
++#endif /* _WINCE_SIGNAL_H_ */
+diff --git a/src/compat/wince/stddef.h b/src/compat/wince/stddef.h
+new file mode 100644
+index 0000000..ec9e307
+--- /dev/null
++++ b/src/compat/wince/stddef.h
+@@ -0,0 +1,31 @@
++/*
++ * src/compat/wince/stddef.h
++ * ANSI C stddef.h compatibility for Microsoft eVC 3.0 on Windows CE
++ */
++#ifndef _WINCE_STDDEF_H_
++#define _WINCE_STDDEF_H_
++
++#ifndef _SIZE_T_DEFINED
++typedef unsigned int size_t;
++#define _SIZE_T_DEFINED
++#endif
++
++#ifndef _PTRDIFF_T_DEFINED
++typedef long ptrdiff_t;
++#define _PTRDIFF_T_DEFINED
++#endif
++
++#ifndef _WCHAR_T_DEFINED
++typedef unsigned short wchar_t;
++#define _WCHAR_T_DEFINED
++#endif
++
++#ifndef NULL
++#define NULL ((void *)0)
++#endif
++
++#ifndef offsetof
++#define offsetof(s, m) ((size_t)&(((s *)0)->m))
++#endif
++
++#endif /* _WINCE_STDDEF_H_ */
+diff --git a/src/compat/wince/stdio.h b/src/compat/wince/stdio.h
+new file mode 100644
+index 0000000..fa19fa2
+--- /dev/null
++++ b/src/compat/wince/stdio.h
+@@ -0,0 +1,52 @@
++/*
++ * src/compat/wince/stdio.h
++ * ANSI C stdio.h compatibility for Microsoft eVC 3.0 on Windows CE
++ */
++#ifndef _WINCE_STDIO_H_
++#define _WINCE_STDIO_H_
++
++#include <../include/stdio.h>
++
++#ifndef BUFSIZ
++#define BUFSIZ 512
++#endif
++
++#ifndef _IOFBF
++#define _IOFBF 0
++#endif
++
++#ifndef _IOLBF
++#define _IOLBF 1
++#endif
++
++#ifndef _IONBF
++#define _IONBF 2
++#endif
++
++#ifndef L_tmpnam
++#define L_tmpnam 16
++#endif
++
++#ifndef snprintf
++#define snprintf _snprintf
++#endif
++
++#ifndef vsnprintf
++#define vsnprintf _vsnprintf
++#endif
++
++char *tmpnam(char *s);
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++void wince_report_error(const char *msg);
++
++#ifdef __cplusplus
++}
++#endif
++
++#define PLATFORM_REPORT_ERROR(msg) wince_report_error(msg)
++
++#endif /* _WINCE_STDIO_H_ */
+diff --git a/src/compat/wince/stdlib.h b/src/compat/wince/stdlib.h
+new file mode 100644
+index 0000000..157be36
+--- /dev/null
++++ b/src/compat/wince/stdlib.h
+@@ -0,0 +1,21 @@
++/*
++ * src/compat/wince/stdlib.h
++ * ANSI C stdlib.h compatibility for Microsoft eVC 3.0 on Windows CE
++ */
++#ifndef _WINCE_STDLIB_H_
++#define _WINCE_STDLIB_H_
++
++#include <../include/stdlib.h>
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++char *getenv(const char *name);
++int system(const char *cmd);
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif /* _WINCE_STDLIB_H_ */
+diff --git a/src/compat/wince/time.h b/src/compat/wince/time.h
+new file mode 100644
+index 0000000..ae78cdd
+--- /dev/null
++++ b/src/compat/wince/time.h
+@@ -0,0 +1,50 @@
++/*
++ * src/compat/wince/time.h
++ * ANSI C time.h compatibility for Windows CE
++ */
++#ifndef _WINCE_TIME_H_
++#define _WINCE_TIME_H_
++
++#include <windows.h>
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++#ifndef _TIME_T_DEFINED
++typedef long time_t;
++#define _TIME_T_DEFINED
++#endif
++
++#ifndef _CLOCK_T_DEFINED
++typedef long clock_t;
++#define _CLOCK_T_DEFINED
++#endif
++
++#ifndef CLOCKS_PER_SEC
++#define CLOCKS_PER_SEC 1000
++#endif
++
++struct tm {
++    int tm_sec;
++    int tm_min;
++    int tm_hour;
++    int tm_mday;
++    int tm_mon;
++    int tm_year;
++    int tm_wday;
++    int tm_yday;
++    int tm_isdst;
++};
++
++time_t time(time_t *timer);
++clock_t clock(void);
++struct tm *gmtime(const time_t *timer);
++struct tm *localtime(const time_t *timer);
++size_t strftime(char *s, size_t max, const char *format, const struct tm *tm);
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif /* _WINCE_TIME_H_ */
+diff --git a/src/compat/wince/wince_crt.c b/src/compat/wince/wince_crt.c
+new file mode 100644
+index 0000000..cf40cf9
+--- /dev/null
++++ b/src/compat/wince/wince_crt.c
+@@ -0,0 +1,262 @@
++/*
++ * src/compat/wince/wince_crt.c
++ * Minimal ANSI C Runtime Compatibility Layer for Windows CE
++ * Targets: HP Jornada 720 (ARM), Casio Cassiopeia A-51 (SH-3), Sigmarion (MIPS)
++ */
++
++#include <windows.h>
++#include "time.h"
++#include "errno.h"
++#include "ctype.h"
++
++/* Global errno instance */
++int _wince_errno = 0;
++
++void abort(void)
++{
++    TerminateProcess(GetCurrentProcess(), 1);
++}
++
++clock_t clock(void)
++{
++    return (clock_t)GetTickCount();
++}
++
++time_t time(time_t *timer)
++{
++    /* Seconds since device boot (monotonic approximation for embedded WinCE) */
++    time_t t = (time_t)(GetTickCount() / 1000);
++    if (timer != NULL) {
++        *timer = t;
++    }
++    return t;
++}
++
++struct tm *localtime(const time_t *timer)
++{
++    static struct tm t;
++    SYSTEMTIME st;
++    (void)timer;
++
++    GetLocalTime(&st);
++    t.tm_sec = st.wSecond;
++    t.tm_min = st.wMinute;
++    t.tm_hour = st.wHour;
++    t.tm_mday = st.wDay;
++    t.tm_mon = st.wMonth - 1;
++    t.tm_year = st.wYear - 1900;
++    t.tm_wday = st.wDayOfWeek;
++    t.tm_yday = 0;
++    t.tm_isdst = 0;
++    return &t;
++}
++
++struct tm *gmtime(const time_t *timer)
++{
++    static struct tm t;
++    SYSTEMTIME st;
++    (void)timer;
++
++    GetSystemTime(&st);
++    t.tm_sec = st.wSecond;
++    t.tm_min = st.wMinute;
++    t.tm_hour = st.wHour;
++    t.tm_mday = st.wDay;
++    t.tm_mon = st.wMonth - 1;
++    t.tm_year = st.wYear - 1900;
++    t.tm_wday = st.wDayOfWeek;
++    t.tm_yday = 0;
++    t.tm_isdst = 0;
++    return &t;
++}
++
++size_t strftime(char *s, size_t max, const char *format, const struct tm *tm)
++{
++    (void)format;
++    (void)tm;
++    if (s != NULL && max > 0) {
++        s[0] = '\0';
++    }
++    return 0;
++}
++
++char *getenv(const char *name)
++{
++    (void)name;
++    return NULL;
++}
++
++int system(const char *cmd)
++{
++    (void)cmd;
++    return -1;
++}
++
++char *strerror(int errnum)
++{
++    (void)errnum;
++    return "Unknown error";
++}
++
++int isspace(int c)
++{
++    return (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\f' || c == '\v');
++}
++
++int isdigit(int c)
++{
++    return (c >= '0' && c <= '9');
++}
++
++int isalpha(int c)
++{
++    return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
++}
++
++int isalnum(int c)
++{
++    return (isalpha(c) || isdigit(c));
++}
++
++int isprint(int c)
++{
++    return (c >= 0x20 && c <= 0x7E);
++}
++
++int isgraph(int c)
++{
++    return (c > 0x20 && c <= 0x7E);
++}
++
++int iscntrl(int c)
++{
++    return ((c >= 0 && c < 0x20) || c == 0x7F);
++}
++
++int ispunct(int c)
++{
++    return (isprint(c) && !isalnum(c) && c != ' ');
++}
++
++int isupper(int c)
++{
++    return (c >= 'A' && c <= 'Z');
++}
++
++int islower(int c)
++{
++    return (c >= 'a' && c <= 'z');
++}
++
++int isxdigit(int c)
++{
++    return (isdigit(c) || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F'));
++}
++
++char *tmpnam(char *s)
++{
++    static char buf[16] = "\\temp.tmp";
++    if (s != NULL) {
++        strcpy(s, "\\temp.tmp");
++        return s;
++    }
++    return buf;
++}
++
++size_t strspn(const char *s, const char *accept)
++{
++    size_t count = 0;
++    while (*s && strchr(accept, *s)) {
++        count++;
++        s++;
++    }
++    return count;
++}
++
++char *strpbrk(const char *s, const char *accept)
++{
++    while (*s) {
++        if (strchr(accept, *s)) {
++            return (char *)s;
++        }
++        s++;
++    }
++    return NULL;
++}
++
++int strcoll(const char *s1, const char *s2)
++{
++    return strcmp(s1, s2);
++}
++
++int remove(const char *filename)
++{
++    WCHAR wpath[MAX_PATH];
++    MultiByteToWideChar(CP_ACP, 0, filename, -1, wpath, MAX_PATH);
++    return DeleteFileW(wpath) ? 0 : -1;
++}
++
++int rename(const char *oldname, const char *newname)
++{
++    WCHAR wold[MAX_PATH];
++    WCHAR wnew[MAX_PATH];
++    MultiByteToWideChar(CP_ACP, 0, oldname, -1, wold, MAX_PATH);
++    MultiByteToWideChar(CP_ACP, 0, newname, -1, wnew, MAX_PATH);
++    return MoveFileW(wold, wnew) ? 0 : -1;
++}
++
++int setvbuf(FILE *stream, char *buf, int mode, size_t size)
++{
++    (void)stream;
++    (void)buf;
++    (void)mode;
++    (void)size;
++    return 0;
++}
++
++FILE *tmpfile(void)
++{
++    return NULL;
++}
++
++FILE *freopen(const char *path, const char *mode, FILE *stream)
++{
++    (void)path;
++    (void)mode;
++    (void)stream;
++    return NULL;
++}
++
++time_t mktime(struct tm *timeptr)
++{
++    (void)timeptr;
++    return (time_t)(GetTickCount() / 1000);
++}
++
++double strtod(const char *nptr, char **endptr)
++{
++    WCHAR wnptr[256];
++    WCHAR *wend = NULL;
++    double val;
++    int len;
++
++    MultiByteToWideChar(CP_ACP, 0, nptr, -1, wnptr, 256);
++    wnptr[255] = L'\0';
++    val = wcstod(wnptr, &wend);
++    if (endptr != NULL) {
++        if (wend != NULL) {
++            len = (int)(wend - wnptr);
++            *endptr = (char *)(nptr + len);
++        } else {
++            *endptr = (char *)nptr;
++        }
++    }
++    return val;
++}
++
++void wince_report_error(const char *msg)
++{
++    WCHAR wmsg[512];
++    MultiByteToWideChar(CP_ACP, 0, msg, -1, wmsg, 512);
++    MessageBoxW(NULL, wmsg, L"dotstar", MB_OK | MB_ICONERROR);
++}
+diff --git a/src/compat/wince/wince_main.c b/src/compat/wince/wince_main.c
+new file mode 100644
+index 0000000..857c57f
+--- /dev/null
++++ b/src/compat/wince/wince_main.c
+@@ -0,0 +1,31 @@
++/*
++ * src/compat/wince/wince_main.c
++ * Windows CE WinMain Entry Point Wrapper
++ * Bridges WinMain(HINSTANCE, ...) to standard ANSI C main(argc, argv)
++ */
++
++#include <windows.h>
++
++int main(int argc, char **argv);
++
++int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd)
++{
++    char cmdline_a[MAX_PATH];
++    char *argv[3];
++    int argc = 1;
++    (void)hInstance;
++    (void)hPrevInstance;
++    (void)nShowCmd;
++
++    argv[0] = "dotstar";
++    argv[1] = NULL;
++    argv[2] = NULL;
++
++    if (lpCmdLine != NULL && lpCmdLine[0] != L'\0') {
++        WideCharToMultiByte(CP_ACP, 0, lpCmdLine, -1, cmdline_a, MAX_PATH, NULL, NULL);
++        argv[1] = cmdline_a;
++        argc = 2;
++    }
++
++    return main(argc, argv);
++}
+diff --git a/src/luaconf.h b/src/luaconf.h
+index 33bb580..642faad 100644
+--- a/src/luaconf.h
++++ b/src/luaconf.h
+@@ -793,6 +793,9 @@
+ ** Local configuration. You can use this space to add your redefinitions
+ ** without modifying the main part of the file.
+ */
++#if defined(_WIN32_WCE) || defined(UNDER_CE)
++#define lua_getlocaledecpoint() '.'
++#endif
+ 
+ 
+ 

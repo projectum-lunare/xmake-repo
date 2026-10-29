@@ -1,0 +1,38 @@
+diff --git a/src/liolib.c b/src/liolib.c
+index c5075f3..9b91d0c 100644
+--- a/src/liolib.c
++++ b/src/liolib.c
+@@ -303,7 +303,11 @@ static int io_popen (lua_State *L) {
+ static int io_tmpfile (lua_State *L) {
+   LStream *p = newfile(L);
+   errno = 0;
++#if defined(__wasi__) || defined(__EMSCRIPTEN__)
++  p->f = NULL;
++#else
+   p->f = tmpfile();
++#endif
+   return (p->f == NULL) ? luaL_fileresult(L, 0, NULL) : 1;
+ }
+ 
+diff --git a/src/luaconf.h b/src/luaconf.h
+index 33bb580..b45b29a 100644
+--- a/src/luaconf.h
++++ b/src/luaconf.h
+@@ -793,6 +793,20 @@
+ ** Local configuration. You can use this space to add your redefinitions
+ ** without modifying the main part of the file.
+ */
++#if defined(__wasi__) || defined(__EMSCRIPTEN__)
++#if !defined(l_signalT)
++#define l_signalT int
++#endif
++#if !defined(LUA_TMPNAMBUFSIZE)
++#define LUA_TMPNAMBUFSIZE 32
++#endif
++#if !defined(lua_tmpnam)
++#define lua_tmpnam(b,e) { (void)(b); (e) = 1; }
++#endif
++#if !defined(l_system)
++#define l_system(cmd) ((void)(cmd), -1)
++#endif
++#endif
