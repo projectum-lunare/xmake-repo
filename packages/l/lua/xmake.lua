@@ -129,6 +129,8 @@ package("lua")
         end
 
         import("package.tools.xmake").install(package, configs)
+        os.cp(sourcedir .. "*.h", package:installdir("include"))
+        os.trycp(sourcedir .. "lua.hpp", package:installdir("include"))
     end)
 
     on_test(function (package)

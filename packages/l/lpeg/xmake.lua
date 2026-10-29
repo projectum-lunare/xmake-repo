@@ -95,8 +95,13 @@ package("lpeg")
         end
 
         import("package.tools.xmake").install(package, configs)
+        os.cp("*.h", package:installdir("include"))
+        os.mkdir(package:installdir("share/lua/lpeg"))
         os.trycp("re.lua", package:installdir("share/lua"))
+        os.trycp("re.lua", package:installdir("share/lua/lpeg"))
+        os.mkdir(package:installdir("lib/lpeg"))
         os.trycp("re.lua", package:installdir("lib"))
+        os.trycp("re.lua", package:installdir("lib/lpeg"))
     end)
 
     on_test(function (package)
