@@ -17,7 +17,7 @@ package("lpeg")
 
     add_deps("lua")
 
-    add_includedirs("include", "include/lpeg")
+    add_includedirs("include")
 
     on_load(function (package)
         package:addenv("LUA_PATH", "share/lua/?.lua;;")
@@ -39,10 +39,14 @@ package("lpeg")
         local lua_includes = {}
         if luainfo then
             for _, inc in ipairs(table.wrap(luainfo.includedirs)) do
-                table.insert(lua_includes, format('add_includedirs("%s")', (inc:gsub("\\", "/"))))
+                local inc_norm = inc:gsub("\\", "/")
+                table.insert(lua_includes, format('add_includedirs("%s")', inc_norm))
+                table.insert(lua_includes, format('add_includedirs("%s/lua")', inc_norm))
             end
             for _, inc in ipairs(table.wrap(luainfo.sysincludedirs)) do
-                table.insert(lua_includes, format('add_sysincludedirs("%s")', (inc:gsub("\\", "/"))))
+                local inc_norm = inc:gsub("\\", "/")
+                table.insert(lua_includes, format('add_sysincludedirs("%s")', inc_norm))
+                table.insert(lua_includes, format('add_sysincludedirs("%s/lua")', inc_norm))
             end
         end
 
@@ -50,7 +54,15 @@ package("lpeg")
 #ifndef LPEG_H
 #define LPEG_H
 
-#include <lua.h>
+#if defined(__has_include)
+#  if __has_include(<lua/lua.h>)
+#    include <lua/lua.h>
+#  else
+#    include <lua.h>
+#  endif
+#else
+#  include <lua/lua.h>
+#endif
 
 #if defined(__cplusplus)
 extern "C" {
@@ -75,7 +87,6 @@ int luaopen_lpeg(lua_State *L);
                 set_basename("lpeg")
                 add_files("lpcap.c", "lpcode.c", "lpcset.c", "lpprint.c", "lptree.c", "lpvm.c")
                 add_headerfiles("*.h", {prefixdir = "lpeg"})
-                add_headerfiles("*.h")
                 add_packages("lua")
                 %s
 
@@ -98,15 +109,14 @@ int luaopen_lpeg(lua_State *L);
         end
 
         import("package.tools.xmake").install(package, configs)
-        os.trycp("lpeg.h", package:installdir("include"))
         os.trycp("re.lua", package:installdir("share/lua"))
         os.trycp("re.lua", package:installdir("lib"))
     end)
 
     on_test(function (package)
         assert(package:check_csnippets({test = [[
-            struct lua_State;
-            int luaopen_lpeg(struct lua_State *L);
+            #include <lua/lua.h>
+            #include <lpeg/lpeg.h>
             void test(void) {
                 luaopen_lpeg(0);
             }
