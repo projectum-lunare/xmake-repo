@@ -14,32 +14,19 @@ package("luacov-reporter-lcov")
     add_versions("v0.1", "a5c0edda950868da6a6177fd8ff2284477b200a1942e3a9fc0af6437c07e8dd5")
 
     add_deps("lua", "luacov")
-
-    on_load(function (package)
-        package:addenv("LUA_PATH", "share/lua/?.lua")
-        package:addenv("LUA_PATH", "share/lua/?/init.lua")
-        package:mark_as_pathenv("LUA_PATH")
-    end)
+    add_deps("forge master", {kind = "addon"})
+    set_kind("library", {headeronly = true})
 
     on_install(function (package)
         io.replace("luacov/reporter/lcov.lua", 'pcall(require "openssl.digest")', 'pcall(require, "openssl.digest")', {plain = true})
-        os.mkdir(package:installdir("share/lua"))
-        os.cp("luacov", package:installdir("share/lua"))
+        io.writefile("xmake.lua", [[
+            target("luacov.reporter.lcov")
+                add_rules("forge.lua.module")
+                add_files("luacov/reporter/lcov.lua")
+        ]])
+        import("@addon.forge.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        if not package:is_cross() then
-            local envs = {}
-            local lua_path = os.getenv("LUA_PATH")
-            if lua_path then
-                if not package:is_plat("windows") and not package:is_plat("mingw") then
-                    lua_path = lua_path:gsub(":", ";")
-                end
-                if not lua_path:endswith(";;") then
-                    lua_path = lua_path .. ";;"
-                end
-                envs.LUA_PATH = lua_path
-            end
-            os.vrunv("lua", {"-e", "local lcov = require('luacov.reporter.lcov'); assert(lcov.LcovReporter)"}, {envs = envs})
-        end
+        import("@addon.forge.lua.module").lua_test(package, "assert(require('luacov.reporter.lcov').LcovReporter)")
     end)

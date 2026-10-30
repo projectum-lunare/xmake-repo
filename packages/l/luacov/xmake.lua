@@ -15,43 +15,26 @@ package("luacov")
     add_versions("v0.15.0", "19ebe0fdd5dd05ab63d5192371dcf272f2c7ccea5366e98fee440a2f30e021d8")
 
     add_deps("lua")
-
-    on_load(function (package)
-        package:addenv("PATH", "bin")
-        package:addenv("LUA_PATH", "share/lua/?.lua")
-        package:addenv("LUA_PATH", "share/lua/?/init.lua")
-        package:mark_as_pathenv("LUA_PATH")
-    end)
+    add_deps("forge master", {kind = "addon"})
+    set_kind("library", {headeronly = true})
+    add_bindirs("bin")
 
     on_install(function (package)
-        os.mkdir(package:installdir("share/lua"))
-        os.cp("src/luacov.lua", package:installdir("share/lua"))
-        os.cp("src/luacov", package:installdir("share/lua"))
+        io.writefile("xmake.lua", [[
+            target("luacov")
+                add_rules("forge.lua.module")
+                add_files("src/**.lua")
 
-        os.mkdir(package:installdir("bin"))
-        os.cp("src/bin/luacov", package:installdir("bin"))
-        local binfile = package:installdir("bin/luacov")
-        if not package:is_plat("windows") then
-            try { function() os.runv("chmod", {"+x", binfile}) end }
-        else
-            io.writefile(package:installdir("bin/luacov.cmd"), "@echo off\r\nlua \"%~dp0\\luacov\" %*\r\n")
-        end
+            target("luacov.bin")
+                add_rules("forge.lua.bin")
+                add_files("src/bin/luacov")
+        ]])
+        import("@addon.forge.lua.module").install_project(package)
     end)
 
     on_test(function (package)
+        import("@addon.forge.lua.module").lua_test(package, "assert(require('luacov'))")
         if not package:is_cross() then
-            local envs = {}
-            local lua_path = os.getenv("LUA_PATH")
-            if lua_path then
-                if not package:is_plat("windows") and not package:is_plat("mingw") then
-                    lua_path = lua_path:gsub(":", ";")
-                end
-                if not lua_path:endswith(";;") then
-                    lua_path = lua_path .. ";;"
-                end
-                envs.LUA_PATH = lua_path
-            end
-            os.vrunv("lua", {"-e", "local luacov = require('luacov'); assert(luacov)"}, {envs = envs})
-            os.vrunv("luacov", {"--help"}, {envs = envs})
+            os.vrunv("luacov", {"--help"})
         end
     end)

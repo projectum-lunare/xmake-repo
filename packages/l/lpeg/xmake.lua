@@ -16,61 +16,23 @@ package("lpeg")
     add_versions("v1.0.2", "48d66576051b6c78388faad09b70493093264588fcd0f258ddaab1cdd4a15ffe")
 
     add_deps("lua")
-    add_deps("forge", {kind = "addon"})
+    add_deps("forge master", {kind = "addon"})
 
     add_includedirs("include", "include/lpeg")
 
-    on_load(function (package)
-        package:addenv("LUA_PATH", "share/lua/?.lua")
-        package:mark_as_pathenv("LUA_PATH")
-        if package:config("shared") then
-            local ext = package:is_plat("windows", "mingw") and ".dll" or ".so"
-            package:addenv("LUA_CPATH", "lib/?" .. ext)
-            package:mark_as_pathenv("LUA_CPATH")
-        end
-    end)
-
     on_install(function (package)
-        local use_c89 = package:is_plat("wince", "dos", "os2", "amiga", "atari", "kolibri", "plan9")
-        local use_32b = package:is_plat("wince", "dos", "os2", "amiga", "atari", "kolibri", "plan9")
-                     or package:is_arch("m68k.*", "i386", "x86", "mips.*", "ppc.*", "powerpc", "armv4.*", "armv5.*", "sh.*")
-
-        io.writefile("xmake.lua", format([[
-            add_rules("mode.release", "mode.debug")
-            add_requires("lua")
-            add_addons("forge")
-            includes("@addon/forge/forge.lua")
-
+        io.writefile("xmake.lua", [[
             target("lpeg")
                 add_rules("forge.lua.module")
-                set_kind("%s")
                 add_files("lpcap.c", "lpcode.c", "lpcset.c", "lpprint.c", "lptree.c", "lpvm.c")
                 add_headerfiles("*.h", {prefixdir = "lpeg"})
                 add_headerfiles("*.h")
 
-                %s
-                %s
-
-                if is_plat("wince") then
-                    add_rules("forge.evc3", {override = true})
-                elseif is_plat("dos", "os2") then
-                    add_rules("forge.watcom", {override = true})
-                end
-
             target("re")
                 add_rules("forge.lua.module")
                 add_files("re.lua")
-        ]],
-            package:config("shared") and "shared" or "static",
-            use_c89 and 'add_defines("LUA_USE_C89")' or "",
-            use_32b and 'add_defines("LUA_32BITS")' or ""))
-
-        local configs = {}
-        if package:config("shared") then
-            configs.kind = "shared"
-        end
-
-        import("package.tools.xmake").install(package, configs)
+        ]])
+        import("@addon.forge.lua.module").install_project(package)
     end)
 
     on_test(function (package)

@@ -31,7 +31,7 @@ package("lua")
     end
 
     if is_plat("dos", "os2", "wince") then
-        add_deps("forge", {kind = "addon"})
+        add_deps("forge master", {kind = "addon"})
     end
 
     add_configs("c89",       {description = "Compile in strict ANSI C89 mode (LUA_USE_C89)", type = "boolean"})
@@ -43,9 +43,7 @@ package("lua")
         add_syslinks("dl", "m")
     end
 
-    on_load(function (package)
-        package:addenv("PATH", "bin")
-    end)
+    add_bindirs("bin")
 
     on_install(function (package)
         local sourcedir = os.isdir("src") and "src/" or ""
