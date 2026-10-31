@@ -260,6 +260,25 @@ target("app")
     add_packages("lua")
 ```
 
+### Building a Standalone Game with LÖVE & Libraries in `xmake.lua`
+```lua
+add_rules("mode.debug", "mode.release")
+
+add_requires("love")
+add_requires("anim8", "bump", "hump", "flux", "tween", "lume")
+add_requires("forge master", {kind = "addon"})
+
+includes("@addon/forge/forge.lua")
+
+target("mygame")
+    add_rules("forge.love")
+    add_packages("love", "anim8", "bump", "hump", "flux", "tween", "lume")
+    add_files("src/main.lua")
+```
+
+- **Dev mode (`xmake run`)**: runs your game interpreting directly from `src/` with automatic package search paths.
+- **Release mode (`xmake -m release`)**: fuses the executable with all game assets and bundled Lua modules into a standalone binary.
+
 ---
 
 ## License
