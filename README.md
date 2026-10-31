@@ -31,6 +31,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 - [Build System & Toolchains (Addons)](#build-system-toolchains-addons)
 - [Runtimes & Core Language](#runtimes-core-language)
 - [OpenResty & NGINX Ecosystem](#openresty-nginx-ecosystem)
+- [Game Engines & Creative Coding](#game-engines--creative-coding)
 - [Languages & Transpilers (Compile-to-Lua)](#languages-transpilers-compile-to-lua)
 - [Parsing, Data Formats & Templates](#parsing-data-formats-templates)
 - [Testing, Code Quality & Documentation](#testing-code-quality-documentation)
@@ -91,6 +92,12 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | [**`lua-resty-websocket`**](packages/l/lua-resty-websocket/xmake.lua) | Lua WebSocket implementation for the ngx_lua module in OpenResty. |
 | [**`lua-tablepool`**](packages/l/lua-tablepool/xmake.lua) | Lua table recycling pools for LuaJIT and OpenResty. |
 | [**`openresty-luajit`**](packages/o/openresty-luajit/xmake.lua) | OpenResty's Branch of LuaJIT 2 with string.buffer, table.new/clear and GC64 support. |
+
+### Game Engines & Creative Coding
+
+| Package | Description |
+| :--- | :--- |
+| [**`love`**](packages/l/love/xmake.lua) | LÖVE is an awesome 2D game framework for Lua. |
 
 ### Languages & Transpilers (Compile-to-Lua)
 
@@ -168,6 +175,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | [**`lualogging`**](packages/l/lualogging/xmake.lua) | A simple API to use logging features in Lua. |
 | [**`luasyslog`**](packages/l/luasyslog/xmake.lua) | Syslog logging addon for LuaLogging and standalone syslog access. |
 | [**`magick`**](packages/m/magick/xmake.lua) | Lua bindings to ImageMagick & GraphicsMagick for LuaJIT using FFI. |
+| [**`openal-soft`**](packages/o/openal-soft/xmake.lua) | A software implementation of the OpenAL 3D audio API. |
 
 ### CLI, Terminal & Text UI
 
