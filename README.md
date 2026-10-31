@@ -28,20 +28,30 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 
 ### Categories
 
-- [Build System & Toolchains (Addons)](#build-system-toolchains-addons)
-- [Runtimes & Core Language](#runtimes-core-language)
-- [OpenResty & NGINX Ecosystem](#openresty-nginx-ecosystem)
-- [Game Engines & Creative Coding](#game-engines--creative-coding)
-  - [Amulet](#amulet)
-  - [LÖVE (Love2D)](#love-love2d)
-- [Languages & Transpilers (Compile-to-Lua)](#languages-transpilers-compile-to-lua)
-- [Parsing, Data Formats & Templates](#parsing-data-formats-templates)
-- [Testing, Code Quality & Documentation](#testing-code-quality-documentation)
-- [Networking, Web & Services](#networking-web-services)
-- [Databases & Storage](#databases-storage)
-- [System, Hardware & Native Bindings](#system-hardware-native-bindings)
-- [CLI, Terminal & Text UI](#cli-terminal-text-ui)
-- [Data Structures, Concurrency & Utilities](#data-structures-concurrency-utilities)
+- [Projectum Lunare Xmake Repository](#projectum-lunare-xmake-repository)
+  - [Adding this Repository](#adding-this-repository)
+  - [Available Packages \& Addons](#available-packages--addons)
+    - [Categories](#categories)
+    - [Build System \& Toolchains (Addons)](#build-system--toolchains-addons)
+    - [Runtimes \& Core Language](#runtimes--core-language)
+    - [OpenResty \& NGINX Ecosystem](#openresty--nginx-ecosystem)
+    - [Game Engines \& Creative Coding](#game-engines--creative-coding)
+      - [LÖVE (Love2D)](#löve-love2d)
+    - [Languages \& Transpilers (Compile-to-Lua)](#languages--transpilers-compile-to-lua)
+    - [Parsing, Data Formats \& Templates](#parsing-data-formats--templates)
+    - [Testing, Code Quality \& Documentation](#testing-code-quality--documentation)
+    - [Networking, Web \& Services](#networking-web--services)
+    - [Databases \& Storage](#databases--storage)
+    - [System, Hardware \& Native Bindings](#system-hardware--native-bindings)
+    - [CLI, Terminal \& Text UI](#cli-terminal--text-ui)
+    - [Data Structures, Concurrency \& Utilities](#data-structures-concurrency--utilities)
+  - [Usage Examples](#usage-examples)
+    - [Installing Forge Addon](#installing-forge-addon)
+    - [Requiring Greatest in `xmake.lua`](#requiring-greatest-in-xmakelua)
+    - [Requiring LPeg in `xmake.lua`](#requiring-lpeg-in-xmakelua)
+    - [Requiring Lua (with Retro \& Embedded Patches) in `xmake.lua`](#requiring-lua-with-retro--embedded-patches-in-xmakelua)
+    - [Building a Standalone Game with LÖVE \& Libraries in `xmake.lua`](#building-a-standalone-game-with-löve--libraries-in-xmakelua)
+  - [License](#license)
 
 ---
 
@@ -96,8 +106,6 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | [**`openresty-luajit`**](packages/o/openresty-luajit/xmake.lua) | OpenResty's Branch of LuaJIT 2 with string.buffer, table.new/clear and GC64 support. |
 
 ### Game Engines & Creative Coding
-
-#### Amulet
 
 | Package | Description |
 | :--- | :--- |
