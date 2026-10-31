@@ -32,6 +32,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 - [Runtimes & Core Language](#runtimes-core-language)
 - [OpenResty & NGINX Ecosystem](#openresty-nginx-ecosystem)
 - [Game Engines & Creative Coding](#game-engines--creative-coding)
+  - [Amulet](#amulet)
   - [LÖVE (Love2D)](#love-love2d)
 - [Languages & Transpilers (Compile-to-Lua)](#languages-transpilers-compile-to-lua)
 - [Parsing, Data Formats & Templates](#parsing-data-formats-templates)
@@ -95,6 +96,12 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | [**`openresty-luajit`**](packages/o/openresty-luajit/xmake.lua) | OpenResty's Branch of LuaJIT 2 with string.buffer, table.new/clear and GC64 support. |
 
 ### Game Engines & Creative Coding
+
+#### Amulet
+
+| Package | Description |
+| :--- | :--- |
+| [**`amulet`**](packages/a/amulet/xmake.lua) | A Lua-based audio/visual game toolkit for small games, rapid prototyping and experimentation. |
 
 #### LÖVE (Love2D)
 
