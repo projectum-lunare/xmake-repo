@@ -7,7 +7,6 @@ package("forge")
     set_description("Projectum Lunare Unified Build, Toolchain & Cross-Compilation Addon")
     set_license("MPL-2.0")
 
-    add_urls("/home/gustavo/Projetos/forge/.git")
     add_urls("https://github.com/projectum-lunare/forge.git")
     add_versions("master", "5c3fe61e20f5c74cec33d0396f48254cdc0a9468")
     add_versions("v0.1.1", "v0.1.1")
