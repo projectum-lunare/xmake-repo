@@ -22,6 +22,10 @@ package("lpeg")
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
+            add_rules("mode.release", "mode.debug")
+            add_requires("lua")
+            includes("@addon/forge/forge.lua")
+
             target("lpeg")
                 add_rules("forge.lua.module")
                 add_files("lpcap.c", "lpcode.c", "lpcset.c", "lpprint.c", "lptree.c", "lpvm.c")
@@ -36,11 +40,15 @@ package("lpeg")
     end)
 
     on_test(function (package)
-        assert(package:check_csnippets({test = [[
-            struct lua_State;
-            int luaopen_lpeg(struct lua_State *L);
-            void test(void) {
-                luaopen_lpeg(0);
-            }
-        ]]}))
+        if package:config("shared") then
+            import("@addon.forge.lua.module").lua_test(package, "assert(require('lpeg'))")
+        else
+            assert(package:check_csnippets({test = [[
+                struct lua_State;
+                int luaopen_lpeg(struct lua_State *L);
+                void test(void) {
+                    luaopen_lpeg(0);
+                }
+            ]]}))
+        end
     end)
