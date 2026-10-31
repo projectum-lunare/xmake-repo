@@ -53,6 +53,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | Package | Description |
 | :--- | :--- |
 | [**`lua`**](packages/l/lua/xmake.lua) | A powerful, efficient, lightweight, embeddable scripting language. |
+| [**`openresty-luajit`**](packages/o/openresty-luajit/xmake.lua) | OpenResty's Branch of LuaJIT 2 with string.buffer, table.new/clear and GC64 support. |
 | [**`elua`**](packages/e/elua/xmake.lua) | Embedded Lua (eLua) offers the full implementation of the Lua language to the embedded world. |
 | [**`luvit`**](packages/l/luvit/xmake.lua) | Asynchronous I/O for Lua - Node.js style APIs for luvi as either a luvi app or library. |
 | [**`lit`**](packages/l/lit/xmake.lua) | The Luvit Invention Toolkit is a luvi app that handles dependencies and luvi builds. |
@@ -82,6 +83,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | [**`lua-resty-upload`**](packages/l/lua-resty-upload/xmake.lua) | Streaming reading and parsing for HTTP file uploading based on ngx_lua cosockets. |
 | [**`lua-resty-websocket`**](packages/l/lua-resty-websocket/xmake.lua) | Lua WebSocket implementation for the ngx_lua module in OpenResty. |
 | [**`lua-tablepool`**](packages/l/lua-tablepool/xmake.lua) | Lua table recycling pools for LuaJIT and OpenResty. |
+| [**`openresty-luajit`**](packages/o/openresty-luajit/xmake.lua) | OpenResty's Branch of LuaJIT 2 with string.buffer, table.new/clear and GC64 support. |
 
 ### Languages & Transpilers (Compile-to-Lua)
 
