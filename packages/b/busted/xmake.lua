@@ -20,7 +20,7 @@ package("busted")
     add_deps("say")
     add_deps("luassert")
     add_deps("penlight")
-    add_deps("mediator_lua")
+    add_deps("mediator-lua")
     if is_plat("windows", "mingw", "linux", "macosx", "bsd", "haiku") then
         add_deps("luasystem", {configs = {shared = true}})
         add_deps("lua-term", {configs = {shared = true}})

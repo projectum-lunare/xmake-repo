@@ -1,8 +1,8 @@
--- Projectum Lunare Xmake Repository - mediator_lua Package
+-- Projectum Lunare Xmake Repository - mediator-lua Package
 -- A mediator pattern implementation for event-driven systems in Lua
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 
-package("mediator_lua")
+package("mediator-lua")
     set_homepage("https://github.com/Olivine-Labs/mediator_lua")
     set_description("A mediator pattern implementation for event-driven systems in Lua.")
     set_license("MIT")
