@@ -23,8 +23,6 @@ package("solo")
     add_includedirs("include", "include/solo")
 
     on_install(function (package)
-        io.gsub("xmake.lua", 'add_addons%("forge master"%)', "")
-        io.gsub("xmake.lua", 'add_repositories%("projectum%-lunare.-"%)', "")
         import("@addon.forge.lua.module").install_project(package)
         os.tryrm(package:installdir("bin"))
     end)
