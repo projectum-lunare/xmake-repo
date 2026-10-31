@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - middleclass Package
+-- Category: Data Structures, Concurrency & Utilities
 -- Object orientation for Lua
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

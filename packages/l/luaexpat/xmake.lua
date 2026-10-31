@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - LuaExpat Package
+-- Category: Parsing, Data Formats & Templates
 -- XML Expat parsing for the Lua language
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - pgmoon Package
+-- Category: Databases & Storage
 -- Pure Lua PostgreSQL client driver
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

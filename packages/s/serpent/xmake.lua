@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - serpent Package
+-- Category: Parsing, Data Formats & Templates
 -- Lua serializer and pretty printer
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

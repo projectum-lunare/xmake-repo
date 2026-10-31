@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - Penlight Package
+-- Category: Data Structures, Concurrency & Utilities
 -- Lua utility libraries loosely based on the Python standard libraries
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - lua-lace Package
+-- Category: Networking, Web & Services
 -- Lua Access Control Engine modelled on Squid's acl syntax
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

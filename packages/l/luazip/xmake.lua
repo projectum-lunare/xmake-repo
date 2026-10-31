@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - LuaZip Package
+-- Category: System, Hardware & Native Bindings
 -- Library for reading files inside zip files
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

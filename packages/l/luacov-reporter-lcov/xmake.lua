@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - LuaCov LCOV Reporter Package
+-- Category: Testing, Code Quality & Documentation
 -- An LCOV reporter for LuaCov to export coverage for Codecov, Coveralls and IDEs
 -- Supported Platforms: All platforms supporting Lua (POSIX, Windows, Vintage, Embedded)
 

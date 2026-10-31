@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - date Package
+-- Category: Data Structures, Concurrency & Utilities
 -- Date & Time module for Lua 5.x
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

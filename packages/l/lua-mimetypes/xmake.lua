@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - lua-mimetypes Package
+-- Category: Networking, Web & Services
 -- A simple library for looking up the MIME types of files
 -- Supported Platforms: All platforms supporting Lua (POSIX, Windows, Vintage, Embedded)
 

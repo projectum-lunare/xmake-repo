@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - cluacov Package
+-- Category: Testing, Code Quality & Documentation
 -- C extensions for LuaCov
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

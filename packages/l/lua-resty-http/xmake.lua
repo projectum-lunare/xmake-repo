@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - lua-resty-http Package
+-- Category: OpenResty & NGINX Ecosystem
 -- Lua HTTP client cosocket driver for OpenResty / ngx_lua
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

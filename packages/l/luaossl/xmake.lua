@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - luaossl Package
+-- Category: Networking, Web & Services
 -- Most comprehensive OpenSSL binding in the Lua universe
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

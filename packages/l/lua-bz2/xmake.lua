@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - lua-bz2 Package
+-- Category: System, Hardware & Native Bindings
 -- A Lua binding to Julian Seward's libbzip2
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

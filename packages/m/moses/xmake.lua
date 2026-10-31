@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - moses Package
+-- Category: Data Structures, Concurrency & Utilities
 -- Utility library for Lua centered around functional programming
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

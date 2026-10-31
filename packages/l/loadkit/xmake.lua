@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - loadkit Package
+-- Category: Data Structures, Concurrency & Utilities
 -- Load arbitrary files within the Lua package path
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

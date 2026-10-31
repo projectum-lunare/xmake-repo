@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - luasystem Package
+-- Category: System, Hardware & Native Bindings
 -- Platform independent system calls for Lua
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - fennel Package
+-- Category: Languages & Transpilers (Compile-to-Lua)
 -- A lisp that compiles to Lua
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - lit Package
+-- Category: Runtimes & Core Language
 -- The Luvit Invention Toolkit (lit) is a package manager and build tool for luvi apps
 -- Supported Platforms: Linux, macOS, Windows
 

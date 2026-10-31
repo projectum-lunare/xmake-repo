@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - lua-resty-jwt Package
+-- Category: OpenResty & NGINX Ecosystem
 -- JWT (JSON Web Tokens) for ngx_lua and LuaJIT
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

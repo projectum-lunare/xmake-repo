@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - wsapi Package
+-- Category: Networking, Web & Services
 -- Lua Web Server API
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

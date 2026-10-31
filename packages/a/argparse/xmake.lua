@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - Argparse Package
+-- Category: CLI, Terminal & Text UI
 -- A feature-rich command line parser for Lua
 -- Supported Platforms: All platforms supporting Lua (POSIX, Windows, Vintage, Embedded)
 

@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - dkjson Package
+-- Category: Parsing, Data Formats & Templates
 -- David Kolf's JSON module for Lua
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - push Package
+-- Category: Data Structures, Concurrency & Utilities
 -- Lua library implementing knockout.js-like observable properties
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

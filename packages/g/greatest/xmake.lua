@@ -1,3 +1,6 @@
+-- Projectum Lunare Xmake Repository - greatest
+-- Category: Testing, Code Quality & Documentation
+
 package("greatest")
     set_kind("library", {headeronly = true})
     set_homepage("https://github.com/silentbicycle/greatest")

@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - Markdown Package
+-- Category: Parsing, Data Formats & Templates
 -- Pure Lua implementation of the Markdown text-to-html markup system
 -- Supported Platforms: All platforms supporting Lua (POSIX, Windows, Vintage, Embedded)
 

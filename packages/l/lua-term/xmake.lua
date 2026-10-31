@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - lua-term Package
+-- Category: CLI, Terminal & Text UI
 -- Terminal manipulation library for Lua
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - copas Package
+-- Category: Networking, Web & Services
 -- Coroutine Oriented Portable Asynchronous Services for Lua
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - MD5 Package
+-- Category: Data Structures, Concurrency & Utilities
 -- Cryptographic facilities for Lua: MD5 and DES56
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

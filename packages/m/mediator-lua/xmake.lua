@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - mediator-lua Package
+-- Category: Data Structures, Concurrency & Utilities
 -- A mediator pattern implementation for event-driven systems in Lua
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

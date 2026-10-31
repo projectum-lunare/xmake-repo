@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - say Package
+-- Category: Testing, Code Quality & Documentation
 -- Simple string key/value store for i18n or any other case where strings need to be stored
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

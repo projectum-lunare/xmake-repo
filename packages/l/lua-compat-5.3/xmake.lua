@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - lua-compat-5.3 Package
+-- Category: Runtimes & Core Language
 -- Compatibility module providing Lua-5.3-style APIs for Lua 5.2 and 5.1
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

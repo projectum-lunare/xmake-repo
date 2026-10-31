@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - luvit Package
+-- Category: Runtimes & Core Language
 -- Asynchronous I/O for Lua (Node.js for Lua)
 -- Supported Platforms: Linux, macOS, Windows
 

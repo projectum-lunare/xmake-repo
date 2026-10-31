@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - eLua Package
+-- Category: Runtimes & Core Language
 -- Embedded Lua - Lua for microcontrollers (host tools, library, and runtime headers)
 -- Supported Platforms: Linux, macOS, BSD, Windows
 

@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - LuaSec Package
+-- Category: Networking, Web & Services
 -- A binding for OpenSSL library to provide TLS/SSL communication over LuaSocket
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

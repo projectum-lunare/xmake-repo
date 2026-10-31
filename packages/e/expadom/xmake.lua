@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - expadom Package
+-- Category: Parsing, Data Formats & Templates
 -- Expat based XML DOM level 2 handling for Lua
 -- Supported Platforms: All platforms supporting Lua (POSIX, Windows, Vintage, Embedded)
 

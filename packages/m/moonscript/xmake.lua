@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - moonscript Package
+-- Category: Languages & Transpilers (Compile-to-Lua)
 -- A programmer friendly language that compiles to Lua
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - Solo Package
+-- Category: System, Hardware & Native Bindings
 -- Physical I/O, System Foundations & Hardware Abstractions (C89 + Lua)
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9
 

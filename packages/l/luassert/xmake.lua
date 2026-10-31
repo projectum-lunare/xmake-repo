@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - luassert Package
+-- Category: Testing, Code Quality & Documentation
 -- Lua assertions extension library
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

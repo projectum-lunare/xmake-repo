@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - lua-cliargs Package
+-- Category: CLI, Terminal & Text UI
 -- A command-line argument parsing module for Lua
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

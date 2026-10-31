@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - lyaml Package
+-- Category: Parsing, Data Formats & Templates
 -- LibYAML binding for Lua
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

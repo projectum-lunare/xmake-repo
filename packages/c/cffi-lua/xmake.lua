@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - cffi-lua Package
+-- Category: System, Hardware & Native Bindings
 -- A portable C FFI for Lua 5.1+, based on libffi
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - luasyslog Package
+-- Category: System, Hardware & Native Bindings
 -- Syslog logging for Lua
 -- Supported Platforms: Linux, macOS, BSD, POSIX
 

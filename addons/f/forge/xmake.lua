@@ -1,3 +1,6 @@
+-- Projectum Lunare Xmake Repository - forge
+-- Category: Build System & Toolchains (Addons)
+
 package("forge")
     set_kind("addon")
     set_homepage("https://github.com/projectum-lunare/forge")

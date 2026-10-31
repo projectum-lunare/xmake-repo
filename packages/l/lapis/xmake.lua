@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - lapis Package
+-- Category: Networking, Web & Services
 -- A web framework for MoonScript and Lua
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

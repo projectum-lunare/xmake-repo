@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - lua-iconv Package
+-- Category: System, Hardware & Native Bindings
 -- Lua binding to the POSIX 'iconv' library
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

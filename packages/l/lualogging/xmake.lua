@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - lualogging Package
+-- Category: System, Hardware & Native Bindings
 -- A simple API to use logging features in Lua
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

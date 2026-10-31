@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - YueScript Package
+-- Category: Languages & Transpilers (Compile-to-Lua)
 -- Yuescript is an expressive, concise language transpiling to Lua (Moonscript dialect)
 -- Supported Platforms: Linux, macOS, BSD, Windows
 

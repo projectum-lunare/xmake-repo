@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - redis-lua Package
+-- Category: Databases & Storage
 -- Pure Lua client library for the Redis key-value storage system
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

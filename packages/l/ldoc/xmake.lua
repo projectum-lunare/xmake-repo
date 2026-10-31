@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - LDoc Package
+-- Category: Testing, Code Quality & Documentation
 -- A Lua Documentation Tool
 -- Supported Platforms: All platforms supporting Lua (POSIX, Windows, Vintage, Embedded)
 

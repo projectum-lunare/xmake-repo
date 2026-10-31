@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - CGILua Package
+-- Category: Networking, Web & Services
 -- Tool for creating dynamic Web pages and manipulating data from Web forms
 -- Supported Platforms: All platforms supporting Lua (POSIX, Windows, Vintage, Embedded)
 

@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - inspect Package
+-- Category: Data Structures, Concurrency & Utilities
 -- Human-readable representation of Lua tables
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

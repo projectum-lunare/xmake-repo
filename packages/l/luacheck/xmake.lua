@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - Luacheck Package
+-- Category: Testing, Code Quality & Documentation
 -- A static analyzer and a linter for Lua
 -- Supported Platforms: All platforms supporting Lua (POSIX, Windows, Vintage, Embedded)
 

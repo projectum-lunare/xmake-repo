@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - lua-cjson Package
+-- Category: OpenResty & NGINX Ecosystem
 -- Fast JSON parsing and encoding support for Lua (OpenResty fork)
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

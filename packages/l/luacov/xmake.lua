@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - LuaCov Package
+-- Category: Testing, Code Quality & Documentation
 -- Simple coverage analysis tool for Lua scripts
 -- Supported Platforms: All platforms supporting Lua (POSIX, Windows, Vintage, Embedded)
 

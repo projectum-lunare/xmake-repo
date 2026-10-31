@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - basexx Package
+-- Category: Data Structures, Concurrency & Utilities
 -- A base2, base16, base32, base64 and base85 library for Lua
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 

@@ -1,4 +1,5 @@
 -- Projectum Lunare Xmake Repository - orbit Package
+-- Category: Networking, Web & Services
 -- MVC Web Development for the Kepler platform
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 
