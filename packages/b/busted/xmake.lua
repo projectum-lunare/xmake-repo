@@ -15,7 +15,7 @@ package("busted")
     add_versions("2.1.2", "445519fa663dbdd21e8a6ecf1609f397d0e2168440e59ee29198ee687321e9a3")
 
     add_deps("lua")
-    add_deps("lua_cliargs")
+    add_deps("lua-cliargs")
     add_deps("dkjson")
     add_deps("say")
     add_deps("luassert")

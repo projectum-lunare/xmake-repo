@@ -1,8 +1,8 @@
--- Projectum Lunare Xmake Repository - lua_cliargs Package
+-- Projectum Lunare Xmake Repository - lua-cliargs Package
 -- A command-line argument parsing module for Lua
 -- Supported Platforms: Linux, macOS, BSD, Windows, WinCE, DOS, OS/2, AmigaOS, Atari ST, KolibriOS, Plan 9, WASM/WASI
 
-package("lua_cliargs")
+package("lua-cliargs")
     set_homepage("https://github.com/lunarmodules/lua_cliargs")
     set_description("A command-line argument parsing module for Lua.")
     set_license("MIT")
