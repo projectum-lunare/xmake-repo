@@ -31,8 +31,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 - [Build System & Toolchains (Addons)](#build-system-toolchains-addons)
 - [Runtimes & Core Language](#runtimes-core-language)
 - [OpenResty & NGINX Ecosystem](#openresty-nginx-ecosystem)
-- [Game Engines & Creative Coding](#game-engines--creative-coding)
-  - [LÖVE (Love2D) Ecosystem & Game Libraries](#love-love2d-ecosystem--game-libraries)
+- [Game Engines & Creative Coding (LÖVE)](#game-engines--creative-coding-love)
 - [Languages & Transpilers (Compile-to-Lua)](#languages-transpilers-compile-to-lua)
 - [Parsing, Data Formats & Templates](#parsing-data-formats-templates)
 - [Testing, Code Quality & Documentation](#testing-code-quality-documentation)
@@ -94,18 +93,11 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | [**`lua-tablepool`**](packages/l/lua-tablepool/xmake.lua) | Lua table recycling pools for LuaJIT and OpenResty. |
 | [**`openresty-luajit`**](packages/o/openresty-luajit/xmake.lua) | OpenResty's Branch of LuaJIT 2 with string.buffer, table.new/clear and GC64 support. |
 
-### Game Engines & Creative Coding
-
-#### LÖVE (Love2D) Core & Framework
+### Game Engines & Creative Coding (LÖVE)
 
 | Package | Description |
 | :--- | :--- |
 | [**`love`**](packages/l/love/xmake.lua) | LÖVE is an awesome 2D game framework for Lua (supports both LuaJIT and PUC-Rio Lua 5.1). |
-
-#### LÖVE (Love2D) Ecosystem & Game Libraries
-
-| Package | Description |
-| :--- | :--- |
 | [**`anim8`**](packages/a/anim8/xmake.lua) | Grid-based 2D sprite animation library for LÖVE. |
 | [**`bump`**](packages/b/bump/xmake.lua) | Fast, simple AABB (axis-aligned bounding box) 2D collision detection and resolution library. |
 | [**`flux`**](packages/f/flux/xmake.lua) | Fast, lightweight tweening library for Lua. |
