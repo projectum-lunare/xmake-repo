@@ -24,7 +24,8 @@ package("fennel")
             lua_prog = "lua"
         end
 
-        os.vrunv("make", {"LUA=" .. lua_prog, "build"})
+        local configs = {"build", LUA = lua_prog}
+        import("package.tools.make").build(package, configs)
 
         os.mkdir("bin")
         os.cp("fennel", "bin/fennel")
