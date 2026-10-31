@@ -70,6 +70,7 @@ package("lua")
             target("lualib")
                 set_kind("%s")
                 set_basename("lua")
+                add_cxflags("-fvisibility=default", {force = true})
                 add_headerfiles(sourcedir .. "*.h", {prefixdir = "lua"})
                 add_headerfiles(sourcedir .. "lua.hpp", {prefixdir = "lua"})
                 add_headerfiles(sourcedir .. "*.h")
@@ -109,6 +110,15 @@ package("lua")
                 set_kind("binary")
                 add_files(sourcedir .. "lua.c")
                 add_deps("lualib")
+                if is_plat("linux", "bsd", "cross") then
+                    add_ldflags("-Wl,-E")
+                    add_rpathdirs("$ORIGIN/../lib")
+                    if not is_kind("shared") then
+                        add_ldflags("-Wl,--whole-archive", "-llua", "-Wl,--no-whole-archive")
+                    end
+                elseif is_plat("macosx") then
+                    add_rpathdirs("@executable_path/../lib")
+                end
                 if not is_plat("windows", "mingw", "wince", "dos", "kolibri", "wasm", "wasi") then
                     add_syslinks("dl")
                 end
