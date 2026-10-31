@@ -6,7 +6,7 @@ package("forge")
 
     add_urls("/home/gustavo/Projetos/forge/.git")
     add_urls("https://github.com/projectum-lunare/forge.git")
-    add_versions("master", "e174edd1f41df557624b99f52823a643837609ae")
+    add_versions("master", "5c3fe61e20f5c74cec33d0396f48254cdc0a9468")
     add_versions("v0.1.1", "v0.1.1")
     add_versions("v0.1.0", "v0.1.0")
 
