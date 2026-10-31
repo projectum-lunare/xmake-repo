@@ -31,7 +31,8 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 - [Build System & Toolchains (Addons)](#build-system-toolchains-addons)
 - [Runtimes & Core Language](#runtimes-core-language)
 - [OpenResty & NGINX Ecosystem](#openresty-nginx-ecosystem)
-- [Game Engines & Creative Coding (LÖVE)](#game-engines--creative-coding-love)
+- [Game Engines & Creative Coding](#game-engines--creative-coding)
+  - [LÖVE (Love2D)](#love-love2d)
 - [Languages & Transpilers (Compile-to-Lua)](#languages-transpilers-compile-to-lua)
 - [Parsing, Data Formats & Templates](#parsing-data-formats-templates)
 - [Testing, Code Quality & Documentation](#testing-code-quality-documentation)
@@ -93,7 +94,9 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | [**`lua-tablepool`**](packages/l/lua-tablepool/xmake.lua) | Lua table recycling pools for LuaJIT and OpenResty. |
 | [**`openresty-luajit`**](packages/o/openresty-luajit/xmake.lua) | OpenResty's Branch of LuaJIT 2 with string.buffer, table.new/clear and GC64 support. |
 
-### Game Engines & Creative Coding (LÖVE)
+### Game Engines & Creative Coding
+
+#### LÖVE (Love2D)
 
 | Package | Description |
 | :--- | :--- |
