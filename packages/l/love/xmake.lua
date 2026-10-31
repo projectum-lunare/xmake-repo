@@ -15,9 +15,12 @@ package("love")
         add_extsources("brew::love")
     end
 
+    add_configs("lua", {description = "Select Lua implementation.", default = "luajit", values = {"luajit", "lua"}})
+    add_configs("luajit", {description = "Use LuaJIT instead of PUC Lua.", default = true, type = "boolean"})
+    add_configs("luaversion", {description = "PUC Lua version to use (e.g. '5.1', '5.4').", default = "5.1", type = "string"})
     add_configs("mpg123", {description = "Enable mpg123 mp3 support.", default = true, type = "boolean"})
 
-    add_deps("libsdl2", "luajit", "freetype", "openal-soft", "zlib", "libmodplug", "libvorbis", "libogg", "theora")
+    add_deps("libsdl2", "freetype", "openal-soft", "zlib", "libmodplug", "libvorbis", "libogg", "theora")
 
     on_load(function (package)
         package:addenv("PATH", "bin")
@@ -29,14 +32,42 @@ package("love")
         if package:config("mpg123") then
             package:add("deps", "mpg123")
         end
+
+        local use_luajit = true
+        if package:config("luajit") == false or package:config("lua") == "lua" then
+            use_luajit = false
+        end
+
+        if use_luajit then
+            package:add("deps", "luajit")
+        else
+            local luaversion = package:config("luaversion") or "5.1"
+            if luaversion == "5.1" then
+                package:add("deps", "lua 5.1.5")
+            elseif luaversion == "5.2" then
+                package:add("deps", "lua 5.2.4")
+            elseif luaversion == "5.3" then
+                package:add("deps", "lua 5.3.6")
+            elseif luaversion == "5.4" then
+                package:add("deps", "lua 5.4.8")
+            else
+                package:add("deps", "lua " .. luaversion)
+            end
+        end
     end)
 
     on_install("linux", "macosx", "bsd", function (package)
+        local use_luajit = true
+        if package:config("luajit") == false or package:config("lua") == "lua" then
+            use_luajit = false
+        end
+
+        local luaversion = package:config("luaversion") or "5.1"
         local configs = {
             "--bindir=" .. package:installdir("bin"),
             "--libdir=" .. package:installdir("lib"),
-            "--with-lua=luajit",
-            "--with-luaversion=5.1",
+            "--with-lua=" .. (use_luajit and "luajit" or "lua"),
+            "--with-luaversion=" .. (use_luajit and "5.1" or luaversion),
         }
 
         if package:config("shared") then
@@ -81,13 +112,34 @@ Cflags: -I${includedir}
             io.writefile(path.join(local_pkgconfig, "theoradec.pc"), pc_content)
         end
 
+        local lua = package:dep("lua")
+        if lua then
+            local lua_dir = lua:installdir()
+            local ver = tostring(lua:version() or luaversion)
+            local pc_content = string.format([[prefix=%s
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: Lua
+Description: Lua language engine
+Version: %s
+Libs: -L${libdir} -llua -ldl -lm
+Cflags: -I${includedir} -I${includedir}/lua
+]], lua_dir, ver)
+            io.writefile(path.join(local_pkgconfig, "lua.pc"), pc_content)
+            io.writefile(path.join(local_pkgconfig, "lua" .. luaversion .. ".pc"), pc_content)
+            local clean_ver = luaversion:gsub("%.", "")
+            io.writefile(path.join(local_pkgconfig, "lua" .. clean_ver .. ".pc"), pc_content)
+        end
+
         if envs.PKG_CONFIG_PATH and envs.PKG_CONFIG_PATH ~= "" then
             envs.PKG_CONFIG_PATH = local_pkgconfig .. ":" .. envs.PKG_CONFIG_PATH
         else
             envs.PKG_CONFIG_PATH = local_pkgconfig
         end
 
-        envs.LIBS = (envs.LIBS and (envs.LIBS .. " ") or "") .. "-lvorbis -logg"
+        envs.LIBS = (envs.LIBS and (envs.LIBS .. " ") or "") .. "-lvorbis -logg -ldl -lm"
 
         autoconf.install(package, configs, {envs = envs})
     end)
