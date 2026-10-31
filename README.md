@@ -64,8 +64,24 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | Package | Description |
 | :--- | :--- |
 | [**`lua-cjson`**](packages/l/lua-cjson/xmake.lua) | A fast JSON encoding/parsing module for Lua (OpenResty fork). |
+| [**`lua-resty-cookie`**](packages/l/lua-resty-cookie/xmake.lua) | HTTP cookie manipulation for OpenResty/ngx_lua. |
+| [**`lua-resty-core`**](packages/l/lua-resty-core/xmake.lua) | New FFI-based Lua API for the ngx_lua module. |
+| [**`lua-resty-dns`**](packages/l/lua-resty-dns/xmake.lua) | DNS resolver for the OpenResty / ngx_lua cosocket API. |
 | [**`lua-resty-http`**](packages/l/lua-resty-http/xmake.lua) | Lua HTTP client cosocket driver for OpenResty / ngx_lua. |
 | [**`lua-resty-jwt`**](packages/l/lua-resty-jwt/xmake.lua) | JWT (JSON Web Tokens) for ngx_lua and LuaJIT. |
+| [**`lua-resty-limit-traffic`**](packages/l/lua-resty-limit-traffic/xmake.lua) | Lua library to limit and traffic shape in OpenResty/ngx_lua. |
+| [**`lua-resty-lock`**](packages/l/lua-resty-lock/xmake.lua) | Simple nonblocking mutex lock for OpenResty based on shared memory. |
+| [**`lua-resty-lrucache`**](packages/l/lua-resty-lrucache/xmake.lua) | Lua-land LRU cache based on the LuaJIT FFI. |
+| [**`lua-resty-memcached`**](packages/l/lua-resty-memcached/xmake.lua) | Lua memcached client driver for the ngx_lua based on the cosocket API. |
+| [**`lua-resty-mysql`**](packages/l/lua-resty-mysql/xmake.lua) | Nonblocking Lua MySQL driver library for OpenResty. |
+| [**`lua-resty-redis`**](packages/l/lua-resty-redis/xmake.lua) | Lua Redis client driver for the ngx_lua based on the cosocket API. |
+| [**`lua-resty-session`**](packages/l/lua-resty-session/xmake.lua) | Session library for OpenResty - Flexible and secure sessions. |
+| [**`lua-resty-shell`**](packages/l/lua-resty-shell/xmake.lua) | Lua module for nonblocking system shell command executions in OpenResty. |
+| [**`lua-resty-signal`**](packages/l/lua-resty-signal/xmake.lua) | POSIX signal library for OpenResty. |
+| [**`lua-resty-string`**](packages/l/lua-resty-string/xmake.lua) | String utilities and common hash functions for OpenResty. |
+| [**`lua-resty-upload`**](packages/l/lua-resty-upload/xmake.lua) | Streaming reading and parsing for HTTP file uploading based on ngx_lua cosockets. |
+| [**`lua-resty-websocket`**](packages/l/lua-resty-websocket/xmake.lua) | Lua WebSocket implementation for the ngx_lua module in OpenResty. |
+| [**`lua-tablepool`**](packages/l/lua-tablepool/xmake.lua) | Lua table recycling pools for LuaJIT and OpenResty. |
 
 ### Languages & Transpilers (Compile-to-Lua)
 
