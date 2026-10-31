@@ -107,11 +107,11 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | Package | Description |
 | :--- | :--- |
 | [**`anim8`**](packages/a/anim8/xmake.lua) | Grid-based 2D sprite animation library for LÖVE. |
-| [**`bump`**](packages/b/bump/xmake.lua) / [**`bump.lua`**](packages/b/bump.lua/xmake.lua) | Fast, simple AABB (axis-aligned bounding box) 2D collision detection and resolution library. |
+| [**`bump`**](packages/b/bump/xmake.lua) | Fast, simple AABB (axis-aligned bounding box) 2D collision detection and resolution library. |
 | [**`flux`**](packages/f/flux/xmake.lua) | Fast, lightweight tweening library for Lua. |
 | [**`hump`**](packages/h/hump/xmake.lua) | Lightweight game development utilities for LÖVE (camera, timer, vector, gamestate, class, signal). |
 | [**`lume`**](packages/l/lume/xmake.lua) | Essential math, table and functional utilities for gamedev in Lua. |
-| [**`tween`**](packages/t/tween/xmake.lua) / [**`tween.lua`**](packages/t/tween.lua/xmake.lua) | Small tweening and easing library for Lua with custom interpolation functions. |
+| [**`tween`**](packages/t/tween/xmake.lua) | Small tweening and easing library for Lua with custom interpolation functions. |
 
 ### Languages & Transpilers (Compile-to-Lua)
 
