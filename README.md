@@ -32,6 +32,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 - [Runtimes & Core Language](#runtimes-core-language)
 - [OpenResty & NGINX Ecosystem](#openresty-nginx-ecosystem)
 - [Game Engines & Creative Coding](#game-engines--creative-coding)
+  - [LÖVE (Love2D) Ecosystem & Game Libraries](#love-love2d-ecosystem--game-libraries)
 - [Languages & Transpilers (Compile-to-Lua)](#languages-transpilers-compile-to-lua)
 - [Parsing, Data Formats & Templates](#parsing-data-formats-templates)
 - [Testing, Code Quality & Documentation](#testing-code-quality-documentation)
@@ -95,9 +96,22 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 
 ### Game Engines & Creative Coding
 
+#### LÖVE (Love2D) Core & Framework
+
 | Package | Description |
 | :--- | :--- |
-| [**`love`**](packages/l/love/xmake.lua) | LÖVE is an awesome 2D game framework for Lua. |
+| [**`love`**](packages/l/love/xmake.lua) | LÖVE is an awesome 2D game framework for Lua (supports both LuaJIT and PUC-Rio Lua 5.1). |
+
+#### LÖVE (Love2D) Ecosystem & Game Libraries
+
+| Package | Description |
+| :--- | :--- |
+| [**`anim8`**](packages/a/anim8/xmake.lua) | Grid-based 2D sprite animation library for LÖVE. |
+| [**`bump`**](packages/b/bump/xmake.lua) / [**`bump.lua`**](packages/b/bump.lua/xmake.lua) | Fast, simple AABB (axis-aligned bounding box) 2D collision detection and resolution library. |
+| [**`flux`**](packages/f/flux/xmake.lua) | Fast, lightweight tweening library for Lua. |
+| [**`hump`**](packages/h/hump/xmake.lua) | Lightweight game development utilities for LÖVE (camera, timer, vector, gamestate, class, signal). |
+| [**`lume`**](packages/l/lume/xmake.lua) | Essential math, table and functional utilities for gamedev in Lua. |
+| [**`tween`**](packages/t/tween/xmake.lua) / [**`tween.lua`**](packages/t/tween.lua/xmake.lua) | Small tweening and easing library for Lua with custom interpolation functions. |
 
 ### Languages & Transpilers (Compile-to-Lua)
 
