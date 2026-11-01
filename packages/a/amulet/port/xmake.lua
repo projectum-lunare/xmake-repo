@@ -80,6 +80,14 @@ target("amulet")
     end
 
     on_load(function (target)
+        local function replace_first(str, target_str, replacement)
+            local p1, p2 = str:find(target_str, 1, true)
+            if p1 then
+                return str:sub(1, p1 - 1) .. replacement .. str:sub(p2 + 1)
+            end
+            return str
+        end
+
         -- 1. Apply preload & custom init hook patches if not already patched
         local util_file = "src/am_lua_util.cpp"
         if os.isfile(util_file) then
@@ -99,9 +107,11 @@ target("amulet")
                 lua_pushvalue(L, 1);
                 lua_call(L, 1, 1);
                 // Save returned module in AM_MODULE_TABLE
+                lua_rawgeti(L, LUA_REGISTRYINDEX, AM_MODULE_TABLE);
                 lua_pushvalue(L, 1);
-                lua_pushvalue(L, -2);
-                lua_rawset(L, -5);
+                lua_pushvalue(L, -3);
+                lua_rawset(L, -3);
+                lua_pop(L, 1);
                 lua_insert(L, 1);
                 lua_settop(L, 1);
                 return 1;
@@ -113,10 +123,8 @@ target("amulet")
     lua_pop(L, 1);
 
     // create exports table and add to module table:]]
-                if content:find(target_str, 1, true) then
-                    content = content:gsub(target_str, replacement_str, 1)
-                    io.writefile(util_file, content)
-                end
+                content = replace_first(content, target_str, replacement_str)
+                io.writefile(util_file, content)
             end
         end
 
@@ -138,24 +146,12 @@ void am_set_custom_init_hook(am_engine_init_hook_t hook) {
 
 am_engine *am_init_engine(bool worker, int argc, char** argv) {]]
 
-                content = content:gsub("am_engine %*am_init_engine%(bool worker, int argc, char%*%* argv%) %{", hook_decl, 1)
+                content = replace_first(content, "am_engine *am_init_engine(bool worker, int argc, char** argv) {", hook_decl)
 
-                local hook_call = [[    if (!run_embedded_scripts(L, worker)) {
-        lua_close(L);
-        return NULL;
-    }
-    if (am_custom_engine_init_hook) {
-        am_custom_engine_init_hook(L);
-    }
-    return eng;]]
+                local old_call = "    if (!run_embedded_scripts(L, worker)) {\n        lua_close(L);\n        return NULL;\n    }\n    return eng;"
+                local hook_call = "    if (!run_embedded_scripts(L, worker)) {\n        lua_close(L);\n        return NULL;\n    }\n    if (am_custom_engine_init_hook) {\n        am_custom_engine_init_hook(L);\n    }\n    return eng;"
 
-                local old_call = [[    if (!run_embedded_scripts(L, worker)) {
-        lua_close(L);
-        return NULL;
-    }
-    return eng;]]
-
-                content = content:gsub(old_call, hook_call, 1)
+                content = replace_first(content, old_call, hook_call)
                 io.writefile(engine_cpp, content)
             end
         end
