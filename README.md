@@ -200,6 +200,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | [**`luasyslog`**](packages/l/luasyslog/xmake.lua) | Syslog logging addon for LuaLogging and standalone syslog access. |
 | [**`magick`**](packages/m/magick/xmake.lua) | Lua bindings to ImageMagick & GraphicsMagick for LuaJIT using FFI. |
 | [**`openal-soft`**](packages/o/openal-soft/xmake.lua) | A software implementation of the OpenAL 3D audio API. |
+| [**`im`**](packages/i/im/xmake.lua) | Image Representation, Storage, Capture and Processing Toolkit (Tecgraf/PUC-Rio). |
 
 ### CLI, Terminal & Text UI
 
