@@ -23,6 +23,12 @@ package("amulet")
     end
 
     on_load(function (package)
+        import("@addon.forge.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            version = "5.1",
+            default = "lua",
+        })
+
         package:addenv("PATH", "bin")
         if package:is_plat("linux") then
             package:add("defines", package:is_arch("x86_64") and "AM_LINUX64" or "AM_LINUX32")
@@ -34,8 +40,11 @@ package("amulet")
     end)
 
     on_install("linux", "macosx", function (package)
+        local configs = {}
+        local rt = package:config("runtime") or "lua"
+        table.insert(configs, "--runtime=" .. rt)
         os.cp(path.join(os.scriptdir(), "port", "xmake.lua"), "xmake.lua")
-        import("package.tools.xmake").install(package)
+        import("package.tools.xmake").install(package, configs)
     end)
 
     on_test(function (package)

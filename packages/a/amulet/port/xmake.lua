@@ -1,10 +1,21 @@
+option("runtime")
+    set_default("lua")
+    set_values("lua", "luajit")
+    set_description("Lua runtime implementation (lua 5.1 or luajit)")
+
 add_rules("mode.release", "mode.debug")
 
 add_requires("libsdl2", "freetype")
+if has_config("runtime") and get_config("runtime") == "luajit" then
+    add_requires("luajit")
+end
 
 target("amulet")
     set_kind("static")
     add_packages("libsdl2", "freetype")
+    if has_config("runtime") and get_config("runtime") == "luajit" then
+        add_packages("luajit")
+    end
 
     add_includedirs(
         "src",
@@ -12,18 +23,13 @@ target("amulet")
         "third_party/stb",
         "third_party/kiss_fft130",
         "third_party/tinymt-1.0.3",
-        "third_party/simpleopt",
-        "third_party/lua-5.1.5/src"
+        "third_party/simpleopt"
     )
 
     add_headerfiles(
         "src/amulet.h",
         "src/am_engine.h",
         "src/c99.h",
-        "third_party/lua-5.1.5/src/(lua.h)",
-        "third_party/lua-5.1.5/src/(luaconf.h)",
-        "third_party/lua-5.1.5/src/(lauxlib.h)",
-        "third_party/lua-5.1.5/src/(lualib.h)",
         "third_party/stb/(**.h)",
         "third_party/kiss_fft130/(**.h)",
         "third_party/tinymt-1.0.3/(**.h)",
@@ -32,6 +38,18 @@ target("amulet")
         "third_party/glm-0.9.7.1/(glm/**.inl)",
         "third_party/glm-0.9.7.1/(glm/**.h)"
     )
+
+    if not has_config("runtime") or get_config("runtime") ~= "luajit" then
+        add_includedirs("third_party/lua-5.1.5/src")
+        add_headerfiles(
+            "third_party/lua-5.1.5/src/(lua.h)",
+            "third_party/lua-5.1.5/src/(luaconf.h)",
+            "third_party/lua-5.1.5/src/(lauxlib.h)",
+            "third_party/lua-5.1.5/src/(lualib.h)"
+        )
+        -- Bundled Lua 5.1 runtime
+        add_files("third_party/lua-5.1.5/src/*.c|lua.c|luac.c|print.c")
+    end
 
     if is_plat("linux") then
         if is_arch("x86_64") then
@@ -53,9 +71,6 @@ target("amulet")
 
     add_defines("AM_LUA51")
     add_defines("main=am_main")
-
-    -- Bundled Lua 5.1 runtime
-    add_files("third_party/lua-5.1.5/src/*.c|lua.c|luac.c|print.c")
 
     -- Third-party components
     add_files(
@@ -278,7 +293,13 @@ target("amulet_bin")
     set_basename("amulet")
     add_deps("amulet")
     add_packages("libsdl2", "freetype")
-    add_includedirs("src", "third_party/lua-5.1.5/src")
+    if has_config("runtime") and get_config("runtime") == "luajit" then
+        add_packages("luajit")
+    end
+    add_includedirs("src")
+    if not has_config("runtime") or get_config("runtime") ~= "luajit" then
+        add_includedirs("third_party/lua-5.1.5/src")
+    end
     if is_plat("linux", "macosx", "bsd") then
         add_syslinks("GL", "dl", "m", "pthread")
     end
