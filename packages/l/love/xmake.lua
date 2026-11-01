@@ -9,12 +9,6 @@ package("love")
     add_versions("11.4", "e32feecaf5f4f210242a4b5f26cdf9ce9014bfde18d51286f643bb7fe51f5369")
     add_versions("11.3", "649f0db7750ca121e4de7b60208703661052356df35f4cfad490b1ba14dd1455")
 
-    if is_plat("linux") then
-        add_extsources("pacman::love", "apt::love")
-    elseif is_plat("macosx") then
-        add_extsources("brew::love")
-    end
-
     add_configs("mpg123", {description = "Enable mpg123 mp3 support.", default = true, type = "boolean"})
 
     add_deps("libsdl2", "freetype", "openal-soft", "zlib", "libmodplug", "libvorbis", "libogg", "theora")
