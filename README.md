@@ -37,7 +37,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
     - [OpenResty \& NGINX Ecosystem](#openresty--nginx-ecosystem)
     - [Game Engines \& Creative Coding](#game-engines--creative-coding)
       - [LÖVE (Love2D)](#löve-love2d)
-    - [Languages \& Transpilers (Compile-to-Lua)](#languages--transpilers-compile-to-lua)
+    - [Languages \& Transpilers](#languages--transpilers)
     - [Parsing, Data Formats \& Templates](#parsing-data-formats--templates)
     - [Testing, Code Quality \& Documentation](#testing-code-quality--documentation)
     - [Networking, Web \& Services](#networking-web--services)
@@ -51,6 +51,8 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
     - [Requiring LPeg in `xmake.lua`](#requiring-lpeg-in-xmakelua)
     - [Requiring Lua (with Retro \& Embedded Patches) in `xmake.lua`](#requiring-lua-with-retro--embedded-patches-in-xmakelua)
     - [Building a Standalone Game with LÖVE \& Libraries in `xmake.lua`](#building-a-standalone-game-with-löve--libraries-in-xmakelua)
+    - [Compiling Typed Code with Teal (`tl`) in `xmake.lua`](#compiling-typed-code-with-teal-tl-in-xmakelua)
+    - [Compiling Systems Code with Nelua in `xmake.lua`](#compiling-systems-code-with-nelua-in-xmakelua)
   - [License](#license)
 
 ---
@@ -123,12 +125,14 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | [**`lume`**](packages/l/lume/xmake.lua) | Essential math, table and functional utilities for gamedev in Lua. |
 | [**`tween`**](packages/t/tween/xmake.lua) | Small tweening and easing library for Lua with custom interpolation functions. |
 
-### Languages & Transpilers (Compile-to-Lua)
+### Languages & Transpilers
 
 | Package | Description |
 | :--- | :--- |
 | [**`fennel`**](packages/f/fennel/xmake.lua) | A lisp that compiles to Lua. |
 | [**`moonscript`**](packages/m/moonscript/xmake.lua) | A programmer friendly language that compiles to Lua. |
+| [**`nelua`**](packages/n/nelua/xmake.lua) | Statically-typed, meta-programmable systems programming language inspired by Lua that compiles to C and WebAssembly. |
+| [**`tl`**](packages/t/tl/xmake.lua) | Teal, a typed dialect of Lua with compile-time type-checking and transpilation to Lua. |
 | [**`yuescript`**](packages/y/yuescript/xmake.lua) | Yuescript is an expressive, concise language transpiling to Lua. |
 
 ### Parsing, Data Formats & Templates
@@ -291,6 +295,28 @@ target("mygame")
 
 - **Dev mode (`xmake run`)**: runs your game interpreting directly from `src/` with automatic package search paths.
 - **Release mode (`xmake -m release`)**: fuses the executable with all game assets and bundled Lua modules into a standalone binary.
+
+### Compiling Typed Code with Teal (`tl`) in `xmake.lua`
+```lua
+add_requires("tl")
+add_requires("forge master", {kind = "addon"})
+includes("@addon/forge/forge.lua")
+
+target("typed_module")
+    add_rules("forge.lua.module", "forge.teal")
+    add_files("src/*.tl")
+```
+
+### Compiling Systems Code with Nelua in `xmake.lua`
+```lua
+add_requires("nelua")
+add_requires("forge master", {kind = "addon"})
+includes("@addon/forge/forge.lua")
+
+target("systems_app")
+    add_rules("forge.nelua")
+    add_files("src/*.nelua")
+```
 
 ---
 
