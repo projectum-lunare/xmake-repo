@@ -14,17 +14,16 @@ package("lpeglabel")
     add_versions("v1.6.2-1", "5511d2704de4580c5b79b100c2daec5e773db58be9c2239e49ea2d9da2decf67")
     add_versions("v1.6.1-1", "8ae6b44b789d8c1dfbca1ca684308c47657fb0f5f4e7f6ee770147d27c25d1d7")
 
-    add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    on_load(function (package)
+        import("@addon.forge.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+        })
+    end)
 
     add_includedirs("include", "include/lpeglabel")
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
-            add_rules("mode.release", "mode.debug")
-            add_requires("lua")
-            includes("@addon/forge/forge.lua")
-
             target("lpeglabel")
                 add_rules("forge.lua.module")
                 add_files("lplcap.c", "lplcode.c", "lplprint.c", "lpltree.c", "lplvm.c")

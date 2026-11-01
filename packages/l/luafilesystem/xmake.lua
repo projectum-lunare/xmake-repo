@@ -18,20 +18,18 @@ package("luafilesystem")
     add_versions("1.7.0.2", "23b4883aeb4fb90b2d0f338659f33a631f9df7a7e67c54115775a77d4ac3cc59")
     add_versions("1.6.3", "11c7b1fc2e560c0a521246b84e6257138d97dddde5a19e405714dbabcb9436ca")
 
-    add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    on_load(function (package)
+        import("@addon.forge.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+        })
+    end)
 
     add_includedirs("include")
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
-            add_rules("mode.release", "mode.debug")
-            add_requires("lua")
-            includes("@addon/forge/forge.lua")
-
             target("lfs")
                 add_rules("forge.lua.module")
-                add_packages("lua")
                 add_files("src/lfs.c")
                 add_headerfiles("src/(lfs.h)")
         ]])

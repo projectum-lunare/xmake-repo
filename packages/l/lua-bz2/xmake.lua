@@ -18,17 +18,18 @@ package("lua-bz2")
     add_versions("0.2.0", "b348eacd1b67bd0552d725e3b6bab43a732b742f514656a73a801d500dc100a3")
     add_versions("0.1.0", "08bc6ce5faa96d60890b485bb9f5370cde56906d64a482a4cc1efa7ee5d88716")
 
-    add_deps("lua")
     add_deps("bzip2")
-    add_deps("forge master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.forge.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+        })
+    end)
 
     on_install(function (package)
         local modname = package:config("shared") and "bz2" or "lua-bz2"
         io.writefile("xmake.lua", string.format([[
-            add_rules("mode.release", "mode.debug")
-            add_requires("lua")
             add_requires("bzip2")
-            includes("@addon/forge/forge.lua")
 
             target("%s")
                 add_rules("forge.lua.module")

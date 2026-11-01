@@ -15,9 +15,13 @@ package("luaossl")
     add_versions("20250929", "2f695aea5f0bc0b9b32d3de56fffc5d41630f30bdd7e15bd68ce1f4bd3e8f61e")
     add_versions("20220711", "f16c4cd2c880f270c1c73daa0a4bfdd11ae3155b92a2086863731e06d241300b")
 
-    add_deps("lua")
     add_deps("openssl")
-    add_deps("forge master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.forge.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+        })
+    end)
 
     on_install(function (package)
         if os.isfile("config.h.guess") then
@@ -37,10 +41,7 @@ package("luaossl")
         end
 
         io.writefile("xmake.lua", [[
-            add_rules("mode.release", "mode.debug")
-            add_requires("lua")
             add_requires("openssl")
-            includes("@addon/forge/forge.lua")
 
             target("_openssl")
                 add_rules("forge.lua.module")

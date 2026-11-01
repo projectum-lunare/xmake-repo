@@ -18,9 +18,13 @@ package("luaexpat")
     add_versions("1.4.0", "aa40dbdfd314d489166e63ce1de4f484248272fb3b6fb35099ceaddc959ccca5")
     add_versions("1.3.0", "9906b1ec81ba141f4cd03e2c8f6c633b15e40b3d341c52a1ef97243e521cdce1")
 
-    add_deps("lua")
     add_deps("expat")
-    add_deps("forge master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.forge.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+        })
+    end)
 
     add_includedirs("include", "include/lxp")
 
@@ -51,10 +55,7 @@ package("luaexpat")
         end
 
         io.writefile("xmake.lua", string.format([[
-            add_rules("mode.release", "mode.debug")
-            add_requires("lua")
             add_requires("expat")
-            includes("@addon/forge/forge.lua")
 
             %s
         ]], table.concat(targets, "\n")))

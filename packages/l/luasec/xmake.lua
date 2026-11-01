@@ -18,15 +18,16 @@ package("luasec")
     add_versions("1.1.0", "05995c993fcadffc91cf713b3467a674e1cffec7aed1467f4a189ca7feaa3b06")
     add_versions("1.0.2", "0001e24323beee51cd1ee186b369b50a19696d59960b537093883e5ce264d886")
 
-    add_deps("lua")
     add_deps("openssl")
-    add_deps("forge master", {kind = "addon"})
 
     if is_plat("windows", "mingw") then
         add_syslinks("ws2_32", "crypt32")
     end
 
     on_load(function (package)
+        import("@addon.forge.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+        })
         if package:config("shared") and package:is_plat("windows", "mingw", "linux", "macosx", "bsd", "haiku") then
             package:add("deps", "luasocket", {configs = {shared = true}})
         else
@@ -37,10 +38,7 @@ package("luasec")
     on_install(function (package)
         local modname = package:config("shared") and "ssl" or "luasec"
         io.writefile("xmake.lua", string.format([[
-            add_rules("mode.release", "mode.debug")
-            add_requires("lua")
             add_requires("openssl")
-            includes("@addon/forge/forge.lua")
 
             target("%s")
                 add_rules("forge.lua.module")

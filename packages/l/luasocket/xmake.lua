@@ -14,8 +14,11 @@ package("luasocket")
     add_versions("3.1.0", "bf033aeb9e62bcaa8d007df68c119c966418e8c9ef7e4f2d7e96bddeca9cca6e")
     add_versions("3.0.0", "04d98e40edcee7c7c5f83f0e8ba5503d14b56280e20daceee9e34ed7cf8f1b15")
 
-    add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    on_load(function (package)
+        import("@addon.forge.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+        })
+    end)
 
     add_includedirs("include", "include/luasocket")
 
@@ -27,10 +30,6 @@ package("luasocket")
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
-            add_rules("mode.release", "mode.debug")
-            add_requires("lua")
-            includes("@addon/forge/forge.lua")
-
             target("socket.core")
                 add_rules("forge.lua.module")
                 add_includedirs("src")

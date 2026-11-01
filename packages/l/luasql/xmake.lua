@@ -22,12 +22,12 @@ package("luasql")
     add_configs("mysql", {description = "Enable MySQL driver", default = false, type = "boolean"})
     add_configs("odbc", {description = "Enable ODBC driver", default = false, type = "boolean"})
 
-    add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
-
     add_includedirs("include", "include/luasql")
 
     on_load(function (package)
+        import("@addon.forge.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+        })
         if package:config("sqlite3") then
             package:add("deps", "sqlite3")
         end
@@ -41,7 +41,7 @@ package("luasql")
 
     on_install(function (package)
         local targets = {}
-        local requires = {'add_requires("lua")'}
+        local requires = {}
 
         if package:config("sqlite3") then
             table.insert(requires, 'add_requires("sqlite3")')
@@ -99,9 +99,7 @@ package("luasql")
         end
 
         io.writefile("xmake.lua", string.format([[
-            add_rules("mode.release", "mode.debug")
             %s
-            includes("@addon/forge/forge.lua")
 
             %s
         ]], table.concat(requires, "\n"), table.concat(targets, "\n")))

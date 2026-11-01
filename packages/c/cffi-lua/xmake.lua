@@ -17,9 +17,13 @@ package("cffi-lua")
     add_versions("0.2.1", "c30080d6309167f86d1a96d3ee33f33ef52e884052b7feac140b8c52db10ad7a")
     add_versions("0.2.0", "2c499180f89c9813c8bd0b176bc11e61e1ecbf0e1f60278014a23ed88a33ca00")
 
-    add_deps("lua")
     add_deps("libffi")
-    add_deps("forge master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.forge.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+        })
+    end)
 
     if is_plat("linux", "bsd") then
         add_syslinks("dl")
@@ -33,9 +37,7 @@ package("cffi-lua")
         end
 
         io.writefile("xmake.lua", string.format([[
-            add_rules("mode.release", "mode.debug")
-            add_requires("lua", "libffi")
-            includes("@addon/forge/forge.lua")
+            add_requires("libffi")
 
             target("cffi")
                 add_rules("forge.lua.module")

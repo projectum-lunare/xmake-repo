@@ -14,17 +14,18 @@ package("lua-iconv")
     add_versions("7.1.0", "2539ed57e0e976c68244ae0a1733005037984f620f87c2c107322d24559d6e1e")
     add_versions("7.0.0", "1de42f2d0d0ee9ec45704b8ec0ce267ec67f75f7c9b0dedc24f742410604372b")
 
-    add_deps("lua")
     add_deps("libiconv")
-    add_deps("forge master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.forge.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+        })
+    end)
 
     on_install(function (package)
         local modname = package:config("shared") and "iconv" or "lua-iconv"
         io.writefile("xmake.lua", string.format([[
-            add_rules("mode.release", "mode.debug")
-            add_requires("lua")
             add_requires("libiconv")
-            includes("@addon/forge/forge.lua")
 
             target("%s")
                 add_rules("forge.lua.module")
