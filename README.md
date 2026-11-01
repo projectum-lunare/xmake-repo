@@ -49,10 +49,12 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
     - [Installing Forge Addon](#installing-forge-addon)
     - [Requiring Greatest in `xmake.lua`](#requiring-greatest-in-xmakelua)
     - [Requiring LPeg in `xmake.lua`](#requiring-lpeg-in-xmakelua)
+    - [Multi-Runtime Selection (PUC-Lua vs LuaJIT)](#multi-runtime-selection-puc-lua-vs-luajit)
     - [Requiring Lua (with Retro \& Embedded Patches) in `xmake.lua`](#requiring-lua-with-retro--embedded-patches-in-xmakelua)
     - [Building a Standalone Game with LÖVE \& Libraries in `xmake.lua`](#building-a-standalone-game-with-löve--libraries-in-xmakelua)
     - [Compiling Typed Code with Teal (`tl`) in `xmake.lua`](#compiling-typed-code-with-teal-tl-in-xmakelua)
     - [Compiling Systems Code with Nelua in `xmake.lua`](#compiling-systems-code-with-nelua-in-xmakelua)
+    - [Auditing Recipes with Package Linter](#auditing-recipes-with-package-linter)
   - [License](#license)
 
 ---
@@ -267,6 +269,24 @@ target("app")
     add_packages("lpeg")
 ```
 
+### Multi-Runtime Selection (PUC-Lua vs LuaJIT)
+
+Packages orchestrated via Forge support multi-runtime selection with isolated `buildhash` cache keys, allowing seamless switching between engines without ABI collisions:
+
+```bash
+# Install with default PUC-Lua:
+xrepo install luasocket
+
+# Install with LuaJIT:
+xrepo install -f "runtime='luajit'" luasocket
+```
+
+Or declare runtime requirements directly in `xmake.lua`:
+```lua
+add_requires("luasocket", {configs = {runtime = "luajit"}})
+add_requires("lua-cjson", {configs = {runtime = "lua"}})
+```
+
 ### Requiring Lua (with Retro & Embedded Patches) in `xmake.lua`
 ```lua
 add_requires("lua", {configs = {c89 = true, ["32bits"] = true}})
@@ -316,6 +336,16 @@ includes("@addon/forge/forge.lua")
 target("systems_app")
     add_rules("forge.nelua")
     add_files("src/*.nelua")
+```
+
+### Auditing Recipes with Package Linter
+Ensure all package manifests comply with repository metadata, checksum formats, `on_test` hooks, and Forge conventions:
+```bash
+# Validate all packages across the entire repository
+xmake l scripts/check_packages.lua
+
+# Validate a specific package recipe
+xmake l scripts/check_packages.lua luasocket
 ```
 
 ---
