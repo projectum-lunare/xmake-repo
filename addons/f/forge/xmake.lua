@@ -8,7 +8,7 @@ package("forge")
     set_license("MPL-2.0")
 
     add_urls("https://github.com/projectum-lunare/forge.git")
-    add_versions("master", "7e50c7a0079822e4d45db8491e4ebe21eb240ad7")
+    add_versions("master", "6addc70b205b7e3aadcd96dec932fc6c72e17e5d")
     add_versions("v0.1.2", "v0.1.2")
     add_versions("v0.1.1", "v0.1.1")
     add_versions("v0.1.0", "v0.1.0")
