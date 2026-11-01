@@ -14,17 +14,17 @@ package("lua-compat-5.3")
     add_versions("v0.15.1", "16c4bd7b72a156e3b575ce2b5ebe2ec00611a14c485dd15dc3814647a589c7f8")
     add_versions("v0.15.0", "47caa8cabb85a4ddaefb9445528504b0197a15b39fec3ac9b29818d647198b23")
 
-    add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    on_load(function (package)
+        import("@addon.forge.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            version = ">=5.1 <=5.3",
+        })
+    end)
 
     add_includedirs("include", "include/compat-5.3")
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
-            add_rules("mode.release", "mode.debug")
-            add_requires("lua")
-            includes("@addon/forge/forge.lua")
-
             target("compat53")
                 add_rules("forge.lua.module")
                 add_files("compat53/*.lua")

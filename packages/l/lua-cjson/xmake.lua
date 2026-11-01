@@ -17,18 +17,17 @@ package("lua-cjson")
     add_versions("2.1.0.17", "510062d471fc9c4cd87b367a7b879c7a5f2af70513d97708842d097614d96188")
     add_versions("2.1.0.14", "14cac5c7a4520b33449a1fc961344556b8b6a2a2c6b739b0e46e3002e6e605bc")
 
-    add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    on_load(function (package)
+        import("@addon.forge.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+        })
+    end)
 
     add_includedirs("include", "include/cjson")
     add_bindirs("bin")
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
-            add_rules("mode.release", "mode.debug")
-            add_requires("lua")
-            includes("@addon/forge/forge.lua")
-
             target("cjson")
                 add_rules("forge.lua.module")
                 add_files("lua_cjson.c", "strbuf.c", "fpconv.c")

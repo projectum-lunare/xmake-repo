@@ -16,17 +16,16 @@ package("lpeg")
     add_versions("v1.1.0", "4b155d67d2246c1ffa7ad7bc466c1ea899bbc40fef0257cc9c03cecbaed4352a")
     add_versions("v1.0.2", "48d66576051b6c78388faad09b70493093264588fcd0f258ddaab1cdd4a15ffe")
 
-    add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    on_load(function (package)
+        import("@addon.forge.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+        })
+    end)
 
     add_includedirs("include", "include/lpeg")
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
-            add_rules("mode.release", "mode.debug")
-            add_requires("lua")
-            includes("@addon/forge/forge.lua")
-
             target("lpeg")
                 add_rules("forge.lua.module")
                 add_files("lpcap.c", "lpcode.c", "lpcset.c", "lpprint.c", "lptree.c", "lpvm.c")
