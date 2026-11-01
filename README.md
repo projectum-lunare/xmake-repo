@@ -191,6 +191,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | :--- | :--- |
 | [**`luafilesystem`**](packages/l/luafilesystem/xmake.lua) | File System Library for the Lua Language. |
 | [**`luasystem`**](packages/l/luasystem/xmake.lua) | Platform independent system calls for Lua. |
+| [**`cd`**](packages/c/cd/xmake.lua) | A 2D Graphics Canvas Draw Toolkit (Tecgraf/PUC-Rio). |
 | [**`cffi-lua`**](packages/c/cffi-lua/xmake.lua) | A portable C FFI for Lua 5.1+, based on libffi. |
 | [**`solo`**](packages/s/solo/xmake.lua) | Physical I/O, System Foundations & Hardware Abstractions |
 | [**`lua-bz2`**](packages/l/lua-bz2/xmake.lua) | A Lua binding to Julian Seward's libbzip2. |

@@ -37,19 +37,7 @@ package("im")
         import("package.tools.xmake").install(package, configs)
 
         if package:config("lua") then
-            local ext = package:is_plat("windows") and "dll" or "so"
-            local mod_dir = package:installdir("lib/lua/5.4")
-            os.mkdir(mod_dir)
-            local imlua_mod = package:installdir("lib", "imlua." .. ext)
-            local imlua_proc_mod = package:installdir("lib", "imlua_process." .. ext)
-            if os.isfile(imlua_mod) then
-                os.cp(imlua_mod, mod_dir)
-            end
-            if os.isfile(imlua_proc_mod) then
-                os.cp(imlua_proc_mod, mod_dir)
-            end
-            package:addenv("LUA_CPATH", package:installdir("lib/lua/5.4/?." .. ext))
-            package:addenv("LUA_CPATH", package:installdir("lib/?." .. ext))
+            import("@addon.forge.lua.tree").apply_search_envs(package)
         end
     end)
 

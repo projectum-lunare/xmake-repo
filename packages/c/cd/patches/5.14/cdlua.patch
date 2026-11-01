@@ -1,0 +1,40 @@
+--- a/src/lua5/cdlua5.c
++++ b/src/lua5/cdlua5.c
+@@ -24,20 +24,17 @@
+ * Initialization                                                            *
+ \***************************************************************************/
+ 
+-static const char* cdlua_key = "cdlua5";
+-
+ static void cdlua_setstate(lua_State * L, cdluaLuaState* cdL)
+ {
+-  lua_pushlightuserdata(L, (void*)cdlua_key);
++  lua_pushstring(L, "_CDLUA_STATE_");
+   lua_pushlightuserdata(L, (void*)cdL);
+-  lua_settable(L, LUA_REGISTRYINDEX);    /*  registry[address("cdlua5")]=cdL  */
+-  lua_pop(L, 1);
++  lua_settable(L, LUA_REGISTRYINDEX);    /*  registry["_CDLUA_STATE_"]=cdL  */
+ }
+ 
+ cdluaLuaState* cdlua_getstate(lua_State * L)
+ {
+   cdluaLuaState* cdL;
+-  lua_pushlightuserdata(L, (void*)cdlua_key);
++  lua_pushstring(L, "_CDLUA_STATE_");
+   lua_gettable(L, LUA_REGISTRYINDEX);
+   cdL = (cdluaLuaState*)lua_touserdata(L, -1);
+   lua_pop(L, 1);
+--- a/src/lua5/cdluaim5.c
++++ b/src/lua5/cdluaim5.c
+@@ -407,6 +407,11 @@
+ int cdluaim_open(lua_State *L)
+ {
+   cdluaLuaState* cdL = cdlua_getstate(L);
++  if (!cdL)
++  {
++    cdlua_open(L);
++    cdL = cdlua_getstate(L);
++  }
+   cdlua_register_lib(L, funcs);  /* leave cd table at the top of the stack */
+   cdlua_addcontext(L, cdL, &cdluaimctx);
+ 
