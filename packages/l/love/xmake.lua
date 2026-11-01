@@ -15,14 +15,16 @@ package("love")
         add_extsources("brew::love")
     end
 
-    add_configs("lua", {description = "Select Lua implementation.", default = "luajit", values = {"luajit", "lua"}})
-    add_configs("luajit", {description = "Use LuaJIT instead of PUC Lua.", default = true, type = "boolean"})
-    add_configs("luaversion", {description = "PUC Lua version to use (e.g. '5.1', '5.4').", default = "5.1", type = "string"})
     add_configs("mpg123", {description = "Enable mpg123 mp3 support.", default = true, type = "boolean"})
 
     add_deps("libsdl2", "freetype", "openal-soft", "zlib", "libmodplug", "libvorbis", "libogg", "theora")
 
     on_load(function (package)
+        import("@addon.forge.lua.runtime").setup(package, {
+            runtime = {"luajit", "lua"},
+            default = "luajit",
+        })
+
         package:addenv("PATH", "bin")
         if package:is_plat("linux") then
             package:addenv("LD_LIBRARY_PATH", "lib")
@@ -32,37 +34,17 @@ package("love")
         if package:config("mpg123") then
             package:add("deps", "mpg123")
         end
-
-        local use_luajit = true
-        if package:config("luajit") == false or package:config("lua") == "lua" then
-            use_luajit = false
-        end
-
-        if use_luajit then
-            package:add("deps", "luajit")
-        else
-            local luaversion = package:config("luaversion") or "5.1"
-            if luaversion == "5.1" then
-                package:add("deps", "lua 5.1.5")
-            elseif luaversion == "5.2" then
-                package:add("deps", "lua 5.2.4")
-            elseif luaversion == "5.3" then
-                package:add("deps", "lua 5.3.6")
-            elseif luaversion == "5.4" then
-                package:add("deps", "lua 5.4.8")
-            else
-                package:add("deps", "lua " .. luaversion)
-            end
-        end
     end)
 
     on_install("linux", "macosx", "bsd", function (package)
-        local use_luajit = true
-        if package:config("luajit") == false or package:config("lua") == "lua" then
-            use_luajit = false
+        local rt = package:config("runtime") or "luajit"
+        local use_luajit = (rt == "luajit")
+        local lua_dep = package:dep(use_luajit and "luajit" or "lua")
+        local luaversion = "5.1"
+        if lua_dep and lua_dep:version() then
+            luaversion = lua_dep:version():major() .. "." .. lua_dep:version():minor()
         end
 
-        local luaversion = package:config("luaversion") or "5.1"
         local configs = {
             "--bindir=" .. package:installdir("bin"),
             "--libdir=" .. package:installdir("lib"),
