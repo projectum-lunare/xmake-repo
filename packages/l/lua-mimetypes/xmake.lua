@@ -15,21 +15,21 @@ package("lua-mimetypes")
     add_versions("v1.0.0", "f387475765ff3bcc7abf0f8ad67654bbb8d745569a70623b478f11bebfa585e5")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
     set_kind("library", {headeronly = true})
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
             target("mimetypes")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("mimetypes.lua")
                 add_files("mimetypes/**.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local mimetypes = require("mimetypes")
             assert(mimetypes.guess("init.lua") == "text/x-lua")
             assert(mimetypes.guess("image.png") == "image/png")

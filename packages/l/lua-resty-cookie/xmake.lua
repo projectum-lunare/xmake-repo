@@ -14,24 +14,24 @@ package("lua-resty-cookie")
     add_versions("0.1.0", "d81b33129c6fb5203b571fa4d8394823bf473d8872c0357a1d0f14420b1483bd")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("lua-resty-cookie")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("lua")
                 add_files("lib/resty/**.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local mt = {}
             mt.__index = function(t, k)
                 t[k] = setmetatable({}, mt)

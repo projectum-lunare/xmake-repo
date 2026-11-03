@@ -14,7 +14,7 @@ package("markdown")
     add_versions("0.33", "c94fa6669f3b00a1047c50de4ee26e422a3bacb15ca4ed576b2f4d67d16f1f09")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
     set_kind("library", {headeronly = true})
 
     on_install(function (package)
@@ -25,14 +25,14 @@ package("markdown")
 
         io.writefile("xmake.lua", [[
             target("markdown")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("markdown.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local markdown = require("markdown")
             local html = markdown("# Hello World")
             assert(html:find("<h1>Hello World</h1>"))

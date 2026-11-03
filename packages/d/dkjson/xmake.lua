@@ -15,24 +15,24 @@ package("dkjson")
     add_versions("2.4", "35fd51c22ab0ad1134cd3e5a3b0998aa435ea68e547045689880818b1c441303")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("dkjson")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("lua")
                 add_files("dkjson.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local json = require("dkjson")
             local str = json.encode({ status = "ok" })
             local obj = json.decode(str)

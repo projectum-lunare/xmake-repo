@@ -16,7 +16,7 @@ package("lua-radix-router")
     add_versions("v0.6.0", "a641fa9d33e18c6e568c439ae23f2620538bf31a75807562785bb17a938518b0")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         os.mkdir("lib/radix-router")
@@ -30,18 +30,18 @@ package("lua-radix-router")
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("lua-radix-router")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("lua")
                 add_files("lib/**.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             _G.ngx = {
                 re = {
                     find = function(str, regex)

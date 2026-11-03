@@ -23,40 +23,40 @@ package("moonscript")
         add_deps("lpeg")
         add_deps("luafilesystem")
     end
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("moonscript.parse.native")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("moonscript/parse/native.c")
 
             target("moonscript")
-                add_rules("forge.lua.module")
-                set_values("forge.lua.rootdir", os.projectdir())
+                add_rules("recudo.lua.module")
+                set_values("recudo.lua.rootdir", os.projectdir())
                 add_files("moonscript/**.lua")
                 add_files("moon/**.lua")
 
             target("moon")
-                add_rules("forge.lua.bin")
+                add_rules("recudo.lua.bin")
                 add_files("bin/moon")
 
             target("moonc")
-                add_rules("forge.lua.bin")
+                add_rules("recudo.lua.bin")
                 add_files("bin/moonc")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
         if package:is_plat("linux", "macosx", "bsd", "windows", "mingw") and not package:config("shared") then
             return
         end
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local moonscript = require("moonscript.base")
             local code = moonscript.to_lua("x = 10\nprint x")
             assert(code:find("local x = 10"))

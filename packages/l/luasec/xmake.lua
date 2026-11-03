@@ -25,7 +25,7 @@ package("luasec")
     end
 
     on_load(function (package)
-        import("@addon.forge.lua.runtime").setup(package, {
+        import("@addon.recudo.lua.runtime").setup(package, {
             runtime = {"lua", "luajit"},
         })
         if package:config("shared") and package:is_plat("windows", "mingw", "linux", "macosx", "bsd", "haiku") then
@@ -41,7 +41,7 @@ package("luasec")
             add_requires("openssl")
 
             target("%s")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("openssl")
                 add_includedirs("src", "src/luasocket")
                 add_defines("WITH_LUASOCKET", "LUASOCKET_DEBUG")
@@ -68,18 +68,18 @@ package("luasec")
                 add_headerfiles("src/*.h", {prefixdir = "luasec"})
 
             target("ssl.https")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("lua")
                 add_files("src/https.lua")
         ]], modname))
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
         if package:is_plat("linux", "macosx", "bsd") and not package:config("shared") then
             return
         end
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local ssl = require("ssl")
             assert(ssl and ssl._VERSION)
             local https = require("ssl.https")

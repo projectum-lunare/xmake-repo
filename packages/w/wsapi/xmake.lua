@@ -23,27 +23,27 @@ package("wsapi")
         add_deps("luafilesystem")
         add_deps("rings")
     end
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.replace("src/wsapi/request.lua", "type = string.lower(type)", "local type = string.lower(type)", {plain = true})
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("wsapi")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("src/wsapi.lua")
                 add_files("src/wsapi/*.lua", {prefixdir = "wsapi"})
 
             target("wsapi.cgi")
-                add_rules("forge.lua.bin")
+                add_rules("recudo.lua.bin")
                 add_files("src/launcher/wsapi.cgi")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, "local req = require('wsapi.request'); local res = require('wsapi.response'); assert(req.new and res.new)")
+        import("@addon.recudo.lua.module").lua_test(package, "local req = require('wsapi.request'); local res = require('wsapi.response'); assert(req.new and res.new)")
     end)

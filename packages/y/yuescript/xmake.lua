@@ -17,7 +17,7 @@ package("yuescript")
     add_versions("0.34.0", "3faf4822588ffbbf908f288aa71112a78a2020ad81e8e55673b5f279e034d82b")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     add_bindirs("bin")
 
@@ -25,10 +25,10 @@ package("yuescript")
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("yue")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 set_languages("c++20")
                 add_defines("YUE_UTF8_IMPL")
                 if is_plat("windows") then
@@ -95,12 +95,12 @@ package("yuescript")
                 end
                 add_packages("lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
         if package:config("shared") then
-            import("@addon.forge.lua.module").lua_test(package, [[
+            import("@addon.recudo.lua.module").lua_test(package, [[
                 local yue = require("yue")
                 assert(yue.version, "yue.version should exist")
                 local res = yue.to_lua("local x = 123")

@@ -15,7 +15,7 @@ package("lpeglabel")
     add_versions("v1.6.1-1", "8ae6b44b789d8c1dfbca1ca684308c47657fb0f5f4e7f6ee770147d27c25d1d7")
 
     on_load(function (package)
-        import("@addon.forge.lua.runtime").setup(package, {
+        import("@addon.recudo.lua.runtime").setup(package, {
             runtime = {"lua", "luajit"},
         })
     end)
@@ -25,21 +25,21 @@ package("lpeglabel")
     on_install(function (package)
         io.writefile("xmake.lua", [[
             target("lpeglabel")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("lplcap.c", "lplcode.c", "lplprint.c", "lpltree.c", "lplvm.c")
                 add_headerfiles("*.h", {prefixdir = "lpeglabel"})
                 add_headerfiles("*.h")
 
             target("relabel")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("relabel.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
         if package:config("shared") then
-            import("@addon.forge.lua.module").lua_test(package, "assert(require('lpeglabel')); assert(require('relabel'))")
+            import("@addon.recudo.lua.module").lua_test(package, "assert(require('lpeglabel')); assert(require('relabel'))")
         else
             assert(package:check_csnippets({test = [[
                 struct lua_State;

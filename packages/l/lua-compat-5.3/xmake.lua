@@ -15,7 +15,7 @@ package("lua-compat-5.3")
     add_versions("v0.15.0", "47caa8cabb85a4ddaefb9445528504b0197a15b39fec3ac9b29818d647198b23")
 
     on_load(function (package)
-        import("@addon.forge.lua.runtime").setup(package, {
+        import("@addon.recudo.lua.runtime").setup(package, {
             runtime = {"lua", "luajit"},
             version = ">=5.1 <=5.3",
         })
@@ -26,34 +26,34 @@ package("lua-compat-5.3")
     on_install(function (package)
         io.writefile("xmake.lua", [[
             target("compat53")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("compat53/*.lua")
                 add_headerfiles("c-api/(compat-5.3.h)")
                 add_headerfiles("c-api/compat-5.3.h", {prefixdir = "compat-5.3"})
 
             target("compat53.utf8")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_includedirs(".", "c-api")
                 add_files("lutf8lib.c", "c-api/compat-5.3.c")
 
             target("compat53.table")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_includedirs(".", "c-api")
                 add_files("ltablib.c", "c-api/compat-5.3.c")
 
             target("compat53.string")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_includedirs(".", "c-api")
                 add_files("lstrlib.c", "c-api/compat-5.3.c")
 
             target("compat53.io")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_includedirs(".", "c-api")
                 add_files("liolib.c", "c-api/compat-5.3.c")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, "assert(require('compat53'))")
+        import("@addon.recudo.lua.module").lua_test(package, "assert(require('compat53'))")
     end)

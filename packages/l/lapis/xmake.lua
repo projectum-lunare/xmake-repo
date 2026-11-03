@@ -34,29 +34,29 @@ package("lapis")
         add_deps("luasocket")
         add_deps("luaossl")
     end
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
     add_bindirs("bin")
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("lapis")
-                add_rules("forge.lua.module")
-                set_values("forge.lua.rootdir", os.projectdir())
+                add_rules("recudo.lua.module")
+                set_values("recudo.lua.rootdir", os.projectdir())
                 add_files("lapis/**.lua")
 
             target("lapis-bin")
-                add_rules("forge.lua.bin")
+                add_rules("recudo.lua.bin")
                 add_files("bin/lapis")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local lapis = require("lapis")
             assert(lapis.Application)
             assert(lapis.serve)

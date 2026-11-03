@@ -16,24 +16,24 @@ package("lua-resty-memcached")
     add_versions("0.16", "42893da0e3de4ec180c9bf02f82608d78787290a70c5644b538f29d243147396")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("lua-resty-memcached")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("lua")
                 add_files("lib/resty/**.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local mt = {}
             mt.__index = function(t, k)
                 t[k] = setmetatable({}, mt)

@@ -14,7 +14,7 @@ package("love")
     add_deps("libsdl2", "freetype", "openal-soft", "zlib", "libmodplug", "libvorbis", "libogg", "theora")
 
     on_load(function (package)
-        import("@addon.forge.lua.runtime").setup(package, {
+        import("@addon.recudo.lua.runtime").setup(package, {
             runtime = {"luajit", "lua"},
             default = "luajit",
         })

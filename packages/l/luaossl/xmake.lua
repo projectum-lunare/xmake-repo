@@ -18,7 +18,7 @@ package("luaossl")
     add_deps("openssl")
 
     on_load(function (package)
-        import("@addon.forge.lua.runtime").setup(package, {
+        import("@addon.recudo.lua.runtime").setup(package, {
             runtime = {"lua", "luajit"},
         })
     end)
@@ -44,7 +44,7 @@ package("luaossl")
             add_requires("openssl")
 
             target("_openssl")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("openssl")
                 add_includedirs("src")
                 add_defines("HAVE_CONFIG_H")
@@ -52,17 +52,17 @@ package("luaossl")
                 add_files("src/openssl.c")
 
             target("luaossl")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("lua/**.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
         if package:is_plat("linux", "macosx", "bsd", "windows", "mingw") and not package:config("shared") then
             return
         end
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local hmac = require("openssl.hmac")
             assert(hmac)
             local ctx = hmac.new("secret", "sha1")

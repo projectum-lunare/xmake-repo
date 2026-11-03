@@ -40,7 +40,7 @@ package("lua")
     end
 
     if is_plat("dos", "os2", "wince") then
-        add_deps("forge master", {kind = "addon"})
+        add_deps("recudo master", {kind = "addon"})
     end
 
     add_configs("c89",       {description = "Compile in strict ANSI C89 mode (LUA_USE_C89)", type = "boolean"})
@@ -71,8 +71,8 @@ package("lua")
         io.writefile("xmake.lua", format([[
             add_rules("mode.release", "mode.debug")
             if is_plat("dos", "os2", "wince") then
-                add_addons("forge")
-                includes("@addon/forge/forge.lua")
+                add_addons("recudo")
+                includes("@addon/recudo/recudo.lua")
             end
 
             local sourcedir = "%s"
@@ -100,12 +100,12 @@ package("lua")
                         add_defines("LUA_BUILD_AS_DLL", {public = true})
                     end
                 elseif is_plat("wince") then
-                    add_rules("forge.evc3", {override = true})
+                    add_rules("recudo.toolchain.evc3", {override = true})
                     add_defines("UNDER_CE=300", "_WIN32_WCE=300")
                     add_includedirs(sourcedir .. "compat/wince")
                     add_files(sourcedir .. "compat/wince/*.c|wince_main.c")
                 elseif is_plat("dos", "os2") then
-                    add_rules("forge.watcom", {override = true})
+                    add_rules("recudo.toolchain.watcom", {override = true})
                 elseif is_plat("kolibri") then
                     add_defines("__KOLIBRIOS__")
                 elseif is_plat("plan9") then

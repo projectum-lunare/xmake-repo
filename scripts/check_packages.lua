@@ -78,10 +78,10 @@ local function check_package(pkg_path)
         table.insert(warnings, "Missing on_test(...) validation script")
     end
 
-    -- 5. Forge lua runtime check:
-    -- If package uses forge and has lua modules, check for @addon.forge.lua.runtime
-    if content:find("forge.lua.module", 1, true) and not content:find("@addon.forge.lua.runtime", 1, true) then
-        table.insert(warnings, "Uses forge.lua.module without modern @addon.forge.lua.runtime setup")
+    -- 5. Recudo lua runtime check:
+    -- If package uses recudo and has lua modules, check for @addon.recudo.lua.runtime
+    if content:find("recudo.lua.module", 1, true) and not content:find("@addon.recudo.lua.runtime", 1, true) then
+        table.insert(warnings, "Uses recudo.lua.module without modern @addon.recudo.lua.runtime setup")
     end
 
     if #errors > 0 then

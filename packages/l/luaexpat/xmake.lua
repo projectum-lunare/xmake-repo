@@ -21,7 +21,7 @@ package("luaexpat")
     add_deps("expat")
 
     on_load(function (package)
-        import("@addon.forge.lua.runtime").setup(package, {
+        import("@addon.recudo.lua.runtime").setup(package, {
             runtime = {"lua", "luajit"},
         })
     end)
@@ -32,7 +32,7 @@ package("luaexpat")
         local targets = {}
         table.insert(targets, [[
             target("lxp")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("expat")
                 add_includedirs("src")
                 add_files("src/lxplib.c")
@@ -47,7 +47,7 @@ package("luaexpat")
             if os.isfile(mod.file) then
                 table.insert(targets, string.format([[
                     target("%s")
-                        add_rules("forge.lua.module")
+                        add_rules("recudo.lua.module")
                         add_packages("lua")
                         add_files("%s")
                 ]], mod.name, mod.file))
@@ -60,14 +60,14 @@ package("luaexpat")
             %s
         ]], table.concat(targets, "\n")))
 
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
         if package:is_plat("linux", "macosx", "bsd") and not package:config("shared") then
             return
         end
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local lxp = require("lxp")
             assert(lxp and lxp._VERSION)
             local lom = require("lxp.lom")

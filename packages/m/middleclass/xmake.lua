@@ -15,21 +15,21 @@ package("middleclass")
     add_versions("v4.1.0", "8f518374bbbe1cd58ce347c89ad15b6797892cac2b4d28df824990ad6b18d102")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("middleclass")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("middleclass.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, "local class = require('middleclass'); local A = class('A'); assert(A:new())")
+        import("@addon.recudo.lua.module").lua_test(package, "local class = require('middleclass'); local A = class('A'); assert(A:new())")
     end)

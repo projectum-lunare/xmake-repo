@@ -16,7 +16,7 @@ package("luasyslog")
 
     add_deps("lua")
     add_deps("lualogging")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install("linux", "macosx", "bsd", "cross", function (package)
         os.mkdir("logging")
@@ -24,21 +24,21 @@ package("luasyslog")
 
         io.writefile("xmake.lua", [[
             target("lsyslog")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("lsyslog.c")
 
             target("logging.syslog")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("logging/syslog.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
         if package:is_plat("linux", "macosx", "bsd", "windows", "mingw") and not package:config("shared") then
             return
         end
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local lsyslog = require("lsyslog")
             assert(lsyslog and lsyslog.open)
             local syslog = require("logging.syslog")

@@ -15,21 +15,21 @@ package("loadkit")
     add_versions("v1.0.0", "91469e524100df0fbfc8e615d82b708a00d84221c4b00ac62595745abed4c1db")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("loadkit")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("loadkit.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, "local loadkit = require('loadkit'); assert(type(loadkit.make_loader) == 'function')")
+        import("@addon.recudo.lua.module").lua_test(package, "local loadkit = require('loadkit'); assert(type(loadkit.make_loader) == 'function')")
     end)

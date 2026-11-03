@@ -23,7 +23,7 @@ package("amulet")
     end
 
     on_load(function (package)
-        import("@addon.forge.lua.runtime").setup(package, {
+        import("@addon.recudo.lua.runtime").setup(package, {
             runtime = {"lua", "luajit"},
             version = "5.1",
             default = "lua",

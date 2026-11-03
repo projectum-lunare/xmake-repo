@@ -22,7 +22,7 @@ package("luacheck")
     else
         add_deps("luafilesystem")
     end
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
     set_kind("library", {headeronly = true})
     add_bindirs("bin")
 
@@ -34,18 +34,18 @@ package("luacheck")
 
         io.writefile("xmake.lua", [[
             target("luacheck")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("src/luacheck/**.lua", {rootdir = "src"})
 
             target("luacheck.bin")
-                add_rules("forge.lua.bin")
+                add_rules("recudo.lua.bin")
                 add_files("bin/luacheck.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local luacheck = require("luacheck")
             assert(luacheck and luacheck.check_strings)
             local report = luacheck.check_strings({"local a = 1"})

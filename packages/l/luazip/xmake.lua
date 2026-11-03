@@ -20,7 +20,7 @@ package("luazip")
     else
         add_deps("zziplib")
     end
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
@@ -29,19 +29,19 @@ package("luazip")
             add_requires("zziplib")
 
             target("zip")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("zziplib")
                 add_includedirs("src")
                 add_files("src/luazip.c")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
         if package:is_plat("linux", "macosx", "bsd", "windows", "mingw") and not package:config("shared") then
             return
         end
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local zip = require("zip")
             assert(zip and zip.open)
             assert(zip._VERSION)

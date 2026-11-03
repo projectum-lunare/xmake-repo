@@ -15,16 +15,16 @@ package("lua-term")
     add_versions("0.7", "d91d41b29552b2d0849323f94e274df7eee613fc8ec3d82ed1fae749246a5d25")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("term.core")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("lua")
                 add_files("core.c")
                 if is_plat("windows") then
@@ -32,11 +32,11 @@ package("lua-term")
                 end
 
             target("term")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("lua")
                 add_files("term/**.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
@@ -44,7 +44,7 @@ package("lua-term")
             -- Lua modules built statically cannot be dlopen'd by standalone lua
             return
         end
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local term = require("term")
             assert(term.colors)
             assert(term.cursor)

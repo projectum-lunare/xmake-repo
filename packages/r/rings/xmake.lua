@@ -14,7 +14,7 @@ package("rings")
     add_versions("v_1_3_0", "a1101c2fc8d5b943e66b70ce5d44d8a605567c98dc47fbdcb6722bdc81eabefe")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     add_includedirs("include", "include/rings")
 
@@ -22,20 +22,20 @@ package("rings")
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("rings")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("src/rings.c")
                 add_headerfiles("src/*.h", {prefixdir = "rings"})
                 add_headerfiles("src/*.h")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
         if package:config("shared") then
-            import("@addon.forge.lua.module").lua_test(package, "local rings = require('rings'); local env = rings.new(); local ok, res = env:dostring('return 42'); assert(ok and res == 42)")
+            import("@addon.recudo.lua.module").lua_test(package, "local rings = require('rings'); local env = rings.new(); local ok, res = env:dostring('return 42'); assert(ok and res == 42)")
         else
             assert(package:check_csnippets({test = [[
                 struct lua_State;

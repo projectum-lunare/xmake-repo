@@ -15,19 +15,19 @@ package("luacov-reporter-lcov")
     add_versions("v0.1", "a5c0edda950868da6a6177fd8ff2284477b200a1942e3a9fc0af6437c07e8dd5")
 
     add_deps("lua", "luacov")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
     set_kind("library", {headeronly = true})
 
     on_install(function (package)
         io.replace("luacov/reporter/lcov.lua", 'pcall(require "openssl.digest")', 'pcall(require, "openssl.digest")', {plain = true})
         io.writefile("xmake.lua", [[
             target("luacov.reporter.lcov")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("luacov/reporter/lcov.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, "assert(require('luacov.reporter.lcov').LcovReporter)")
+        import("@addon.recudo.lua.module").lua_test(package, "assert(require('luacov.reporter.lcov').LcovReporter)")
     end)

@@ -21,7 +21,7 @@ package("lua-bz2")
     add_deps("bzip2")
 
     on_load(function (package)
-        import("@addon.forge.lua.runtime").setup(package, {
+        import("@addon.recudo.lua.runtime").setup(package, {
             runtime = {"lua", "luajit"},
         })
     end)
@@ -32,7 +32,7 @@ package("lua-bz2")
             add_requires("bzip2")
 
             target("%s")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("bzip2")
                 add_defines("COMPAT53_PREFIX=compat53")
                 add_files(
@@ -46,19 +46,19 @@ package("lua-bz2")
 
             if os.isfile("bz2/ltn12.lua") then
                 target("bz2.ltn12")
-                    add_rules("forge.lua.module")
+                    add_rules("recudo.lua.module")
                     add_packages("lua")
                     add_files("bz2/ltn12.lua")
             end
         ]], modname))
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
         if package:is_plat("linux", "macosx", "bsd") and not package:config("shared") then
             return
         end
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local bz2 = require("bz2")
             assert(bz2)
             local comp = assert(bz2.initCompress())

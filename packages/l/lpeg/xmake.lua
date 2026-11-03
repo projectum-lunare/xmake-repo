@@ -17,7 +17,7 @@ package("lpeg")
     add_versions("v1.0.2", "48d66576051b6c78388faad09b70493093264588fcd0f258ddaab1cdd4a15ffe")
 
     on_load(function (package)
-        import("@addon.forge.lua.runtime").setup(package, {
+        import("@addon.recudo.lua.runtime").setup(package, {
             runtime = {"lua", "luajit"},
         })
     end)
@@ -27,21 +27,21 @@ package("lpeg")
     on_install(function (package)
         io.writefile("xmake.lua", [[
             target("lpeg")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("lpcap.c", "lpcode.c", "lpcset.c", "lpprint.c", "lptree.c", "lpvm.c")
                 add_headerfiles("*.h", {prefixdir = "lpeg"})
                 add_headerfiles("*.h")
 
             target("re")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("re.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
         if package:config("shared") then
-            import("@addon.forge.lua.module").lua_test(package, "assert(require('lpeg'))")
+            import("@addon.recudo.lua.module").lua_test(package, "assert(require('lpeg'))")
         else
             assert(package:check_csnippets({test = [[
                 struct lua_State;

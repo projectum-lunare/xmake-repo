@@ -15,7 +15,7 @@ package("magick")
     add_versions("v1.5.0", "66dd8066132fd5c16f0da9ccd07f200378b0130df1c281fa9a75854c7d4ba7f1")
 
     on_load(function (package)
-        import("@addon.forge.lua.runtime").setup(package, {
+        import("@addon.recudo.lua.runtime").setup(package, {
             runtime = "luajit",
         })
     end)
@@ -23,13 +23,13 @@ package("magick")
     on_install(function (package)
         io.writefile("xmake.lua", [[
             target("magick")
-                add_rules("forge.lua.module")
-                set_values("forge.lua.rootdir", os.projectdir())
+                add_rules("recudo.lua.module")
+                set_values("recudo.lua.rootdir", os.projectdir())
                 add_files("magick/**.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, "local version = require('magick.version'); assert(type(version) == 'string')")
+        import("@addon.recudo.lua.module").lua_test(package, "local version = require('magick.version'); assert(type(version) == 'string')")
     end)

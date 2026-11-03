@@ -46,7 +46,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
     - [CLI, Terminal \& Text UI](#cli-terminal--text-ui)
     - [Data Structures, Concurrency \& Utilities](#data-structures-concurrency--utilities)
   - [Usage Examples](#usage-examples)
-    - [Installing Forge Addon](#installing-forge-addon)
+    - [Installing Recudo Addon](#installing-recudo-addon)
     - [Requiring Greatest in `xmake.lua`](#requiring-greatest-in-xmakelua)
     - [Requiring LPeg in `xmake.lua`](#requiring-lpeg-in-xmakelua)
     - [Multi-Runtime Selection (PUC-Lua vs LuaJIT)](#multi-runtime-selection-puc-lua-vs-luajit)
@@ -63,7 +63,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 
 | Package | Description |
 | :--- | :--- |
-| [**`forge`**](addons/f/forge/xmake.lua) | Projectum Lunare Unified Build, Toolchain & Cross-Compilation Addon |
+| [**`recudo`**](addons/f/recudo/xmake.lua) | Projectum Lunare Unified Build, Toolchain & Cross-Compilation Addon |
 
 ### Runtimes & Core Language
 
@@ -244,9 +244,9 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 
 ## Usage Examples
 
-### Installing Forge Addon
+### Installing Recudo Addon
 ```bash
-xmake addon --install forge
+xmake addon --install recudo
 ```
 
 ### Requiring Greatest in `xmake.lua`
@@ -271,7 +271,7 @@ target("app")
 
 ### Multi-Runtime Selection (PUC-Lua vs LuaJIT)
 
-Packages orchestrated via Forge support multi-runtime selection with isolated `buildhash` cache keys, allowing seamless switching between engines without ABI collisions:
+Packages orchestrated via Recudo support multi-runtime selection with isolated `buildhash` cache keys, allowing seamless switching between engines without ABI collisions:
 
 ```bash
 # Install with default PUC-Lua:
@@ -303,12 +303,12 @@ add_rules("mode.debug", "mode.release")
 
 add_requires("love")
 add_requires("anim8", "bump", "hump", "flux", "tween", "lume")
-add_requires("forge master", {kind = "addon"})
+add_requires("recudo master", {kind = "addon"})
 
-includes("@addon/forge/forge.lua")
+includes("@addon/recudo/recudo.lua")
 
 target("mygame")
-    add_rules("forge.love")
+    add_rules("recudo.love")
     add_packages("love", "anim8", "bump", "hump", "flux", "tween", "lume")
     add_files("src/main.lua")
 ```
@@ -319,27 +319,27 @@ target("mygame")
 ### Compiling Typed Code with Teal (`tl`) in `xmake.lua`
 ```lua
 add_requires("tl")
-add_requires("forge master", {kind = "addon"})
-includes("@addon/forge/forge.lua")
+add_requires("recudo master", {kind = "addon"})
+includes("@addon/recudo/recudo.lua")
 
 target("typed_module")
-    add_rules("forge.lua.module", "forge.teal")
+    add_rules("recudo.lua.module", "recudo.teal")
     add_files("src/*.tl")
 ```
 
 ### Compiling Systems Code with Nelua in `xmake.lua`
 ```lua
 add_requires("nelua")
-add_requires("forge master", {kind = "addon"})
-includes("@addon/forge/forge.lua")
+add_requires("recudo master", {kind = "addon"})
+includes("@addon/recudo/recudo.lua")
 
 target("systems_app")
-    add_rules("forge.nelua")
+    add_rules("recudo.nelua")
     add_files("src/*.nelua")
 ```
 
 ### Auditing Recipes with Package Linter
-Ensure all package manifests comply with repository metadata, checksum formats, `on_test` hooks, and Forge conventions:
+Ensure all package manifests comply with repository metadata, checksum formats, `on_test` hooks, and Recudo conventions:
 ```bash
 # Validate all packages across the entire repository
 xmake l scripts/check_packages.lua

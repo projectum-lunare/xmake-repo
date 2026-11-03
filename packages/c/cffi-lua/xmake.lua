@@ -20,7 +20,7 @@ package("cffi-lua")
     add_deps("libffi")
 
     on_load(function (package)
-        import("@addon.forge.lua.runtime").setup(package, {
+        import("@addon.recudo.lua.runtime").setup(package, {
             runtime = {"lua", "luajit"},
         })
     end)
@@ -40,7 +40,7 @@ package("cffi-lua")
             add_requires("libffi")
 
             target("cffi")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 set_languages("c++14")
                 add_files("src/*.cc")
                 add_packages("libffi")
@@ -58,12 +58,12 @@ package("cffi-lua")
                     add_syslinks("dl")
                 end
         ]], extra_defs))
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
         if package:config("shared") then
-            import("@addon.forge.lua.module").lua_test(package, [[
+            import("@addon.recudo.lua.module").lua_test(package, [[
                 local ffi = require("cffi")
                 assert(ffi and ffi.os and ffi.arch)
             ]])

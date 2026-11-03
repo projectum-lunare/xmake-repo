@@ -17,7 +17,7 @@ package("lua-resty-signal")
 
     add_deps("lua")
     add_deps("lua-resty-core")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install("linux", "macosx", "bsd", function (package)
         io.gsub("lib/resty/signal.lua", 'for k, _ in string_gmatch%(cpath, "%[%^;%]%+"%) do%s+if k == "%?%.so" then%s+k = "%./"%s+end%s+local fpath = string_match%(k, "%(%.%*/%)"%)', [[for k, _ in string_gmatch(cpath, "[^;]+") do
@@ -27,7 +27,7 @@ package("lua-resty-signal")
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("restysignal")
                 set_kind("shared")
@@ -37,15 +37,15 @@ package("lua-resty-signal")
                 add_files("resty_signal.c")
 
             target("lua-resty-signal")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("lua")
                 add_files("lib/resty/**.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local mt = {}
             mt.__index = function(t, k)
                 t[k] = setmetatable({}, mt)

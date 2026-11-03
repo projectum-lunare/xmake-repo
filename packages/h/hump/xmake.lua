@@ -22,7 +22,7 @@ package("hump")
     add_versions("master", "08937cc0ecf72d1a964a8de6cd552c5e136bf0d4")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.gsub("class.lua", "k = include_helper%(%{%}, k, seen%)", "local key = include_helper({}, k, seen)")
@@ -44,10 +44,10 @@ return {
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("hump")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("lua")
                 add_files("init.lua")
 
@@ -61,16 +61,16 @@ return {
                 {name = "hump.vector-light", file = "vector-light.lua"},
             }) do
                 target(mod.name)
-                    add_rules("forge.lua.module")
+                    add_rules("recudo.lua.module")
                     add_packages("lua")
                     add_files(mod.file)
             end
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local hump = require("hump")
             local Camera = require("hump.camera")
             local Timer = require("hump.timer")

@@ -15,7 +15,7 @@ package("luasocket")
     add_versions("3.0.0", "04d98e40edcee7c7c5f83f0e8ba5503d14b56280e20daceee9e34ed7cf8f1b15")
 
     on_load(function (package)
-        import("@addon.forge.lua.runtime").setup(package, {
+        import("@addon.recudo.lua.runtime").setup(package, {
             runtime = {"lua", "luajit"},
         })
     end)
@@ -31,7 +31,7 @@ package("luasocket")
     on_install(function (package)
         io.writefile("xmake.lua", [[
             target("socket.core")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_includedirs("src")
                 add_defines("LUASOCKET_DEBUG")
                 add_files(
@@ -64,14 +64,14 @@ package("luasocket")
                 add_headerfiles("src/*.h")
 
             target("mime.core")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_includedirs("src")
                 add_defines("LUASOCKET_DEBUG")
                 add_files("src/mime.c", "src/compat.c")
 
             if not is_plat("windows", "mingw") then
                 target("socket.unix")
-                    add_rules("forge.lua.module")
+                    add_rules("recudo.lua.module")
                     add_includedirs("src")
                     add_defines("LUASOCKET_DEBUG")
                     add_files(
@@ -91,7 +91,7 @@ package("luasocket")
                     end
 
                 target("socket.serial")
-                    add_rules("forge.lua.module")
+                    add_rules("recudo.lua.module")
                     add_includedirs("src")
                     add_defines("LUASOCKET_DEBUG")
                     add_files(
@@ -118,17 +118,17 @@ package("luasocket")
                 {name = "socket.smtp",    file = "src/smtp.lua"},
             }) do
                 target(mod.name)
-                    add_rules("forge.lua.module")
+                    add_rules("recudo.lua.module")
                     add_packages("lua")
                     add_files(mod.file)
             end
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
         if package:config("shared") then
-            import("@addon.forge.lua.module").lua_test(package, [[
+            import("@addon.recudo.lua.module").lua_test(package, [[
                 local socket = require("socket")
                 local mime = require("mime")
                 local ltn12 = require("ltn12")

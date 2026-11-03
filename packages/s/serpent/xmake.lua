@@ -15,21 +15,21 @@ package("serpent")
     add_versions("0.28", "93c35fc1941d300268ba2d4eca4a80a8c9965c789e1150678d7d68158e1f2fef")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("serpent")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("src/serpent.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, "local serpent = require('serpent'); assert(serpent.dump({a = 1}))")
+        import("@addon.recudo.lua.module").lua_test(package, "local serpent = require('serpent'); assert(serpent.dump({a = 1}))")
     end)

@@ -16,22 +16,22 @@ package("lume")
     add_versions("v2.2.2", "70dc99fae7fc703b4d403a7a8928834820fbc5fb83f7e33debc5c6c39bfdfc56")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("lume")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("lua")
                 add_files("lume.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, "local lume = require('lume'); assert(lume.clamp(5, 1, 10) == 5)")
+        import("@addon.recudo.lua.module").lua_test(package, "local lume = require('lume'); assert(lume.clamp(5, 1, 10) == 5)")
     end)

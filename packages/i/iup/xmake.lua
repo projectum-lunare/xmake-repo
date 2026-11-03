@@ -27,7 +27,7 @@ package("iup")
     on_load(function (package)
         if package:config("lua") then
             package:add("deps", "lua")
-            package:add("deps", "forge master", {kind = "addon"})
+            package:add("deps", "recudo master", {kind = "addon"})
         end
     end)
 
@@ -37,7 +37,7 @@ package("iup")
         import("package.tools.xmake").install(package, configs)
 
         if package:config("lua") then
-            import("@addon.forge.lua.tree").apply_search_envs(package)
+            import("@addon.recudo.lua.tree").apply_search_envs(package)
         end
     end)
 
@@ -51,7 +51,7 @@ package("iup")
         ]]}))
 
         if package:config("lua") then
-            import("@addon.forge.lua.module").lua_test(package, [[
+            import("@addon.recudo.lua.module").lua_test(package, [[
                 local iup = require("iuplua")
                 assert(iup._VERSION ~= nil)
                 local cd = require("cdlua")

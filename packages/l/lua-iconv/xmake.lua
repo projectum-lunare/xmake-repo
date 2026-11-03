@@ -17,7 +17,7 @@ package("lua-iconv")
     add_deps("libiconv")
 
     on_load(function (package)
-        import("@addon.forge.lua.runtime").setup(package, {
+        import("@addon.recudo.lua.runtime").setup(package, {
             runtime = {"lua", "luajit"},
         })
     end)
@@ -28,18 +28,18 @@ package("lua-iconv")
             add_requires("libiconv")
 
             target("%s")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("libiconv")
                 add_files("luaiconv.c")
         ]], modname))
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
         if package:is_plat("linux", "macosx", "bsd") and not package:config("shared") then
             return
         end
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local iconv = require("iconv")
             assert(iconv and iconv.VERSION)
             local cd = iconv.new("iso-8859-1", "utf-8")

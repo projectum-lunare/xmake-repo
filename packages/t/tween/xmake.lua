@@ -16,22 +16,22 @@ package("tween")
     add_versions("v2.0.0", "f5ef5b8adc0bf2d356dd2298e01cb79766250e5395b43e4cd11e880930f2c00d")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("tween")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("lua")
                 add_files("tween.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, "local tween = require('tween'); assert(type(tween.new) == 'function')")
+        import("@addon.recudo.lua.module").lua_test(package, "local tween = require('tween'); assert(type(tween.new) == 'function')")
     end)

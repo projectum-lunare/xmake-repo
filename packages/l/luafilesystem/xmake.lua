@@ -19,7 +19,7 @@ package("luafilesystem")
     add_versions("1.6.3", "11c7b1fc2e560c0a521246b84e6257138d97dddde5a19e405714dbabcb9436ca")
 
     on_load(function (package)
-        import("@addon.forge.lua.runtime").setup(package, {
+        import("@addon.recudo.lua.runtime").setup(package, {
             runtime = {"lua", "luajit"},
         })
     end)
@@ -29,11 +29,11 @@ package("luafilesystem")
     on_install(function (package)
         io.writefile("xmake.lua", [[
             target("lfs")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("src/lfs.c")
                 add_headerfiles("src/(lfs.h)")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
@@ -41,7 +41,7 @@ package("luafilesystem")
             -- Lua modules built statically cannot be dlopen'd by standalone lua
             return
         end
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local lfs = require("lfs")
             assert(lfs and lfs._VERSION)
             local current = assert(lfs.currentdir())

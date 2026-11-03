@@ -20,36 +20,36 @@ package("lyaml")
     else
         add_deps("libyaml")
     end
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.writefile("xmake.lua", format([[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
             add_requires("libyaml")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("yaml")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("libyaml")
                 add_defines('PACKAGE="lyaml"', 'VERSION="%s"')
                 add_files("ext/yaml/yaml.c", "ext/yaml/emitter.c", "ext/yaml/parser.c", "ext/yaml/scanner.c")
 
             target("lyaml")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("lib/lyaml/init.lua")
                 add_files("lib/lyaml/explicit.lua", {prefixdir = "lyaml"})
                 add_files("lib/lyaml/functional.lua", {prefixdir = "lyaml"})
                 add_files("lib/lyaml/implicit.lua", {prefixdir = "lyaml"})
         ]], package:version()))
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
         if package:is_plat("linux", "macosx", "bsd", "windows", "mingw") and not package:config("shared") then
             return
         end
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local lyaml = require("lyaml")
             local d = lyaml.load("a: 1")
             assert(d.a == 1)

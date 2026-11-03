@@ -29,7 +29,7 @@ package("busted")
         add_deps("luasystem")
         add_deps("lua-term")
     end
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     add_bindirs("bin")
 
@@ -37,22 +37,22 @@ package("busted")
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("busted")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("lua")
                 add_files("busted/**.lua")
 
             target("busted-bin")
-                add_rules("forge.lua.bin")
+                add_rules("recudo.lua.bin")
                 add_files("bin/busted")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local busted = require("busted")
             assert(busted)
             local runner = require("busted.runner")

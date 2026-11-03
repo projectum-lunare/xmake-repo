@@ -15,21 +15,21 @@ package("moses")
     add_versions("2.0.0", "98073633d5bae356e6a1f275468386a2eaec249222e49f022cc6b3817aaeab41")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("moses")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("moses.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, "local _ = require('moses'); assert(_.isEqual({1, 2}, {1, 2}))")
+        import("@addon.recudo.lua.module").lua_test(package, "local _ = require('moses'); assert(_.isEqual({1, 2}, {1, 2}))")
     end)

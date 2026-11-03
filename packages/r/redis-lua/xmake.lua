@@ -16,21 +16,21 @@ package("redis-lua")
 
     add_deps("lua")
     add_deps("luasocket")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("redis")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("src/redis.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, "local redis = require('redis'); assert(redis._VERSION)")
+        import("@addon.recudo.lua.module").lua_test(package, "local redis = require('redis'); assert(redis._VERSION)")
     end)

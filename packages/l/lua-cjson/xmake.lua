@@ -18,7 +18,7 @@ package("lua-cjson")
     add_versions("2.1.0.14", "14cac5c7a4520b33449a1fc961344556b8b6a2a2c6b739b0e46e3002e6e605bc")
 
     on_load(function (package)
-        import("@addon.forge.lua.runtime").setup(package, {
+        import("@addon.recudo.lua.runtime").setup(package, {
             runtime = {"lua", "luajit"},
         })
     end)
@@ -29,7 +29,7 @@ package("lua-cjson")
     on_install(function (package)
         io.writefile("xmake.lua", [[
             target("cjson")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("lua_cjson.c", "strbuf.c", "fpconv.c")
                 add_headerfiles("*.h", {prefixdir = "cjson"})
                 add_headerfiles("*.h")
@@ -39,7 +39,7 @@ package("lua-cjson")
                 end
 
             target("cjson.safe")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("lua_cjson.c", "strbuf.c", "fpconv.c")
                 if is_plat("windows", "mingw") then
                     add_defines("DISABLE_INVALID_NUMBERS")
@@ -47,23 +47,23 @@ package("lua-cjson")
                 end
 
             target("cjson.util")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("lua/cjson/util.lua")
 
             target("lua2json")
-                add_rules("forge.lua.bin")
+                add_rules("recudo.lua.bin")
                 add_files("lua/lua2json.lua")
 
             target("json2lua")
-                add_rules("forge.lua.bin")
+                add_rules("recudo.lua.bin")
                 add_files("lua/json2lua.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
         if package:config("shared") then
-            import("@addon.forge.lua.module").lua_test(package, [[
+            import("@addon.recudo.lua.module").lua_test(package, [[
                 local cjson = require("cjson")
                 local safe = require("cjson.safe")
                 local util = require("cjson.util")

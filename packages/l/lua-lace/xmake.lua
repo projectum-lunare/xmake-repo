@@ -15,22 +15,22 @@ package("lua-lace")
     add_versions("v1.3.1", "8cadcda0ec3240a8f633af81aece9e9d9cc185c31f32ce1d8d0e491332cee4b3")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("lace")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("lib/lace.lua")
                 add_files("lib/lace/*.lua", {prefixdir = "lace"})
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, "assert(require('lace'))")
+        import("@addon.recudo.lua.module").lua_test(package, "assert(require('lace'))")
     end)

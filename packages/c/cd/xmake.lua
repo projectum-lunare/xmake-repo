@@ -29,7 +29,7 @@ package("cd")
     on_load(function (package)
         if package:config("lua") then
             package:add("deps", "lua")
-            package:add("deps", "forge master", {kind = "addon"})
+            package:add("deps", "recudo master", {kind = "addon"})
         end
     end)
 
@@ -39,7 +39,7 @@ package("cd")
         import("package.tools.xmake").install(package, configs)
 
         if package:config("lua") then
-            import("@addon.forge.lua.tree").apply_search_envs(package)
+            import("@addon.recudo.lua.tree").apply_search_envs(package)
         end
     end)
 
@@ -53,7 +53,7 @@ package("cd")
         ]]}))
 
         if package:config("lua") then
-            import("@addon.forge.lua.module").lua_test(package, [[
+            import("@addon.recudo.lua.module").lua_test(package, [[
                 local cd = require("cdlua")
                 assert(cd.Version() ~= nil)
                 local im = require("imlua")

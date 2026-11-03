@@ -25,7 +25,7 @@ package("luasql")
     add_includedirs("include", "include/luasql")
 
     on_load(function (package)
-        import("@addon.forge.lua.runtime").setup(package, {
+        import("@addon.recudo.lua.runtime").setup(package, {
             runtime = {"lua", "luajit"},
         })
         if package:config("sqlite3") then
@@ -47,7 +47,7 @@ package("luasql")
             table.insert(requires, 'add_requires("sqlite3")')
             table.insert(targets, string.format([[
                 target("luasql.sqlite3")
-                    add_rules("forge.lua.module")
+                    add_rules("recudo.lua.module")
                     add_packages("sqlite3")
                     add_includedirs("src")
                     add_defines("LUASQL_VERSION_NUMBER=\"%s\"")
@@ -60,7 +60,7 @@ package("luasql")
             table.insert(requires, 'add_requires("libpq")')
             table.insert(targets, string.format([[
                 target("luasql.postgres")
-                    add_rules("forge.lua.module")
+                    add_rules("recudo.lua.module")
                     add_packages("libpq")
                     add_includedirs("src")
                     add_defines("LUASQL_VERSION_NUMBER=\"%s\"")
@@ -73,7 +73,7 @@ package("luasql")
             table.insert(requires, 'add_requires("mysql")')
             table.insert(targets, string.format([[
                 target("luasql.mysql")
-                    add_rules("forge.lua.module")
+                    add_rules("recudo.lua.module")
                     add_packages("mysql")
                     add_includedirs("src")
                     add_defines("LUASQL_VERSION_NUMBER=\"%s\"")
@@ -85,7 +85,7 @@ package("luasql")
         if package:config("odbc") then
             table.insert(targets, string.format([[
                 target("luasql.odbc")
-                    add_rules("forge.lua.module")
+                    add_rules("recudo.lua.module")
                     add_includedirs("src")
                     add_defines("LUASQL_VERSION_NUMBER=\"%s\"")
                     add_files("src/luasql.c", "src/ls_odbc.c")
@@ -104,7 +104,7 @@ package("luasql")
             %s
         ]], table.concat(requires, "\n"), table.concat(targets, "\n")))
 
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
@@ -112,7 +112,7 @@ package("luasql")
             return
         end
         if package:config("sqlite3") then
-            import("@addon.forge.lua.module").lua_test(package, [[
+            import("@addon.recudo.lua.module").lua_test(package, [[
                 local luasql = require("luasql.sqlite3")
                 assert(luasql and luasql.sqlite3)
                 local env = luasql.sqlite3()

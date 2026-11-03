@@ -17,7 +17,7 @@ package("ldoc")
     add_deps("lua")
     add_deps("penlight")
     add_deps("markdown")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
     set_kind("library", {headeronly = true})
     add_bindirs("bin")
 
@@ -28,18 +28,18 @@ package("ldoc")
 
         io.writefile("xmake.lua", [[
             target("ldoc")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("ldoc/**.lua")
 
             target("ldoc.bin")
-                add_rules("forge.lua.bin")
+                add_rules("recudo.lua.bin")
                 add_files("ldoc.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local tools = require("ldoc.tools")
             assert(tools)
             local doc = require("ldoc.doc")

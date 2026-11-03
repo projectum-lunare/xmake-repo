@@ -15,7 +15,7 @@ package("luasystem")
     add_versions("0.7.0", "f6a617414f5e27c69e2377c7e2b90631b8ee0529c3ef7960d6937e33247d0bbe")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     if is_plat("windows", "mingw") then
         add_syslinks("advapi32", "winmm", "bcrypt")
@@ -27,10 +27,10 @@ package("luasystem")
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("system.core")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("lua")
                 add_includedirs("src")
                 add_files(
@@ -51,11 +51,11 @@ package("luasystem")
                 end
 
             target("system")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("lua")
                 add_files("system/init.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
@@ -63,7 +63,7 @@ package("luasystem")
             -- Lua modules built statically cannot be dlopen'd by standalone lua
             return
         end
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local sys = require("system")
             assert(sys and sys.gettime)
             assert(type(sys.gettime()) == "number")

@@ -16,20 +16,20 @@ package("argparse")
     add_versions("0.7.0", "d85b31ca60d88c54ad743c3b5c4cdb0ae47ba57341c203a899b18c0277afec77")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
     set_kind("library", {headeronly = true})
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
             target("argparse")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("src/argparse.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local argparse = require("argparse")
             local parser = argparse("script", "An example program.")
             parser:argument("input")

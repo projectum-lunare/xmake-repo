@@ -14,21 +14,21 @@ package("ansicolors")
     add_versions("v1.0.2", "fa76a465c2e0d342f6d5a1d44c63bd398053f206f41c7b5356b551694f899d64")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("ansicolors")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("ansicolors.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, "local colors = require('ansicolors'); assert(colors('%{red}hello') ~= nil)")
+        import("@addon.recudo.lua.module").lua_test(package, "local colors = require('ansicolors'); assert(colors('%{red}hello') ~= nil)")
     end)

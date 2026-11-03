@@ -15,21 +15,21 @@ package("inifile")
     add_versions("v1.0", "5b9365c66145c3b4aeb0d997aff974e0acff60067a804adcf0ba05ead0e450fb")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("inifile")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("inifile.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, "local ini = require('inifile'); local t = ini.parse('[s]\\na=1\\n', 'memory'); assert(t.s.a == 1 or t.s.a == '1')")
+        import("@addon.recudo.lua.module").lua_test(package, "local ini = require('inifile'); local t = ini.parse('[s]\\na=1\\n', 'memory'); assert(t.s.a == 1 or t.s.a == '1')")
     end)

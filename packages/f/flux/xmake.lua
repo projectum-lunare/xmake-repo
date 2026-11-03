@@ -21,22 +21,22 @@ package("flux")
     add_versions("master", "bb330231b87eabf84fbd68322f13a6320db30a41")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("flux")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_packages("lua")
                 add_files("flux.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, "local flux = require('flux'); assert(type(flux.to) == 'function')")
+        import("@addon.recudo.lua.module").lua_test(package, "local flux = require('flux'); assert(type(flux.to) == 'function')")
     end)

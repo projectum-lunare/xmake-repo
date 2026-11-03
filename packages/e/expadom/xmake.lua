@@ -19,7 +19,7 @@ package("expadom")
     else
         add_deps("luaexpat")
     end
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
     set_kind("library", {headeronly = true})
 
     on_install(function (package)
@@ -30,14 +30,14 @@ package("expadom")
 
         io.writefile("xmake.lua", [[
             target("expadom")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("src/expadom/**.lua", {rootdir = "src"})
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local expadom = require("expadom")
             assert(expadom and expadom.parseDocument)
             local doc = expadom.parseDocument("<root><child/></root>")

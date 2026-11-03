@@ -16,30 +16,30 @@ package("cluacov")
 
     add_deps("lua")
     add_deps("luacov")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
             target("cluacov.deepactivelines")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("src/cluacov/deepactivelines.c")
 
             target("cluacov.hook")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("src/cluacov/hook.c")
 
             target("cluacov.version")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("src/cluacov/version.lua", {rootdir = "src"})
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
         if package:is_plat("linux", "macosx", "bsd", "windows", "mingw") and not package:config("shared") then
             return
         end
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local dal = require("cluacov.deepactivelines")
             assert(dal)
             local hook = require("cluacov.hook")

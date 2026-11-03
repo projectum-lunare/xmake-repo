@@ -15,7 +15,7 @@ package("lua-resty-http")
     add_versions("v0.17.2", "3da18ca8582243eff28302591e36651dc7fab046e77336aa4a6fa718bccce4a2")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
 
     on_install(function (package)
         io.replace("lib/resty/http.lua", "for key, values in pairs(headers) do\n        key = tostring(key)", "for raw_key, values in pairs(headers) do\n        local key = tostring(raw_key)", {plain = true})
@@ -23,17 +23,17 @@ package("lua-resty-http")
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             add_requires("lua")
-            includes("@addon/forge/forge.lua")
+            includes("@addon/recudo/recudo.lua")
 
             target("lua-resty-http")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("lib/resty/**.lua")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local mt = {}
             mt.__index = function(t, k)
                 t[k] = setmetatable({}, mt)

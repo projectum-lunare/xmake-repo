@@ -21,7 +21,7 @@ package("cgilua")
     else
         add_deps("luafilesystem")
     end
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
     set_kind("library", {headeronly = true})
     add_bindirs("bin")
 
@@ -31,19 +31,19 @@ package("cgilua")
 
         io.writefile("xmake.lua", [[
             target("cgilua")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("src/cgilua/**.lua", {rootdir = "src"})
 
             target("cgilua.launchers")
-                add_rules("forge.lua.bin")
+                add_rules("recudo.lua.bin")
                 add_files("src/launchers/cgilua.cgi")
                 add_files("src/launchers/cgilua.fcgi")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, [[
+        import("@addon.recudo.lua.module").lua_test(package, [[
             local cgilua = require("cgilua")
             assert(cgilua and cgilua._VERSION)
             local urlcode = require("cgilua.urlcode")

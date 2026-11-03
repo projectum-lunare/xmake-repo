@@ -16,25 +16,25 @@ package("luacov")
     add_versions("v0.15.0", "19ebe0fdd5dd05ab63d5192371dcf272f2c7ccea5366e98fee440a2f30e021d8")
 
     add_deps("lua")
-    add_deps("forge master", {kind = "addon"})
+    add_deps("recudo master", {kind = "addon"})
     set_kind("library", {headeronly = true})
     add_bindirs("bin")
 
     on_install(function (package)
         io.writefile("xmake.lua", [[
             target("luacov")
-                add_rules("forge.lua.module")
+                add_rules("recudo.lua.module")
                 add_files("src/**.lua")
 
             target("luacov.bin")
-                add_rules("forge.lua.bin")
+                add_rules("recudo.lua.bin")
                 add_files("src/bin/luacov")
         ]])
-        import("@addon.forge.lua.module").install_project(package)
+        import("@addon.recudo.lua.module").install_project(package)
     end)
 
     on_test(function (package)
-        import("@addon.forge.lua.module").lua_test(package, "assert(require('luacov'))")
+        import("@addon.recudo.lua.module").lua_test(package, "assert(require('luacov'))")
         if not package:is_cross() then
             os.vrunv("luacov", {"--help"})
         end
