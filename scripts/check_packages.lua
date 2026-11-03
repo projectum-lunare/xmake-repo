@@ -73,9 +73,24 @@ local function check_package(pkg_path)
         end
     end
 
-    -- 4. Test block check
+    -- 4. Test block check: the recipe must ship a test, and that test must
+    -- actually verify something. A bare `on_test(function() end)` would
+    -- otherwise pass while proving nothing about the installed package.
     if not content:find("on_test%(") then
-        table.insert(warnings, "Missing on_test(...) validation script")
+        table.insert(errors, "Missing on_test(...) validation script")
+    else
+        local block = content:match("on_test%(function[^)]-%)%s*(.-)%s*end%)")
+        if block then
+            local verifies = block:find("assert", 1, true)
+                or block:find("lua_test", 1, true)
+                or block:find("has_cincludes", 1, true)
+                or block:find("has_cxxincludes", 1, true)
+                or block:find("has_cfuncs", 1, true)
+                or block:find("os.vrun", 1, true)
+            if not verifies then
+                table.insert(warnings, "on_test(...) does not assert anything - it cannot fail")
+            end
+        end
     end
 
     -- 5. on_install is mandatory: without it the recipe installs nothing
@@ -116,16 +131,24 @@ local function check_package(pkg_path)
 
     -- 8. Rule names must exist in the Recudo addon's canonical set
     local KNOWN_RULES = {
-        ["recudo.lua.module"] = true, ["recudo.lua.app"] = true,
-        ["recudo.lua.bin"] = true, ["recudo.lua.binary"] = true,
+        ["recudo.lua.module"] = true,
+        ["recudo.lua.app"] = true,
+        ["recudo.lua.bin"] = true,
+        ["recudo.lua.binary"] = true,
         ["recudo.lua.bundle"] = true,
-        ["recudo.lang.fennel"] = true, ["recudo.lang.moonscript"] = true,
-        ["recudo.lang.nelua"] = true, ["recudo.lang.teal"] = true,
+        ["recudo.lang.fennel"] = true,
+        ["recudo.lang.moonscript"] = true,
+        ["recudo.lang.nelua"] = true,
+        ["recudo.lang.teal"] = true,
         ["recudo.lang.yuescript"] = true,
-        ["recudo.engine.love"] = true, ["recudo.engine.amulet"] = true,
-        ["recudo.toolchain.atarist"] = true, ["recudo.toolchain.evc3"] = true,
-        ["recudo.toolchain.vbcc"] = true, ["recudo.toolchain.watcom"] = true,
-        ["mode.release"] = true, ["mode.debug"] = true,
+        ["recudo.engine.love"] = true,
+        ["recudo.engine.amulet"] = true,
+        ["recudo.toolchain.atarist"] = true,
+        ["recudo.toolchain.evc3"] = true,
+        ["recudo.toolchain.vbcc"] = true,
+        ["recudo.toolchain.watcom"] = true,
+        ["mode.release"] = true,
+        ["mode.debug"] = true,
     }
     for rules_line in content:gmatch("add_rules%(([^%)]+)%)") do
         for rule in rules_line:gmatch('"([^"]+)"') do
