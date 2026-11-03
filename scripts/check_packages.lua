@@ -78,6 +78,64 @@ local function check_package(pkg_path)
         table.insert(warnings, "Missing on_test(...) validation script")
     end
 
+    -- 5. on_install is mandatory: without it the recipe installs nothing
+    if not content:find("on_install%(") then
+        table.insert(errors, "Missing on_install(...) - the recipe never installs anything")
+    end
+
+    -- 6. Every declared alias must have a matching add_urls({alias = ...})
+    local declared_aliases = {}
+    for alias in content:gmatch('alias%s*=%s*"([^"]+)"') do
+        declared_aliases[alias] = true
+    end
+    for version in content:gmatch('add_versions%("([^"]+)"') do
+        local alias = version:match("^([^:]+):")
+        if alias and not declared_aliases[alias] then
+            table.insert(errors, string.format(
+                "add_versions(\"%s\") uses alias '%s' but no add_urls({alias = \"%s\"}) declares it",
+                version, alias, alias))
+        end
+    end
+
+    -- 7. A URL must be version-parameterised when more than one version exists
+    local version_count = 0
+    for _ in content:gmatch('add_versions%("') do version_count = version_count + 1 end
+    if version_count > 1 and content:find("add_urls%(") then
+        local has_template = false
+        for url in content:gmatch('add_urls%("([^"]+)"') do
+            if url:find("$(version)", 1, true) or url:find("$(V)", 1, true) then
+                has_template = true
+            end
+        end
+        if not has_template then
+            table.insert(errors, string.format(
+                "%d versions declared but no add_urls() uses the $(version) placeholder - only one artifact is reachable",
+                version_count))
+        end
+    end
+
+    -- 8. Rule names must exist in the Recudo addon's canonical set
+    local KNOWN_RULES = {
+        ["recudo.lua.module"] = true, ["recudo.lua.app"] = true,
+        ["recudo.lua.bin"] = true, ["recudo.lua.binary"] = true,
+        ["recudo.lua.bundle"] = true,
+        ["recudo.lang.fennel"] = true, ["recudo.lang.moonscript"] = true,
+        ["recudo.lang.nelua"] = true, ["recudo.lang.teal"] = true,
+        ["recudo.lang.yuescript"] = true,
+        ["recudo.engine.love"] = true, ["recudo.engine.amulet"] = true,
+        ["recudo.toolchain.atarist"] = true, ["recudo.toolchain.evc3"] = true,
+        ["recudo.toolchain.vbcc"] = true, ["recudo.toolchain.watcom"] = true,
+        ["mode.release"] = true, ["mode.debug"] = true,
+    }
+    for rules_line in content:gmatch("add_rules%(([^%)]+)%)") do
+        for rule in rules_line:gmatch('"([^"]+)"') do
+            if rule:startswith("recudo.") and not KNOWN_RULES[rule] then
+                table.insert(errors, string.format(
+                    "add_rules uses unknown rule '%s' (check the Recudo rule taxonomy)", rule))
+            end
+        end
+    end
+
     -- 5. Recudo lua runtime check:
     -- If package uses recudo and has lua modules, check for @addon.recudo.lua.runtime
     if content:find("recudo.lua.module", 1, true) and not content:find("@addon.recudo.lua.runtime", 1, true) then
