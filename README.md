@@ -1,7 +1,16 @@
 # Projectum Lunare Xmake Repository
 
 > **Official package and addon repository for Projectum Lunare**  
-> Custom packages, cross-compilation toolchains, and retro-computing dependencies for [Xmake](https://xmake.io).
+> Lua packages wired for the Recudo module model, plus the Recudo addon itself, for [Xmake](https://xmake.io).
+
+Every recipe here is written against Recudo's Lua subsystem: modules install
+where `require` looks, native extensions carry a runtime buildhash, and
+multi-runtime (PUC-Lua / LuaJIT / OpenResty) is a config, not a fork.
+
+Cross-compilation toolchains are **not** in this repository — they ship as
+package recipes inside
+[`projectum-lunare/recudo`](https://github.com/projectum-lunare/recudo)
+under `repository/tools/`, and are installed with `xmake recudo tool install`.
 
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-blue.svg)](https://opensource.org/licenses/MPL-2.0)
 [![Xmake](https://img.shields.io/badge/Xmake-Repository-red.svg)](https://xmake.io)
@@ -63,7 +72,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 
 | Package | Description |
 | :--- | :--- |
-| [**`recudo`**](addons/f/recudo/xmake.lua) | Projectum Lunare Unified Build, Toolchain & Cross-Compilation Addon |
+| [**`recudo`**](addons/r/recudo/xmake.lua) | Projectum Lunare Unified Build, Toolchain & Cross-Compilation Addon |
 
 ### Runtimes & Core Language
 
@@ -246,7 +255,12 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 
 ### Installing Recudo Addon
 ```bash
+# from this repository
+xmake repo --add projectum-lunare https://github.com/projectum-lunare/xmake-repo.git
 xmake addon --install recudo
+
+# or straight from the addon repository
+xmake addon --install github:projectum-lunare/recudo
 ```
 
 ### Requiring Greatest in `xmake.lua`
@@ -308,7 +322,7 @@ add_requires("recudo master", {kind = "addon"})
 includes("@addon/recudo/recudo.lua")
 
 target("mygame")
-    add_rules("recudo.love")
+    add_rules("recudo.engine.love")
     add_packages("love", "anim8", "bump", "hump", "flux", "tween", "lume")
     add_files("src/main.lua")
 ```
@@ -323,7 +337,7 @@ add_requires("recudo master", {kind = "addon"})
 includes("@addon/recudo/recudo.lua")
 
 target("typed_module")
-    add_rules("recudo.lua.module", "recudo.teal")
+    add_rules("recudo.lua.module", "recudo.lang.teal")
     add_files("src/*.tl")
 ```
 
@@ -334,7 +348,7 @@ add_requires("recudo master", {kind = "addon"})
 includes("@addon/recudo/recudo.lua")
 
 target("systems_app")
-    add_rules("recudo.nelua")
+    add_rules("recudo.lang.nelua")
     add_files("src/*.nelua")
 ```
 
