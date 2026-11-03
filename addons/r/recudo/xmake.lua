@@ -8,7 +8,8 @@ package("recudo")
     set_license("MPL-2.0")
 
     add_urls("https://github.com/projectum-lunare/recudo.git")
-    add_versions("master", "56fbf86057284981a637adeb7ee61be1bc45069c")
+    -- semver only: a branch name in add_versions makes xmake fail with
+    -- "unable to parse semver". `master` stays reachable as a git ref.
     add_versions("v0.2.0", "v0.2.0")
     add_versions("v0.2.1", "v0.2.1")
 
