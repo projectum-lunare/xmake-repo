@@ -15,16 +15,22 @@ package("luacheck")
     add_versions("v1.1.2", "a3ae089f3939b9fba4dd91c8c6f206e088cc4b21b49f1b6c7a5cc7345a09dc19")
     add_versions("v1.1.1", "6ef4276498c4bb4ec527c3f942e35ff5c71fdd8c88ed0619a83a1c967d135c81")
 
-    add_deps("lua")
     add_deps("argparse")
     if is_plat("windows", "mingw", "linux", "macosx", "bsd", "haiku") then
         add_deps("luafilesystem", {configs = {shared = true}})
     else
         add_deps("luafilesystem")
     end
-    add_deps("recudo master", {kind = "addon"})
     set_kind("library", {headeronly = true})
     add_bindirs("bin")
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.replace("src/luacheck/standards.lua",

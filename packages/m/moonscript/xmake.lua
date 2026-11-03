@@ -14,7 +14,6 @@ package("moonscript")
     add_versions("v0.8.0", "0458ba86359c9089f823f81e4198ea3f7d57c2f2773fb8a1364940ebdd802ac5")
     add_versions("v0.7.0", "98fcf86d47694c81ccf9012e310f86d443ddf516e90b267ea33eb7ff1b0747c4")
 
-    add_deps("lua")
     add_deps("argparse")
     if is_plat("windows", "mingw", "linux", "macosx", "bsd", "haiku") then
         add_deps("lpeg", {configs = {shared = true}})
@@ -23,7 +22,14 @@ package("moonscript")
         add_deps("lpeg")
         add_deps("luafilesystem")
     end
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

@@ -15,8 +15,14 @@ package("lua-resty-memcached")
     add_versions("0.17", "02733575c4aed15f6cab662378e4b071c0a4a4d07940c4ef19a7319e9be943d4")
     add_versions("0.16", "42893da0e3de4ec180c9bf02f82608d78787290a70c5644b538f29d243147396")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"luajit", "openresty-luajit"},
+            default = "luajit",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

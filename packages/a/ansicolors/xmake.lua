@@ -13,8 +13,14 @@ package("ansicolors")
 
     add_versions("v1.0.2", "fa76a465c2e0d342f6d5a1d44c63bd398053f206f41c7b5356b551694f899d64")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

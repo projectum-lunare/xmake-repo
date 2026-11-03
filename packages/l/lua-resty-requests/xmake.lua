@@ -15,11 +15,17 @@ package("lua-resty-requests")
     add_versions("v0.7.2", "a1df91dfef28a975f2dccaab447c5fbfa92de01a386f3e89b5d7bb010d6c7b8d")
     add_versions("v0.7.1", "e3e7057e81271cb762bd99cc5079817368f0d5996c32471e15931284806a420c")
 
-    add_deps("lua")
     add_deps("lua-cjson", {configs = {shared = true}})
     add_deps("lua-resty-socket")
     add_deps("lua-resty-http2")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"luajit", "openresty-luajit"},
+            default = "luajit",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

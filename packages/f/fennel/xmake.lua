@@ -14,9 +14,15 @@ package("fennel")
     add_versions("1.6.1", "f0f188e9a4424851d9263ab69302b6b2ffc5c6efb67a25fffc52187a29c94024")
     add_versions("1.6.0", "42942d90bbd68656b6025144bb0527c1ae5a5d55e22a53c7e820325230185bf5")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
     add_bindirs("bin")
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         local lua = package:dep("lua")

@@ -17,8 +17,14 @@ package("binaryheap")
     add_versions("0.4", "10b1b6c6f2d22560f512f9896a6672ec5ae0eea1390ff8e662be1d5d9625b438")
     add_versions("0.3", "e25ac29abf9e22c8e4aae0b02255d0dd2e35a27a39b90fb6a24b179805eb8049")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

@@ -14,9 +14,15 @@ package("luassert")
     add_versions("1.9.0", "1db0fabf1bd87392860375b89a8a37d17b687325c988be0df8c42e7e96e7ed73")
     add_versions("1.8.0", "5955234a63fdc208674314b2e97982bb551459b85b8ff11611a50421c6a29c76")
 
-    add_deps("lua")
     add_deps("say")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

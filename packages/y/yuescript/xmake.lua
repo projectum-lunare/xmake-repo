@@ -16,10 +16,16 @@ package("yuescript")
     add_versions("0.34.1", "5c291001b6c210f4220ddf4bef0b0cffc7ba2b1cab4c70bc2e44f924c84db8c2")
     add_versions("0.34.0", "3faf4822588ffbbf908f288aa71112a78a2020ad81e8e55673b5f279e034d82b")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
 
     add_bindirs("bin")
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

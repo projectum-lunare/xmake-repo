@@ -14,9 +14,15 @@ package("luasyslog")
     add_versions("2.0.1", "166ddad9c6ab304d4793242493a516ab8c33c768724f798ea7c955631b29a72e")
     add_versions("2.0.0", "187fc1916b32f72a6ccd0e79e9425f6eb25c94df10f0a404b1b7961f919d5803")
 
-    add_deps("lua")
     add_deps("lualogging")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install("linux", "macosx", "bsd", "cross", function (package)
         os.mkdir("logging")

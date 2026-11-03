@@ -14,9 +14,15 @@ package("lua-mimetypes")
     add_versions("v1.1.0", "0f035ae4cde86ad4187fa6e92d360659299911e3756947ba89f087c52d57cf0a")
     add_versions("v1.0.0", "f387475765ff3bcc7abf0f8ad67654bbb8d745569a70623b478f11bebfa585e5")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
     set_kind("library", {headeronly = true})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

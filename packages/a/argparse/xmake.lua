@@ -15,9 +15,15 @@ package("argparse")
     add_versions("0.7.1", "d344e49404c3e7b3e7fa4fe6741c106f25909d9b24923cb08dcceda1f9754809")
     add_versions("0.7.0", "d85b31ca60d88c54ad743c3b5c4cdb0ae47ba57341c203a899b18c0277afec77")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
     set_kind("library", {headeronly = true})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

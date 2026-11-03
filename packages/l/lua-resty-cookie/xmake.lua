@@ -13,8 +13,14 @@ package("lua-resty-cookie")
 
     add_versions("0.1.0", "d81b33129c6fb5203b571fa4d8394823bf473d8872c0357a1d0f14420b1483bd")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"luajit", "openresty-luajit"},
+            default = "luajit",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

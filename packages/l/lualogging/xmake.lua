@@ -17,13 +17,19 @@ package("lualogging")
     add_versions("1.7.0", "e8665ff75ffb529c7d9bf47e4501f45c291b029ab50c96ad5e946a5cb30bb03b")
     add_versions("1.6.0", "92a68e9a45a896a562135c876ef4fdc780f93eef14ed8a1796d4b35c00a589bc")
 
-    add_deps("lua")
     if is_plat("windows", "mingw", "linux", "macosx", "bsd", "haiku") then
         add_deps("luasocket", {configs = {shared = true}})
     else
         add_deps("luasocket")
     end
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

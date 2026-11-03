@@ -15,10 +15,16 @@ package("timerwheel")
     add_versions("1.0.1", "fcbef22ddb623337e9ac76eb3edeb60b22210f2368679aac13884582156e1f08")
     add_versions("1.0.0", "2e126a3f5100fb6f05ef7cded4c2e5775871eca0ee5af907f8cfbf6f406765f3")
 
-    add_deps("lua")
     add_deps("binaryheap")
     add_deps("coxpcall")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

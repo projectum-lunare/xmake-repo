@@ -15,8 +15,15 @@ package("luacov-reporter-lcov")
     add_versions("v0.1", "a5c0edda950868da6a6177fd8ff2284477b200a1942e3a9fc0af6437c07e8dd5")
 
     add_deps("lua", "luacov")
-    add_deps("recudo master", {kind = "addon"})
     set_kind("library", {headeronly = true})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.replace("luacov/reporter/lcov.lua", 'pcall(require "openssl.digest")', 'pcall(require, "openssl.digest")', {plain = true})

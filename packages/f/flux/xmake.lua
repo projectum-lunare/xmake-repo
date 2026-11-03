@@ -20,8 +20,14 @@ package("flux")
     add_versions("0.1.0", "3ecc818f6ad5db474b9f1adcd76762601c341c10e3bdae96f9c0baa2671c2fb1")
     add_versions("master", "bb330231b87eabf84fbd68322f13a6320db30a41")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

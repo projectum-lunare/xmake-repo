@@ -14,7 +14,6 @@ package("lapis")
     add_versions("v1.19.0", "15c6b5f8a26b7db5f0abd2d348112fad31d816eb961080f0fb5ec7a054913e7d")
     add_versions("v1.18.0", "5d7a8e291bc9c87318071739b1da059f20b0e85230c8966dc2eacce0853ae5dc")
 
-    add_deps("lua")
     add_deps("ansicolors")
     add_deps("argparse")
     add_deps("date")
@@ -34,8 +33,15 @@ package("lapis")
         add_deps("luasocket")
         add_deps("luaossl")
     end
-    add_deps("recudo master", {kind = "addon"})
     add_bindirs("bin")
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

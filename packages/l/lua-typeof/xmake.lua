@@ -13,8 +13,14 @@ package("lua-typeof")
 
     add_versions("v0.1", "b8369cad3cadb402c4ae0318c4bb26c56c4c9b2dfb1a3ecf6411e8d09b36ecd5")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

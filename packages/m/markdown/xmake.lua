@@ -13,9 +13,15 @@ package("markdown")
 
     add_versions("0.33", "c94fa6669f3b00a1047c50de4ee26e422a3bacb15ca4ed576b2f4d67d16f1f09")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
     set_kind("library", {headeronly = true})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.replace("markdown.lua",

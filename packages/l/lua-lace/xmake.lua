@@ -14,8 +14,14 @@ package("lua-lace")
     add_versions("v1.4", "8e50bb0589655b0607ed8ba4031093799f7d0a4670c9b36a53126f44bfacf54c")
     add_versions("v1.3.1", "8cadcda0ec3240a8f633af81aece9e9d9cc185c31f32ce1d8d0e491332cee4b3")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

@@ -15,8 +15,14 @@ package("lua-tablepool")
     add_versions("0.02", "b0a525219bc54445b993b3e9b7bc0c59ec45d33f70c413e3cb5b0f0a209e2221")
     add_versions("0.01", "0b0c90f71526ce7ba94a3cd362d065279ce370fcf8b251a7062c181fd79be496")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"luajit", "openresty-luajit"},
+            default = "luajit",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

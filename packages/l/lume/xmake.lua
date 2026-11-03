@@ -15,8 +15,14 @@ package("lume")
     add_versions("v2.2.3", "5b4604596606e6f5a1d4d1285f658d0fca4c15873688a6ce22276a1234551369")
     add_versions("v2.2.2", "70dc99fae7fc703b4d403a7a8928834820fbc5fb83f7e33debc5c6c39bfdfc56")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

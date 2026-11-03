@@ -14,12 +14,18 @@ package("ldoc")
     add_versions("v1.5.0", "4469cd74c8c7f51d3b9ce802d2239ba2b09d3d3a11273c3a5abdf273a0a53531")
     add_versions("1.4.6", "7eb5097ad786ac44c963e586d6953de3970edf772c251ac6f91dc170210d429d")
 
-    add_deps("lua")
     add_deps("penlight")
     add_deps("markdown")
-    add_deps("recudo master", {kind = "addon"})
     set_kind("library", {headeronly = true})
     add_bindirs("bin")
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.replace("ldoc/html.lua", "tag = stringx.title(tag)", "local tag = stringx.title(tag)", {plain = true})

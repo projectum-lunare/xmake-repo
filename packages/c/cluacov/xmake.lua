@@ -14,9 +14,15 @@ package("cluacov")
     add_versions("1.0.0", "0d4683d195ec69b070ba6d37ccb07b4c428cba38a727b0e2c2f4ba77e90df4b6")
     add_versions("0.1.4", "6d96004bb17ef14c3569934d64651d7fd0d451c6e733f71590989a334a3a7ddb")
 
-    add_deps("lua")
     add_deps("luacov")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

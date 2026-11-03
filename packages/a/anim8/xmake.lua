@@ -16,8 +16,14 @@ package("anim8")
     add_versions("v2.2.0", "673559055f53de720f3412e65f1da0b1770640d87ce5439f19b7534ad4026fb0")
     add_versions("v2.1.0", "30259570e500ee0b250f1b3d3fa3b90c4fcfbdccd5d8cda1b618f2b7b2eb2f99")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

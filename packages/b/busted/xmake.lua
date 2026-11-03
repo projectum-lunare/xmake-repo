@@ -15,7 +15,6 @@ package("busted")
     add_versions("2.2.0", "befca10f573bb476fa1db2e3149150d65f802a71d34d1682679e640665f2dc2b")
     add_versions("2.1.2", "445519fa663dbdd21e8a6ecf1609f397d0e2168440e59ee29198ee687321e9a3")
 
-    add_deps("lua")
     add_deps("lua-cliargs")
     add_deps("dkjson")
     add_deps("say")
@@ -29,9 +28,16 @@ package("busted")
         add_deps("luasystem")
         add_deps("lua-term")
     end
-    add_deps("recudo master", {kind = "addon"})
 
     add_bindirs("bin")
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

@@ -15,8 +15,14 @@ package("lua-resty-maxminddb")
     add_versions("v1.3.6", "4e10a1c168ac80de31ec1fc097a1c5b1875322ad70f0d539adbdc3f734e52d86")
     add_versions("v1.3.5", "731e3b019d25963f96a61f0bb4e3f5a4ae74bb2469e5e1482c6eaff3df42ffc3")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"luajit", "openresty-luajit"},
+            default = "luajit",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

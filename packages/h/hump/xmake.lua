@@ -21,8 +21,14 @@ package("hump")
     add_versions("0.4-2", "442a7167eb9b33908e880b6c35cedce0eab22b86bf474f162312c867bc6eef25")
     add_versions("master", "08937cc0ecf72d1a964a8de6cd552c5e136bf0d4")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.gsub("class.lua", "k = include_helper%(%{%}, k, seen%)", "local key = include_helper({}, k, seen)")

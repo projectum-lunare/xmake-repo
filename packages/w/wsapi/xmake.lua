@@ -14,7 +14,6 @@ package("wsapi")
     add_versions("v1.7", "48dc7aba0fd2e96a3e5ef51045b5d923964f6ae299de761aa0467031ad44e987")
     add_versions("v1.6.1", "49c73a35c69e8a708c6247223969c4005dd9bebb8b036343b10d1c9020e73a04")
 
-    add_deps("lua")
     add_deps("coxpcall")
     if is_plat("windows", "mingw", "linux", "macosx", "bsd", "haiku") then
         add_deps("luafilesystem", {configs = {shared = true}})
@@ -23,7 +22,14 @@ package("wsapi")
         add_deps("luafilesystem")
         add_deps("rings")
     end
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.replace("src/wsapi/request.lua", "type = string.lower(type)", "local type = string.lower(type)", {plain = true})

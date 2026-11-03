@@ -14,8 +14,14 @@ package("moses")
     add_versions("2.1.0", "92818397ede48d5d0491e793b26739cee5689634fbb38ec4b7cc3c2683dfbf58")
     add_versions("2.0.0", "98073633d5bae356e6a1f275468386a2eaec249222e49f022cc6b3817aaeab41")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

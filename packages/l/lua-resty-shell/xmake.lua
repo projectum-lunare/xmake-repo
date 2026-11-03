@@ -15,10 +15,16 @@ package("lua-resty-shell")
     add_versions("0.02", "a928b9074d3f61a64ca72172b10233a892b14fe20d20032283b281c80e1be74f")
     add_versions("0.01", "3c8a38c146a02fad4ae2b5b651f3164b31d8bffa6359c0a8d6c70789400c102c")
 
-    add_deps("lua")
     add_deps("lua-resty-signal")
     add_deps("lua-tablepool")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"luajit", "openresty-luajit"},
+            default = "luajit",
+        })
+    end)
+
 
     on_install("linux", "macosx", "bsd", function (package)
         io.writefile("xmake.lua", [[

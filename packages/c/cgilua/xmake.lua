@@ -15,15 +15,21 @@ package("cgilua")
     add_versions("v5.2.1", "6b2d81f9363595d0f6c8158b9c2e9f438d2aced0e31bde6cc5b7f06270bd4711")
     add_versions("v5.1.4", "56f295119763a83ff6d2cef21d612ccc81b5ec6f1b2f51a2f9619501bb421fbb")
 
-    add_deps("lua")
     if is_plat("windows", "mingw", "linux", "macosx", "bsd", "haiku") then
         add_deps("luafilesystem", {configs = {shared = true}})
     else
         add_deps("luafilesystem")
     end
-    add_deps("recudo master", {kind = "addon"})
     set_kind("library", {headeronly = true})
     add_bindirs("bin")
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.replace("src/cgilua/post.lua", "name = strlower(name)", "local name = strlower(name)", {plain = true})

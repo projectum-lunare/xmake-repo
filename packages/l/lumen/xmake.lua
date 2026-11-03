@@ -13,8 +13,14 @@ package("lumen")
 
     add_versions("v1.0", "240ae43da36ad291746a23a5c40f9e08665701ecfa80d6a0e6dbbf25737b4cb7")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("lumen.lua", [[

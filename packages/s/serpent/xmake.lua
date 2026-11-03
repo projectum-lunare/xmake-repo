@@ -14,8 +14,14 @@ package("serpent")
     add_versions("0.30", "ebc8d9121a793ae2df69ca03b7f9d2ad0e82e385d4ed0d452eedd305c1b93b22")
     add_versions("0.28", "93c35fc1941d300268ba2d4eca4a80a8c9965c789e1150678d7d68158e1f2fef")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

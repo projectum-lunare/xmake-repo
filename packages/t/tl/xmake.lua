@@ -15,12 +15,18 @@ package("tl")
     add_versions("v0.24.7", "2fa3211c37fdc48f56fd76c14d95463f7bbf3cec3f71ebca39f0b653e937274c")
     add_versions("v0.24.6", "7f4f91f3667653dd5c1a2a273a0066fcf0ad8bbec1506b1a1619abf471408f7a")
 
-    add_deps("lua")
     add_deps("argparse")
-    add_deps("recudo master", {kind = "addon"})
 
     set_kind("library", {headeronly = true})
     add_bindirs("bin")
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.replace("tl",

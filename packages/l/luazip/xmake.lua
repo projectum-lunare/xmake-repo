@@ -14,13 +14,19 @@ package("luazip")
     add_versions("1.2.7", "d01848f7d9d43972b99635de41a0e3d6e266264564103f8536d37bdb9372edb7")
     add_versions("1.2.6", "d679a412e875b176d9b2ff9bb05d7c08f6f92cecdc3b53b87def6a2d9844ce25")
 
-    add_deps("lua")
     if is_plat("windows", "mingw", "linux", "macosx", "bsd", "haiku") then
         add_deps("zziplib", {configs = {shared = true}})
     else
         add_deps("zziplib")
     end
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

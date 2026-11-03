@@ -14,9 +14,15 @@ package("redis-lua")
     add_versions("v2.0.4", "5eb6cb7cd0eda659cef7c231e43cd5f491cbd04804034d1c80134a1604e5cb5e")
     add_versions("v2.0.3", "3985492db5a8e2f5f58ad69d22c62238a659bc4532ff58c620ae1ae457e20c1d")
 
-    add_deps("lua")
     add_deps("luasocket")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

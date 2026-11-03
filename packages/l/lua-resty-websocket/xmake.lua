@@ -15,8 +15,14 @@ package("lua-resty-websocket")
     add_versions("0.15", "4339974c2143f74dc53dcbc46ae26a567c47daf0a90134c7ad29190e5bc6e401")
     add_versions("0.14", "273e205a6b058c0606aeb6999cfe6ac8693c5cf492df09ffce244911e6c0e1dd")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"luajit", "openresty-luajit"},
+            default = "luajit",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

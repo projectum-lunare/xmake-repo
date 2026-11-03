@@ -15,8 +15,14 @@ package("lua-resty-limit-traffic")
     add_versions("0.08", "33020df8db0edb621e51996e2d7a3459a86fc2bb353e6f0062c2bbd860b603d2")
     add_versions("0.07", "90b88114a8bed6e23dfb8c82a3ea5e96bbf8c7fb7ca0612fe49c6035099d0a79")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"luajit", "openresty-luajit"},
+            default = "luajit",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

@@ -14,8 +14,14 @@ package("dkjson")
     add_versions("2.5", "8560ee3c7ed421b293bf0905017bc90bd2f282d56517aa59ec6c53f5fb4057bd")
     add_versions("2.4", "35fd51c22ab0ad1134cd3e5a3b0998aa435ea68e547045689880818b1c441303")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

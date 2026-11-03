@@ -13,8 +13,14 @@ package("lua-cliargs")
 
     add_versions("3.0.2", "a7a57ab9c73f6c44040a78305b6dc7780ca1565cc4c9057d74a6608cb0443af4")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

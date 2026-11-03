@@ -15,9 +15,15 @@ package("lua-resty-signal")
     add_versions("0.04", "1347a39d4426cdedff8141c3cdcb65a3ac53b9326b08a8793d9a0a3116966825")
     add_versions("0.03", "f0bf3e4645dc7a658951febc9f3a62e948beec870082fe7403616dbeb2202c5b")
 
-    add_deps("lua")
     add_deps("lua-resty-core")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"luajit", "openresty-luajit"},
+            default = "luajit",
+        })
+    end)
+
 
     on_install("linux", "macosx", "bsd", function (package)
         io.gsub("lib/resty/signal.lua", 'for k, _ in string_gmatch%(cpath, "%[%^;%]%+"%) do%s+if k == "%?%.so" then%s+k = "%./"%s+end%s+local fpath = string_match%(k, "%(%.%*/%)"%)', [[for k, _ in string_gmatch(cpath, "[^;]+") do

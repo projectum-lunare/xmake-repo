@@ -15,13 +15,19 @@ package("lua-resty-openidc")
     add_versions("v1.9.2", "96e0601ee6ac8df9b7c2150e7e70da7c257eae6a8fc4deb58d2cc44489f3b4d7")
     add_versions("v1.9.1", "4cc7b5e3e49fbf7af0dccdc9bc850afacf9b7f6b93e7a49dd6e2a4750f8317d5")
 
-    add_deps("lua")
     add_deps("lua-cjson", {configs = {shared = true}})
     add_deps("lua-resty-http")
     add_deps("lua-resty-string")
     add_deps("lua-resty-session")
     add_deps("lua-resty-jwt")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"luajit", "openresty-luajit"},
+            default = "luajit",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

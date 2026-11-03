@@ -15,9 +15,15 @@ package("lua-resty-mysql")
     add_versions("0.30", "8bae90ba71c1b94d52e3f97177119ecf55f9d239bed6a1c24c44abcd45990ed9")
     add_versions("0.29", "1a22548915608aa41ffe7c1f2203ae9a256b5e211b0f7f2b6f94489ce9216037")
 
-    add_deps("lua")
     add_deps("lua-resty-string")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"luajit", "openresty-luajit"},
+            default = "luajit",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

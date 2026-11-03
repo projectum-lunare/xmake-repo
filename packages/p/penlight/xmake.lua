@@ -15,13 +15,19 @@ package("penlight")
     add_versions("1.14.0", "2387431c0e83c4189cccb35b989141a3280d735cb5d42bacf3451af9869bebf7")
     add_versions("1.13.1", "530380e1a377df519c2e589f47823f79701f8e0e67f6bbd994e18d09a470b680")
 
-    add_deps("lua")
     if is_plat("windows", "mingw", "linux", "macosx", "bsd", "haiku") then
         add_deps("luafilesystem", {configs = {shared = true}})
     else
         add_deps("luafilesystem")
     end
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

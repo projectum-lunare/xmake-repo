@@ -14,8 +14,14 @@ package("lua-resty-http")
     add_versions("v0.18.0", "d84e87bfea7bc1b91c52a27c9464d1412823ce748fd13d3885308f21166f946b")
     add_versions("v0.17.2", "3da18ca8582243eff28302591e36651dc7fab046e77336aa4a6fa718bccce4a2")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"luajit", "openresty-luajit"},
+            default = "luajit",
+        })
+    end)
+
 
     on_install(function (package)
         io.replace("lib/resty/http.lua", "for key, values in pairs(headers) do\n        key = tostring(key)", "for raw_key, values in pairs(headers) do\n        local key = tostring(raw_key)", {plain = true})

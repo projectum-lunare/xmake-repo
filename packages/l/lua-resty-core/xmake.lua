@@ -15,9 +15,15 @@ package("lua-resty-core")
     add_versions("0.1.30", "adc7781ddaeab9341b82033a6c06b0d190d4c6d1c2dddd46f6965ce9e57a0310")
     add_versions("0.1.29", "e416241724ce36ae90dddae8652f8c451e1ad87ebfb3cd62de76985492ef315f")
 
-    add_deps("lua")
     add_deps("lua-resty-lrucache")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"luajit", "openresty-luajit"},
+            default = "luajit",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

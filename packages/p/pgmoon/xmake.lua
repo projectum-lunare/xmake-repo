@@ -14,7 +14,6 @@ package("pgmoon")
     add_versions("v1.18.0", "1d11cde905533a76911808c0930470638fba10415f2ac4fe15c3edfd55edae55")
     add_versions("v1.17.0", "becae9131253f718a316aa79fe80858a0eec546f6ddc3020a5429e91e56d219f")
 
-    add_deps("lua")
     if is_plat("windows", "mingw", "linux", "macosx", "bsd", "haiku") then
         add_deps("luasocket", {configs = {shared = true}})
         add_deps("lpeg", {configs = {shared = true}})
@@ -22,7 +21,14 @@ package("pgmoon")
         add_deps("luasocket")
         add_deps("lpeg")
     end
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

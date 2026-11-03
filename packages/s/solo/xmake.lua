@@ -15,12 +15,19 @@ package("solo")
     add_versions("0.1.0", "36cb5330426814e6b74d4a676a7d16c0f63692f3c99a92f7a3408e845ed4eb3c")
     add_versions("master", "888638aaee24224ccbef156ae3b2b67ced42f805")
 
-    add_deps("recudo master", {kind = "addon"})
     if is_plat("linux", "macosx", "bsd", "windows", "mingw") then
         add_deps("lua >=5.4")
     end
 
     add_includedirs("include", "include/solo")
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         import("@addon.recudo.lua.module").install_project(package)

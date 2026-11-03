@@ -16,8 +16,14 @@ package("coxpcall")
     add_versions("1.17.0", "6044f70fcc01f50cae3a191cba13c252dcf9e6f169502e3d9c4a151934c46be0")
     add_versions("1.16.0", "b732add4d8c2c56d82a176cf38c11ff1b799c02f220cb29dcd332b91adc34b16")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

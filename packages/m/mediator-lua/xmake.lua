@@ -14,8 +14,14 @@ package("mediator-lua")
     add_versions("1.1.2", "faf5859fd2081be4e9e4fb8873a2dc65f7eff3fd93d6dd14da65f8e123fcff9b")
     add_versions("1.1.1", "e1e2fca724fe1e553390cf4e3b52ccc78e0fef725e3d77b064089595cc6a06da")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

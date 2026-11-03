@@ -14,14 +14,20 @@ package("luasystem")
     add_versions("0.7.1", "c85fb1e05ba5059a767ee0f6c8db8b9a30b86760224085b687ffbdf4892895cd")
     add_versions("0.7.0", "f6a617414f5e27c69e2377c7e2b90631b8ee0529c3ef7960d6937e33247d0bbe")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
 
     if is_plat("windows", "mingw") then
         add_syslinks("advapi32", "winmm", "bcrypt")
     elseif is_plat("linux") then
         add_syslinks("rt")
     end
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

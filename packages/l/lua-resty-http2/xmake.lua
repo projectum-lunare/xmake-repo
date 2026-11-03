@@ -13,8 +13,14 @@ package("lua-resty-http2")
 
     add_versions("v1.0", "66901be9e976be734140ef5b3d3ce060fee65ceead9a56021afbdb9b785cf6af")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"luajit", "openresty-luajit"},
+            default = "luajit",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

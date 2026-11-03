@@ -15,8 +15,14 @@ package("lua-resty-dns")
     add_versions("0.23", "ecc80b91bfb4f795b8a80acfa69e1778288ef60649ddd87f30a9c4a57ac5da79")
     add_versions("0.22", "70e9a01eb32ccade0d5116a25bcffde0445b94ad35035ce06b94ccd260ad1bf0")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"luajit", "openresty-luajit"},
+            default = "luajit",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

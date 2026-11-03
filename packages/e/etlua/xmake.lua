@@ -14,8 +14,14 @@ package("etlua")
     add_versions("v1.3.0", "66e602779ebf9ad9ef7624fea6bcffe9ecc540691144f7f25fb97062df7a5994")
     add_versions("v1.2.0", "4a61ffc0226633e80c93c05badff7bcc608b3ce678e6111068083d8ec1f214ed")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

@@ -13,13 +13,19 @@ package("terminal.lua")
 
     add_versions("0.1.0", "2097d5c66cb1e0def36f68233ae032619385d3753e799d5fccd8a83a65d48133")
 
-    add_deps("lua")
     if is_plat("windows", "mingw", "linux", "macosx", "bsd", "haiku") then
         add_deps("luasystem", {configs = {shared = true}})
     else
         add_deps("luasystem")
     end
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

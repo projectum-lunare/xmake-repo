@@ -15,13 +15,19 @@ package("lua-resty-etcd")
     add_versions("v1.8.3", "511ad83647ae4267c36d18ef8a0ad05dcf512cfb9b2bcd36558e8a548cabdaf0")
     add_versions("v1.8.2", "e85e580b31d5e6e8f49d030fbe68e2efa7b533b7e9e3a3911eba3a820b7fd3bc")
 
-    add_deps("lua")
     add_deps("lua-typeof")
     add_deps("lua-resty-http")
     add_deps("lua-resty-string")
     add_deps("penlight")
     add_deps("lua-cjson", {configs = {shared = true}})
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"luajit", "openresty-luajit"},
+            default = "luajit",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

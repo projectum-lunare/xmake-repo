@@ -15,8 +15,14 @@ package("tween")
     add_versions("v2.1.0", "422a8e03ae731ec6295f93dea59ad420db31090cbb17b6823f23bbb5583cffb3")
     add_versions("v2.0.0", "f5ef5b8adc0bf2d356dd2298e01cb79766250e5395b43e4cd11e880930f2c00d")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

@@ -15,8 +15,14 @@ package("lua-radix-router")
     add_versions("v0.6.1", "0f687edda554eeee82c82f03654046be3c5d500800f68f4207f82f8bf3902423")
     add_versions("v0.6.0", "a641fa9d33e18c6e568c439ae23f2620538bf31a75807562785bb17a938518b0")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         os.mkdir("lib/radix-router")

@@ -14,7 +14,6 @@ package("copas")
     add_versions("4.12.0", "e5bf9668c6f9b6f24f15075488fdaa03c46df675c7a70412bf6fb974268a8174")
     add_versions("4.11.0", "4676141569f2a18ef835a579580c42a4b9a6a0b804f0eb89b2188bd64a4a9c47")
 
-    add_deps("lua")
     if is_plat("windows", "mingw", "linux", "macosx", "bsd", "haiku") then
         add_deps("luasocket", {configs = {shared = true}})
     else
@@ -23,9 +22,16 @@ package("copas")
     add_deps("coxpcall")
     add_deps("binaryheap")
     add_deps("timerwheel")
-    add_deps("recudo master", {kind = "addon"})
 
     add_bindirs("bin")
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

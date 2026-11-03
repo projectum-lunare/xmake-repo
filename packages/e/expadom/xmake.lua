@@ -13,14 +13,20 @@ package("expadom")
 
     add_versions("0.1.0", "8165fc6310e832e9c90b4630a57f4271e517420e5b384ed13ae7d308ce094ad0")
 
-    add_deps("lua")
     if is_plat("windows", "mingw", "linux", "macosx", "bsd", "haiku") then
         add_deps("luaexpat", {configs = {shared = true}})
     else
         add_deps("luaexpat")
     end
-    add_deps("recudo master", {kind = "addon"})
     set_kind("library", {headeronly = true})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.replace("src/expadom/class.lua",

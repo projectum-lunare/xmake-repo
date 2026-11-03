@@ -25,6 +25,11 @@ package("im")
     end
 
     on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+
         if package:config("lua") then
             package:add("deps", "lua")
             package:add("deps", "recudo master", {kind = "addon"})

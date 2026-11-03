@@ -13,10 +13,16 @@ package("rings")
 
     add_versions("v_1_3_0", "a1101c2fc8d5b943e66b70ce5d44d8a605567c98dc47fbdcb6722bdc81eabefe")
 
-    add_deps("lua")
-    add_deps("recudo master", {kind = "addon"})
 
     add_includedirs("include", "include/rings")
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.writefile("xmake.lua", [[

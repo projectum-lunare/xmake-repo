@@ -14,7 +14,6 @@ package("orbit")
     add_versions("v2.2.4", "eedfe095c8bd849cb231b4c543c7225051c3eb4ff37ba8af2d4aedd8123aa81f")
     add_versions("v2.2.3", "0fad7afb32cbdb6d96c07816edae15d1968cd0edbc66584a59c144d8ee41f1a1")
 
-    add_deps("lua")
     add_deps("wsapi")
     add_deps("cosmo")
     if is_plat("windows", "mingw", "linux", "macosx", "bsd", "haiku") then
@@ -24,7 +23,14 @@ package("orbit")
         add_deps("luafilesystem")
         add_deps("lpeg")
     end
-    add_deps("recudo master", {kind = "addon"})
+
+    on_load(function (package)
+        import("@addon.recudo.lua.runtime").setup(package, {
+            runtime = {"lua", "luajit"},
+            default = "lua",
+        })
+    end)
+
 
     on_install(function (package)
         io.replace("src/orbit/model.lua", 'module("orbit.model", package.seeall)', 'local _M = {}; local _ENV = setmetatable(_M, {__index = _G}); package.loaded["orbit.model"] = _M', {plain = true})
