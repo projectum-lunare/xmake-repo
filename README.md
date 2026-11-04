@@ -11,7 +11,7 @@
 
 Every recipe in this repository is designed around **Projectum Lunare**'s engineering principles:
 * **Recudo Module Model**: Modules install exactly where Lua's `require()` searches. Native extensions are identified by a deterministic runtime `buildhash`.
-* **Multi-Runtime ABI Isolation**: Seamlessly switch between PUC-Rio Lua (5.1 / 5.2 / 5.3 / 5.4), LuaJIT 2.1, and OpenResty LuaJIT without ABI conflicts or recipe forks.
+* **Multi-Runtime ABI Isolation**: Seamlessly switch between PUC-Rio Lua (5.1 / 5.2 / 5.3 / 5.4 / 5.5), LuaJIT 2.1, and OpenResty LuaJIT without ABI conflicts or recipe forks.
 * **Dialect & Transpiler Ecosystem**: Native Xmake integration for modern languages transpiling to Lua (Pluto, Teal, Nelua, TypeScript-to-Lua, Erde, Pallene, Fennel, MoonScript, Yuescript, PureScript, CSharp.lua).
 * **Multi-Backend Compilers**: First-class support for Haxe and NekoVM compiled from source with modular configurations.
 * **Deterministic Source Builds**: Builds tools and native extensions directly from upstream source code with reproducible dependency graphs and zero system pollution.
@@ -49,7 +49,7 @@ Every recipe in this repository is designed around **Projectum Lunare**'s engine
   - [1. Installing & Using the Recudo Addon](#1-installing--using-the-recudo-addon)
   - [2. Multi-Runtime Selection (PUC-Lua vs LuaJIT vs OpenResty)](#2-multi-runtime-selection-puc-lua-vs-luajit-vs-openresty)
   - [3. Requiring Dialects & Transpilers in `xmake.lua`](#3-requiring-dialects--transpilers-in-xmakelua)
-  - [4. NekoVM & Haxe Multi-Target Tooling](#4-nekovm--haxe-multi-target-tooling)
+  - [4. Multi-Backend Haxe Compilation (Native C++ & Lua)](#4-multi-backend-haxe-compilation-native-c--lua)
   - [5. Building Standalone Games with LÖVE & Libraries](#5-building-standalone-games-with-löve--libraries)
   - [6. Native C & C++ Libraries in `xmake.lua`](#6-native-c--c-libraries-in-xmakelua)
   - [7. Embedded Lua & Retro Platform Configurations](#7-embedded-lua--retro-platform-configurations)
@@ -99,7 +99,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 
 | Package | Description |
 | :--- | :--- |
-| [**`lua`**](packages/l/lua/xmake.lua) | A powerful, efficient, lightweight, embeddable scripting language (PUC-Rio Lua 5.1, 5.2, 5.3, 5.4). |
+| [**`lua`**](packages/l/lua/xmake.lua) | A powerful, efficient, lightweight, embeddable scripting language (PUC-Rio Lua 5.1, 5.2, 5.3, 5.4, 5.5). |
 | [**`openresty-luajit`**](packages/o/openresty-luajit/xmake.lua) | OpenResty's branch of LuaJIT 2 with `string.buffer`, `table.new`/`clear`, and GC64 support. |
 | [**`neko`**](packages/n/neko/xmake.lua) | High-level dynamically typed programming language and lightweight virtual machine by Haxe Foundation. |
 | [**`elua`**](packages/e/elua/xmake.lua) | Embedded Lua (eLua) offering the full implementation of the Lua language to microcontrollers and bare metal. |
@@ -410,36 +410,12 @@ target("systems_app")
 
 ---
 
-### 4. NekoVM & Haxe Multi-Target Tooling
+### 4. Multi-Backend Haxe Compilation (Native C++ & Lua)
 
-#### NekoVM (Compiled from Source)
-[**`neko`**](packages/n/neko/xmake.lua) compiles in ~4 seconds and provides modular configurations:
+Compile native C++ binaries using Haxe and `hxcpp`, or transpile Haxe source code directly to portable Lua:
 
-```bash
-# Default install (Core VM, Compiler, NekoML, JIT, SQLite, Regexp):
-xrepo install neko
-
-# Modular installs enabling SSL (MbedTLS) and MySQL (MariaDB Connector):
-xrepo install neko -k ssl,mysql
-
-# Run code directly in the Neko environment:
-xrepo env -b neko neko -version
-xrepo env -b neko sh -c 'nekoc main.neko && neko main.n'
-```
-
-#### Embedding NekoVM in C/C++ (`xmake.lua`):
 ```lua
-add_requires("neko")
-
-target("neko_embedded_host")
-    set_kind("binary")
-    add_files("src/*.c")
-    add_packages("neko")
-```
-
-#### Multi-Backend Haxe Compilation:
-```lua
-add_requires("haxe", "hxcpp", "neko")
+add_requires("haxe", "hxcpp")
 add_requires("recudo master", {kind = "addon"})
 includes("@addon/recudo/recudo.lua")
 
@@ -532,7 +508,7 @@ Ensure all package manifests comply with repository metadata, checksum formats, 
 xmake l scripts/check_packages.lua
 
 # Validate a specific package recipe:
-xmake l scripts/check_packages.lua neko
+xmake l scripts/check_packages.lua haxe
 xmake l scripts/check_packages.lua pluto
 ```
 
