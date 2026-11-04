@@ -55,7 +55,6 @@ package("lua")
                 toolchain = "recudo.toolchain.evc3",
                 platforms = "wince",
                 c = {"89"},
-                patch = "patches/evc3.patch",
             },
             vbcc = {
                 toolchain = "recudo.toolchain.vbcc",
@@ -155,8 +154,6 @@ package("lua")
                     end
                 elseif is_plat("wince") then
                     add_defines("UNDER_CE=300", "_WIN32_WCE=300")
-                    add_includedirs(sourcedir .. "compat/wince")
-                    add_files(sourcedir .. "compat/wince/*.c|wince_main.c")
                 elseif is_plat("kolibri") then
                     add_defines("__KOLIBRIOS__")
                 elseif is_plat("plan9") then
@@ -167,6 +164,7 @@ package("lua")
 
             <% if tc.evc3.enabled then %>
                 add_rules("<%= tc.evc3.toolchain %>", {override = true})
+                set_values("<%= tc.evc3.toolchain %>.compat", "c89")
             <% end %>
             <% if tc.vbcc.enabled then %>
                 add_rules("<%= tc.vbcc.toolchain %>", {override = true})
