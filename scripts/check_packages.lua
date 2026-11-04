@@ -138,6 +138,7 @@ local function check_package(pkg_path)
         ["recudo.lua.binary"] = true,
         ["recudo.lua.bundle"] = true,
         ["recudo.lang.fennel"] = true,
+        ["recudo.lang.haxe"] = true,
         ["recudo.lang.moonscript"] = true,
         ["recudo.lang.nelua"] = true,
         ["recudo.lang.teal"] = true,
