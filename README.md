@@ -86,6 +86,9 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 
 ## Package Directory
 
+> [!NOTE]
+> Packages marked with **`🗄️`** indicate that the upstream repository was archived or frozen by its original author, but is fully maintained, compatible, and verified with automated test suites within this repository.
+
 ### Build System & Toolchains (Addons)
 
 | Package | Description |
@@ -104,7 +107,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | [**`lit`**](packages/l/lit/xmake.lua) | The Luvit Invention Toolkit - packaging and dependency management for luvi applications. |
 | [**`rings`**](packages/r/rings/xmake.lua) | Multiple isolated Lua states executed safely from within a master Lua state. |
 | [**`lua-compat-5.3`**](packages/l/lua-compat-5.3/xmake.lua) | Comprehensive compatibility module providing Lua-5.3-style C and Lua APIs for Lua 5.2 and 5.1. |
-| [**`bit32`**](packages/b/bit32/xmake.lua) | Lua 5.2 bit manipulation library backported to Lua 5.1. |
+| [**`bit32`**](packages/b/bit32/xmake.lua) 🗄️ | Lua 5.2 bit manipulation library backported to Lua 5.1 (upstream feature-complete). |
 
 ### Languages, Compilers & Transpilers
 
@@ -207,7 +210,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | [**`lapis`**](packages/l/lapis/xmake.lua) | High-performance full-stack web framework for MoonScript and Lua (OpenResty / Server). |
 | [**`wsapi`**](packages/w/wsapi/xmake.lua) | WSAPI abstracts the web server from Lua web applications (WSGI/Rack equivalent). |
 | [**`cgilua`**](packages/c/cgilua/xmake.lua) | Tool for creating dynamic web pages and processing web forms across CGI/FastCGI. |
-| [**`orbit`**](packages/o/orbit/xmake.lua) | MVC web development framework built upon WSAPI for the Kepler platform. |
+| [**`orbit`**](packages/o/orbit/xmake.lua) 🗄️ | MVC web development framework built upon WSAPI for the Kepler platform (legacy WSAPI). |
 | [**`lua-lace`**](packages/l/lua-lace/xmake.lua) | Access control and ACL evaluation engine modelled on Squid syntax. |
 
 #### OpenResty & NGINX Ecosystem
@@ -215,7 +218,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | Package | Description |
 | :--- | :--- |
 | [**`lua-radix-router`**](packages/l/lua-radix-router/xmake.lua) | Fast, lightweight API router based on radix tree for OpenResty and Lua. |
-| [**`lua-resty-cookie`**](packages/l/lua-resty-cookie/xmake.lua) | HTTP cookie manipulation and parsing for OpenResty / ngx_lua. |
+| [**`lua-resty-cookie`**](packages/l/lua-resty-cookie/xmake.lua) 🗄️ | HTTP cookie manipulation and parsing for OpenResty / ngx_lua. |
 | [**`lua-resty-core`**](packages/l/lua-resty-core/xmake.lua) | FFI-based Lua API for the ngx_lua module replacing the classic C-API. |
 | [**`lua-resty-dns`**](packages/l/lua-resty-dns/xmake.lua) | Nonblocking DNS resolver for the OpenResty / ngx_lua cosocket API. |
 | [**`lua-resty-etcd`**](packages/l/lua-resty-etcd/xmake.lua) | Nonblocking Lua etcd v3 client driver for OpenResty. |
