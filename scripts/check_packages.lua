@@ -194,7 +194,7 @@ function main(...)
     table.sort(pkg_files)
 
     for _, pkg_path in ipairs(pkg_files) do
-        local pkg_name = path.basename(path.directory(pkg_path))
+        local pkg_name = path.filename(path.directory(pkg_path))
         if not pkg_filter or pkg_name:find(pkg_filter, 1, true) then
             local ok, errors, warnings = check_package(pkg_path)
             if not ok then

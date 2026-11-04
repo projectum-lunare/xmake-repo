@@ -5,7 +5,7 @@
 
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-blue.svg)](https://opensource.org/licenses/MPL-2.0)
 [![Xmake](https://img.shields.io/badge/Xmake-Repository-red.svg)](https://xmake.io)
-[![Packages](https://img.shields.io/badge/Packages-129%20Available-green.svg)](#package-directory)
+[![Packages](https://img.shields.io/badge/Packages-146%20Available-green.svg)](#package-directory)
 [![Addon: Recudo](https://img.shields.io/badge/Addon-Recudo%20v0.2.3-orange.svg)](addons/r/recudo/xmake.lua)
 [![Platforms](https://img.shields.io/badge/Platforms-Linux%20%7C%20macOS%20%7C%20Windows%20%7C%20BSD%20%7C%20WASM-lightgrey.svg)](#getting-started)
 
@@ -139,13 +139,16 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | :--- | :--- |
 | [**`anim8`**](packages/a/anim8/xmake.lua) | Grid-based 2D sprite animation library designed for LÖVE and generic 2D games. |
 | [**`hump`**](packages/h/hump/xmake.lua) | Essential game development utilities for LÖVE (camera, timer, vector, gamestate, class, signal). |
+| [**`sti`**](packages/s/sti/xmake.lua) | Simple Tiled Implementation (STI) map loader and renderer for Lua and LÖVE. |
 
 #### Game Math, Physics & Utilities (Engine-Agnostic)
 
 | Package | Description |
 | :--- | :--- |
 | [**`bump`**](packages/b/bump/xmake.lua) | Fast, simple AABB (axis-aligned bounding box) 2D collision detection and resolution library. |
+| [**`cpml`**](packages/c/cpml/xmake.lua) | Cirno's Perfect Math Library: 2D and 3D game math (vectors, matrices, quaternions, geometry). |
 | [**`flux`**](packages/f/flux/xmake.lua) | Fast, lightweight tweening and animation library for Lua. |
+| [**`hc`**](packages/h/hc/xmake.lua) | General purpose 2D collision detection using Separating Axis Theorem (SAT) and GJK. |
 | [**`lume`**](packages/l/lume/xmake.lua) | Essential mathematical, functional, and table utility collection tailored for game developers. |
 | [**`tween`**](packages/t/tween/xmake.lua) | Small tweening and easing library with custom interpolation curves. |
 
@@ -163,9 +166,14 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | Package | Description |
 | :--- | :--- |
 | [**`lua-cjson`**](packages/l/lua-cjson/xmake.lua) | Ultra-fast JSON encoding and parsing module for Lua in pure C (maintained OpenResty fork). |
+| [**`lua-protobuf`**](packages/l/lua-protobuf/xmake.lua) | High-performance Google Protocol Buffers implementation for Lua in pure C. |
+| [**`lua-cmsgpack`**](packages/l/lua-cmsgpack/xmake.lua) | Fast self-contained MessagePack serializer and deserializer for Lua in C. |
+| [**`lua-toml`**](packages/l/lua-toml/xmake.lua) | Simple, compliant TOML parser and serializer for Lua. |
+| [**`lua-zlib`**](packages/l/lua-zlib/xmake.lua) | Complete streaming zlib (deflate/inflate and gzip) compression binding for Lua in C. |
 | [**`hx-lua-simdjson`**](packages/h/hx-lua-simdjson/xmake.lua) | High-performance JSON parsing binding based on simdjson for Lua and Haxe. |
 | [**`dkjson`**](packages/d/dkjson/xmake.lua) | David Kolf's pure-Lua JSON encoder and decoder with LPeg acceleration. |
 | [**`lpeg`**](packages/l/lpeg/xmake.lua) | Pattern-Matching for Lua using Parsing Expression Grammars (PEGs). |
+| [**`lpeg-patterns`**](packages/l/lpeg-patterns/xmake.lua) | Collection of useful LPeg patterns (URI, HTTP, IPv4, IPv6, email, etc.). |
 | [**`lpeglabel`**](packages/l/lpeglabel/xmake.lua) | Parsing Expression Grammars with labeled failures for syntax error reporting. |
 | [**`lrexlib-pcre2`**](packages/l/lrexlib-pcre2/xmake.lua) | High-performance PCRE2 regular expression library bindings for Lua. |
 | [**`lyaml`**](packages/l/lyaml/xmake.lua) | LibYAML binding for Lua. |
@@ -189,11 +197,13 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | [**`luaossl`**](packages/l/luaossl/xmake.lua) | Comprehensive, modern OpenSSL binding for Lua (crypto, x509, bignum, ssl). |
 | [**`copas`**](packages/c/copas/xmake.lua) | Coroutine Oriented Portable Asynchronous Services and dispatcher for LuaSocket. |
 | [**`lua-mimetypes`**](packages/l/lua-mimetypes/xmake.lua) | Fast MIME type lookup table for file extensions and media types. |
+| [**`lua-psl`**](packages/l/lua-psl/xmake.lua) | Lua binding to libpsl for Public Suffix List lookups and cookie domain validation. |
 
 #### Web Frameworks & Server Interfaces (WSAPI & Kepler)
 
 | Package | Description |
 | :--- | :--- |
+| [**`lua-http`**](packages/l/lua-http/xmake.lua) | Performant, modern HTTP/1.1 and HTTP/2 client/server and WebSocket library for Lua. |
 | [**`lapis`**](packages/l/lapis/xmake.lua) | High-performance full-stack web framework for MoonScript and Lua (OpenResty / Server). |
 | [**`wsapi`**](packages/w/wsapi/xmake.lua) | WSAPI abstracts the web server from Lua web applications (WSGI/Rack equivalent). |
 | [**`cgilua`**](packages/c/cgilua/xmake.lua) | Tool for creating dynamic web pages and processing web forms across CGI/FastCGI. |
@@ -234,6 +244,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 
 | Package | Description |
 | :--- | :--- |
+| [**`lsqlite3`**](packages/l/lsqlite3/xmake.lua) | Complete binding for Lua to the SQLite3 database library with full API support. |
 | [**`luasql`**](packages/l/luasql/xmake.lua) | Unified database connectivity for Lua supporting SQLite3, PostgreSQL, MySQL, and ODBC. |
 | [**`pgmoon`**](packages/p/pgmoon/xmake.lua) | Pure-Lua PostgreSQL driver with SSL support for OpenResty, cqueues, and LuaSocket. |
 | [**`redis-lua`**](packages/r/redis-lua/xmake.lua) | Fast, pure-Lua client library for the Redis in-memory storage engine. |
@@ -242,6 +253,8 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 
 | Package | Description |
 | :--- | :--- |
+| [**`luaposix`**](packages/l/luaposix/xmake.lua) | Comprehensive POSIX binding for Lua (unistd, dirent, fcntl, signal, poll, etc.). |
+| [**`sol2`**](packages/s/sol2/xmake.lua) | High-performance C++17/C++20 Lua binding and embedding library with ergonomic API. |
 | [**`luafilesystem`**](packages/l/luafilesystem/xmake.lua) | File system directory traversal, file attributes, and permissions for Lua. |
 | [**`luasystem`**](packages/l/luasystem/xmake.lua) | Platform-independent system calls, sleep, high-resolution timers, and terminal state. |
 | [**`cffi-lua`**](packages/c/cffi-lua/xmake.lua) | Portable C Foreign Function Interface (FFI) for Lua 5.1+ based on libffi. |
@@ -259,6 +272,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 
 | Package | Description |
 | :--- | :--- |
+| [**`mobdebug`**](packages/m/mobdebug/xmake.lua) | Remote debugger and profiler for Lua, LuaJIT, and OpenResty. |
 | [**`busted`**](packages/b/busted/xmake.lua) | Elegant, extensible Behavior-Driven Development (BDD) testing framework for Lua. |
 | [**`luassert`**](packages/l/luassert/xmake.lua) | Assertion, matcher, and test spy library for Lua. |
 | [**`say`**](packages/s/say/xmake.lua) | Key/value string store for internationalization (i18n) and assertion failure messages. |
@@ -291,10 +305,13 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | [**`basexx`**](packages/b/basexx/xmake.lua) | Base2, base16, base32, base64, and base85 encoding/decoding library for Lua. |
 | [**`md5`**](packages/m/md5/xmake.lua) | Cryptographic facilities for Lua: MD5 hash function and DES56 encryption. |
 | [**`binaryheap`**](packages/b/binaryheap/xmake.lua) | Binary Heap priority queue implementation in pure Lua. |
+| [**`fifo.lua`**](packages/f/fifo.lua/xmake.lua) | Fast, pure-Lua first-in-first-out (FIFO) queue data structure implementation. |
 | [**`timerwheel`**](packages/t/timerwheel/xmake.lua) | High-performance, constant-time timer wheel implementation in pure Lua. |
 | [**`mediator-lua`**](packages/m/mediator-lua/xmake.lua) | Mediator pattern implementation for event-driven decoupled systems in Lua. |
 | [**`push`**](packages/p/push/xmake.lua) | Observable properties and reactive state binding implementation for Lua. |
 | [**`loadkit`**](packages/l/loadkit/xmake.lua) | Load arbitrary resources and non-code files within the Lua package search path. |
+| [**`cqueues`**](packages/c/cqueues/xmake.lua) | Embeddable, stackable coroutine event loop and asynchronous I/O engine for POSIX systems. |
+| [**`lanes`**](packages/l/lanes/xmake.lua) | Multithreading and parallel execution library for Lua with isolated states and inter-thread channels. |
 | [**`lumen`**](packages/l/lumen/xmake.lua) | Simple concurrent task scheduling and cooperative multitasking environment for Lua. |
 | [**`coxpcall`**](packages/c/coxpcall/xmake.lua) | Coroutine-safe `pcall` and `xpcall` implementations across Lua versions. |
 | [**`lua-typeof`**](packages/l/lua-typeof/xmake.lua) | Fast, comprehensive type checking and schema validation library for Lua. |
