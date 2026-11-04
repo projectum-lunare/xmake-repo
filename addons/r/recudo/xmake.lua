@@ -12,6 +12,7 @@ package("recudo")
     -- "unable to parse semver". `master` stays reachable as a git ref.
     add_versions("v0.2.0", "v0.2.0")
     add_versions("v0.2.1", "v0.2.1")
+    add_versions("v0.2.2", "v0.2.2")
 
     on_test(function (package)
         assert(package:has_addon())
