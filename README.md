@@ -63,6 +63,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
     - [Building a Standalone Game with LÖVE \& Libraries in `xmake.lua`](#building-a-standalone-game-with-löve--libraries-in-xmakelua)
     - [Compiling Typed Code with Teal (`tl`) in `xmake.lua`](#compiling-typed-code-with-teal-tl-in-xmakelua)
     - [Compiling Systems Code with Nelua in `xmake.lua`](#compiling-systems-code-with-nelua-in-xmakelua)
+    - [Compiling Multi-Backend Haxe in `xmake.lua`](#compiling-multi-backend-haxe-in-xmakelua)
     - [Auditing Recipes with Package Linter](#auditing-recipes-with-package-linter)
   - [License](#license)
 
@@ -85,6 +86,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | [**`lit`**](packages/l/lit/xmake.lua) | The Luvit Invention Toolkit is a luvi app that handles dependencies and luvi builds. |
 | [**`rings`**](packages/r/rings/xmake.lua) | Multiple Lua states from Lua. |
 | [**`lua-compat-5.3`**](packages/l/lua-compat-5.3/xmake.lua) | Compatibility module providing Lua-5.3-style APIs for Lua 5.2 and 5.1. |
+| [**`bit32`**](packages/b/bit32/xmake.lua) | Lua 5.2 bit manipulation library backported to Lua 5.1. |
 
 ### OpenResty & NGINX Ecosystem
 
@@ -141,6 +143,8 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | Package | Description |
 | :--- | :--- |
 | [**`fennel`**](packages/f/fennel/xmake.lua) | A lisp that compiles to Lua. |
+| [**`haxe`**](packages/h/haxe/xmake.lua) | A high-level, strictly-typed multi-target programming language. |
+| [**`hxcpp`**](packages/h/hxcpp/xmake.lua) | Runtime support and C++ backend for the Haxe compiler. |
 | [**`moonscript`**](packages/m/moonscript/xmake.lua) | A programmer friendly language that compiles to Lua. |
 | [**`nelua`**](packages/n/nelua/xmake.lua) | Statically-typed, meta-programmable systems programming language inspired by Lua that compiles to C and WebAssembly. |
 | [**`tl`**](packages/t/tl/xmake.lua) | Teal, a typed dialect of Lua with compile-time type-checking and transpilation to Lua. |
@@ -152,6 +156,8 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | :--- | :--- |
 | [**`lpeg`**](packages/l/lpeg/xmake.lua) | Pattern-Matching for Lua that uses Parsing Expression Grammars (PEGs). |
 | [**`lpeglabel`**](packages/l/lpeglabel/xmake.lua) | Parsing Expression Grammars For Lua with Labeled Failures. |
+| [**`lrexlib-pcre2`**](packages/l/lrexlib-pcre2/xmake.lua) | PCRE2 regular expression library binding for Lua. |
+| [**`hx-lua-simdjson`**](packages/h/hx-lua-simdjson/xmake.lua) | High-performance JSON parsing binding based on simdjson for Lua and Haxe. |
 | [**`dkjson`**](packages/d/dkjson/xmake.lua) | David Kolf's JSON module for Lua. |
 | [**`lyaml`**](packages/l/lyaml/xmake.lua) | LibYAML binding for Lua. |
 | [**`libyaml`**](packages/l/libyaml/xmake.lua) | A C library for parsing and emitting YAML. |
@@ -209,6 +215,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | [**`cd`**](packages/c/cd/xmake.lua) | A 2D Graphics Canvas Draw Toolkit (Tecgraf/PUC-Rio). |
 | [**`cffi-lua`**](packages/c/cffi-lua/xmake.lua) | A portable C FFI for Lua 5.1+, based on libffi. |
 | [**`solo`**](packages/s/solo/xmake.lua) | Physical I/O, System Foundations & Hardware Abstractions |
+| [**`luv`**](packages/l/luv/xmake.lua) | Bare libuv bindings for Lua. |
 | [**`lua-bz2`**](packages/l/lua-bz2/xmake.lua) | A Lua binding to Julian Seward's libbzip2. |
 | [**`luazip`**](packages/l/luazip/xmake.lua) | Lua extension library used to read files stored inside zip files. |
 | [**`lua-iconv`**](packages/l/lua-iconv/xmake.lua) | Lua binding to the POSIX 'iconv' library. |
@@ -249,6 +256,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | [**`lumen`**](packages/l/lumen/xmake.lua) | Simple concurrent task scheduling and multitasking environment for Lua. |
 | [**`coxpcall`**](packages/c/coxpcall/xmake.lua) | Coroutine-safe xpcall and pcall implementations for Lua. |
 | [**`lua-typeof`**](packages/l/lua-typeof/xmake.lua) | Type check library for Lua. |
+| [**`luautf8`**](packages/l/luautf8/xmake.lua) | A UTF-8 support library for Lua 5.x and LuaJIT compatible with standard Lua 5.3 string functions. |
 
 ---
 
@@ -351,6 +359,29 @@ includes("@addon/recudo/recudo.lua")
 target("systems_app")
     add_rules("recudo.lang.nelua")
     add_files("src/*.nelua")
+```
+
+### Compiling Multi-Backend Haxe in `xmake.lua`
+```lua
+add_requires("haxe", "hxcpp")
+add_requires("recudo master", {kind = "addon"})
+includes("@addon/recudo/recudo.lua")
+
+-- Compile native C++ executable via Xmake toolchain & hxcpp runtime
+target("haxe_native")
+    set_kind("binary")
+    add_rules("recudo.lang.haxe")
+    add_files("src/NativeMain.hx")
+    set_values("recudo.lang.haxe.backend", "cpp")
+    set_values("recudo.lang.haxe.main", "NativeMain")
+    add_packages("haxe", "hxcpp")
+
+-- Transpile and run as portable Lua app
+target("haxe_lua")
+    add_rules("recudo.lua.app", "recudo.lang.haxe")
+    add_files("src/LuaMain.hx")
+    set_values("recudo.lang.haxe.main", "LuaMain")
+    add_packages("haxe")
 ```
 
 ### Auditing Recipes with Package Linter
