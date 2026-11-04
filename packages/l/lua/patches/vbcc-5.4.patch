@@ -1,0 +1,45 @@
+diff --git a/src/lobject.c b/src/lobject.c
+--- a/src/lobject.c
++++ b/src/lobject.c
+@@ -208,7 +208,11 @@
+     *endptr = cast_charp(s);  /* valid up to here */
+   }
+   if (neg) r = -r;
++#if defined(LUA_USE_VBCC)	/* vbcc's libm ldexp is broken (returns x + junk) */
++  return r * l_mathop(pow)(l_mathop(2.0), (lua_Number)e);
++#else
+   return l_mathop(ldexp)(r, e);
++#endif
+ }
+ 
+ #endif
+diff --git a/src/lcode.c b/src/lcode.c
+--- a/src/lcode.c
++++ b/src/lcode.c
+@@ -608,7 +608,11 @@
+     return addk(fs, &o, &o);  /* use number itself as key */
+   else {  /* must build an alternative key */
+     const int nbm = l_floatatt(MANT_DIG);
++#if defined(LUA_USE_VBCC)	/* vbcc's libm ldexp is broken */
++    const lua_Number q = l_mathop(pow)(l_mathop(2.0), (lua_Number)(-nbm + 1));
++#else
+     const lua_Number q = l_mathop(ldexp)(l_mathop(1.0), -nbm + 1);
++#endif
+     const lua_Number k = (ik == 0) ? q : r + r*q;  /* new key */
+     TValue kv;
+     setfltvalue(&kv, k);
+diff --git a/src/lmathlib.c b/src/lmathlib.c
+--- a/src/lmathlib.c
++++ b/src/lmathlib.c
+@@ -705,7 +705,11 @@
+ static int math_ldexp (lua_State *L) {
+   lua_Number x = luaL_checknumber(L, 1);
+   int ep = (int)luaL_checkinteger(L, 2);
++#if defined(LUA_USE_VBCC)	/* vbcc's libm ldexp is broken */
++  lua_pushnumber(L, x * l_mathop(pow)(l_mathop(2.0), (lua_Number)ep));
++#else
+   lua_pushnumber(L, l_mathop(ldexp)(x, ep));
++#endif
+   return 1;
+ }
+ 

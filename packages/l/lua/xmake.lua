@@ -28,20 +28,7 @@ package("lua")
     add_versions("v5.1.5", "2640fc56a795f29d28ef15e13c34a47e223960b0240e8cb0a82d9b0738695333")
     add_versions("v5.1.1", "c5daeed0a75d8e4dd2328b7c7a69888247868154acbda69110e97d4a6e17d1f0")
 
-    -- Retro & Embedded Patches from Projectum Lunare
-    if is_plat("wince") then
-        add_patches(">=5.4.0", "patches/wince.patch")
-    elseif is_plat("kolibri") then
-        add_patches(">=5.4.0", "patches/kolibri.patch")
-    elseif is_plat("plan9") then
-        add_patches(">=5.4.0", "patches/plan9.patch")
-    elseif is_plat("wasm", "wasi") then
-        add_patches(">=5.4.0", "patches/wasm.patch")
-    end
-
-    if is_plat("dos", "os2", "wince") then
-        add_deps("recudo master", {kind = "addon"})
-    end
+    add_deps("recudo master", {kind = "addon"})
 
     add_configs("c89",       {description = "Compile in strict ANSI C89 mode (LUA_USE_C89)", type = "boolean"})
     add_configs("32bits",    {description = "Enable 32-bit integers and floats (LUA_32BITS)", type = "boolean"})
@@ -56,40 +43,107 @@ package("lua")
 
     on_install(function (package)
         local sourcedir = os.isdir("src") and "src/" or ""
+
+        -- Toolchain selection and compat patches are recudo policy, resolved
+        -- here where the toolchain is actually known (the definition scope
+        -- has no is_toolchain() predicate, and the patch must land before
+        -- the nested build is generated). The platform implies the toolchain
+        -- (wince -> evc3, amiga/atari -> vbcc) or the consumer forces one on
+        -- any platform via {configs = {evc3 = true}} / {configs = {vbcc = true}}.
+        local tc = import("@addon.recudo.tool.patch").setup(package, {
+            evc3 = {
+                toolchain = "recudo.toolchain.evc3",
+                platforms = "wince",
+                c = {"89"},
+                patch = "patches/evc3.patch",
+            },
+            vbcc = {
+                toolchain = "recudo.toolchain.vbcc",
+                c = {"89"},
+                patches = {
+                    {versions = ">=5.1.0 <5.2.0", patch = "patches/vbcc-5.1.patch"},
+                    {versions = ">=5.4.4 <5.5.0", patch = "patches/vbcc-5.4.patch"},
+                },
+            },
+            watcom = {
+                toolchain = "recudo.toolchain.watcom",
+                platforms = {"dos", "os2"},
+                c = {"89"},
+            },
+            kolibrios = {
+                c = {"89", "99"},
+                patches = {
+                    {versions = ">=5.4.0 <5.6.0", patch = "patches/kolibri.patch"},
+                },
+            },
+            plan9 = {
+                platforms = "plan9",
+                patches = {
+                    {versions = ">=5.4.0 <5.6.0", patch = "patches/plan9.patch"},
+                },
+            },
+            wasm = {
+                platforms = {"wasm", "wasi"},
+                c = {"89", "99"},
+                patches = {
+                    {versions = ">=5.4.7 <5.6.0", patch = "patches/wasm.patch"},
+                },
+            },
+        })
+
+        -- C89 is a compiler limitation, not a platform one: the tools
+        -- declare the C standards they support; an enabled tool without
+        -- declared C99 support forces C89 mode. No recudo tool driving the
+        -- build means the platform's own toolchain decides - modern C.
         local use_c89 = package:config("c89")
         if use_c89 == nil then
-            use_c89 = package:is_plat("wince", "dos", "os2", "amiga", "atari", "kolibri", "plan9")
+            use_c89 = false
+            for _, name in ipairs(tc.tools) do
+                local t = tc[name]
+                if t.enabled and not (t.c and table.contains(t.c, "99")) then
+                    use_c89 = true
+                end
+            end
         end
 
+        -- word size is an ABI fact of the target arch, not of the platform
         local use_32b = package:config("32bits")
         if use_32b == nil then
-            use_32b = package:is_plat("wince", "dos", "os2", "amiga", "atari", "kolibri", "plan9")
-                   or package:is_arch("m68k.*", "i386", "x86", "mips.*", "ppc.*", "powerpc", "armv4.*", "armv5.*", "sh.*")
+            use_32b = package:is_arch("m68k.*", "i386", "x86", "mips.*", "ppc.*", "powerpc", "armv4.*", "armv5.*", "sh.*")
         end
         local no_parser = package:config("no_parser")
 
-        io.writefile("xmake.lua", format([[
+        local template = import("@addon.recudo.template")
+        -- the nested build is rendered with recudo's own template engine:
+        -- named fields and render-time control flow, no positional slots
+        io.writefile("xmake.lua", template.render([[
             add_rules("mode.release", "mode.debug")
-            if is_plat("dos", "os2", "wince") then
-                add_addons("recudo")
-                includes("@addon/recudo/recudo.lua")
-            end
+            <% if tc.addon then %>
+            add_addons("recudo")
+            includes("@addon/recudo/recudo.lua")
+            <% end %>
 
-            local sourcedir = "%s"
+            local sourcedir = "<%= sourcedir %>"
             target("lualib")
-                set_kind("%s")
+                set_kind("<%= kind %>")
                 set_basename("lua")
                 add_cxflags("-fvisibility=default", {force = true})
                 add_headerfiles(sourcedir .. "*.h", {prefixdir = "lua"})
                 add_headerfiles(sourcedir .. "lua.hpp", {prefixdir = "lua"})
                 add_headerfiles(sourcedir .. "*.h")
                 add_headerfiles(sourcedir .. "lua.hpp")
-                add_files(sourcedir .. "*.c|lua.c|luac.c|onelua.c%s")
+                add_files(sourcedir .. "*.c|lua.c|luac.c|onelua.c<% if no_parser then %>|lcode.c|llex.c|lparser.c<% end %>")
                 add_defines("LUA_COMPAT_5_3")
 
-                %s
-                %s
-                %s
+                <% if use_c89 then %>
+                add_defines("LUA_USE_C89")
+                <% end %>
+                <% if use_32b then %>
+                add_defines("LUA_32BITS")
+                <% end %>
+                <% if no_parser then %>
+                add_defines("LUA_NO_PARSER")
+                <% end %>
 
                 if is_plat("linux", "bsd", "cross") then
                     add_defines("LUA_USE_LINUX", "LUA_DL_DLOPEN")
@@ -100,12 +154,9 @@ package("lua")
                         add_defines("LUA_BUILD_AS_DLL", {public = true})
                     end
                 elseif is_plat("wince") then
-                    add_rules("recudo.toolchain.evc3", {override = true})
                     add_defines("UNDER_CE=300", "_WIN32_WCE=300")
                     add_includedirs(sourcedir .. "compat/wince")
                     add_files(sourcedir .. "compat/wince/*.c|wince_main.c")
-                elseif is_plat("dos", "os2") then
-                    add_rules("recudo.toolchain.watcom", {override = true})
                 elseif is_plat("kolibri") then
                     add_defines("__KOLIBRIOS__")
                 elseif is_plat("plan9") then
@@ -114,8 +165,20 @@ package("lua")
                     add_defines("_WASI_EMULATED_SIGNAL", "_WASI_EMULATED_PROCESS_CLOCKS")
                 end
 
+            <% if tc.evc3.enabled then %>
+                add_rules("<%= tc.evc3.toolchain %>", {override = true})
+            <% end %>
+            <% if tc.vbcc.enabled then %>
+                add_rules("<%= tc.vbcc.toolchain %>", {override = true})
+                set_values("<%= tc.vbcc.toolchain %>.math", "msoft")
+                add_defines("LUA_USE_VBCC")
+            <% end %>
+            <% if tc.watcom.enabled then %>
+                add_rules("<%= tc.watcom.toolchain %>", {override = true})
+            <% end %>
+
             target("lua")
-                set_enabled(%s)
+                set_enabled(<%= has_interpreter %>)
                 set_kind("binary")
                 add_files(sourcedir .. "lua.c")
                 add_deps("lualib")
@@ -131,14 +194,15 @@ package("lua")
                 if not is_plat("windows", "mingw", "wince", "dos", "kolibri", "wasm", "wasi") then
                     add_syslinks("dl")
                 end
-        ]],
-            sourcedir,
-            package:config("shared") and "shared" or "static",
-            no_parser and "|lcode.c|llex.c|lparser.c" or "",
-            use_c89 and 'add_defines("LUA_USE_C89")' or "",
-            use_32b and 'add_defines("LUA_32BITS")' or "",
-            no_parser and 'add_defines("LUA_NO_PARSER")' or "",
-            (package:is_cross() or no_parser or package:is_plat("wasm", "wasi")) and "false" or "true"))
+        ]], {
+            tc = tc,
+            sourcedir = sourcedir,
+            kind = package:config("shared") and "shared" or "static",
+            use_c89 = use_c89,
+            use_32b = use_32b,
+            no_parser = no_parser,
+            has_interpreter = not (package:is_cross() or no_parser or package:is_plat("wasm", "wasi")),
+        }))
 
         local configs = {}
         if package:config("shared") then
