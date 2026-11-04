@@ -64,6 +64,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
     - [Compiling Typed Code with Teal (`tl`) in `xmake.lua`](#compiling-typed-code-with-teal-tl-in-xmakelua)
     - [Compiling Systems Code with Nelua in `xmake.lua`](#compiling-systems-code-with-nelua-in-xmakelua)
     - [Compiling Multi-Backend Haxe in `xmake.lua`](#compiling-multi-backend-haxe-in-xmakelua)
+    - [Transpiling Dialects (Pluto, TypeScriptToLua, Erde, Pallene) in `xmake.lua`](#transpiling-dialects-pluto-typescripttolua-erde-pallene-in-xmakelua)
     - [Auditing Recipes with Package Linter](#auditing-recipes-with-package-linter)
   - [License](#license)
 
@@ -142,12 +143,18 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 
 | Package | Description |
 | :--- | :--- |
+| [**`csharp-lua`**](packages/c/csharp-lua/xmake.lua) | C# to Lua compiler for Unity and general Lua game engines. |
+| [**`erde`**](packages/e/erde/xmake.lua) | An ergonomic, modern language that transpiles to Lua. |
 | [**`fennel`**](packages/f/fennel/xmake.lua) | A lisp that compiles to Lua. |
 | [**`haxe`**](packages/h/haxe/xmake.lua) | A high-level, strictly-typed multi-target programming language. |
 | [**`hxcpp`**](packages/h/hxcpp/xmake.lua) | Runtime support and C++ backend for the Haxe compiler. |
 | [**`moonscript`**](packages/m/moonscript/xmake.lua) | A programmer friendly language that compiles to Lua. |
 | [**`nelua`**](packages/n/nelua/xmake.lua) | Statically-typed, meta-programmable systems programming language inspired by Lua that compiles to C and WebAssembly. |
+| [**`pallene`**](packages/p/pallene/xmake.lua) | Pallene is a statically-typed, ahead-of-time compiled sister language to Lua. |
+| [**`pluto`**](packages/p/pluto/xmake.lua) | A modern general-purpose superset of Lua 5.5. |
+| [**`purescript`**](packages/p/purescript/xmake.lua) | Strongly-typed functional programming language that compiles to JavaScript and Lua (via backends). |
 | [**`tl`**](packages/t/tl/xmake.lua) | Teal, a typed dialect of Lua with compile-time type-checking and transpilation to Lua. |
+| [**`typescript-to-lua`**](packages/t/typescript-to-lua/xmake.lua) | TypeScript to Lua transpiler for modern type-safe Lua programming. |
 | [**`yuescript`**](packages/y/yuescript/xmake.lua) | Yuescript is an expressive, concise language transpiling to Lua. |
 
 ### Parsing, Data Formats & Templates
@@ -382,6 +389,25 @@ target("haxe_lua")
     add_files("src/LuaMain.hx")
     set_values("recudo.lang.haxe.main", "LuaMain")
     add_packages("haxe")
+```
+
+### Transpiling Dialects (Pluto, TypeScriptToLua, Erde, Pallene) in `xmake.lua`
+```lua
+add_requires("pluto", "typescript-to-lua", "erde", "pallene")
+add_requires("recudo master", {kind = "addon"})
+includes("@addon/recudo/recudo.lua")
+
+-- Build a Pluto superset app
+target("pluto_app")
+    add_rules("recudo.lua.app", "recudo.lang.pluto")
+    add_files("src/*.pluto")
+    add_packages("pluto")
+
+-- Transpile TypeScript to Lua
+target("ts_app")
+    add_rules("recudo.lua.app", "recudo.lang.typescript")
+    add_files("src/*.ts")
+    add_packages("typescript-to-lua")
 ```
 
 ### Auditing Recipes with Package Linter
