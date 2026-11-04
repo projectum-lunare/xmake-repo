@@ -150,6 +150,7 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 | [**`hxcpp`**](packages/h/hxcpp/xmake.lua) | Runtime support and C++ backend for the Haxe compiler. |
 | [**`moonscript`**](packages/m/moonscript/xmake.lua) | A programmer friendly language that compiles to Lua. |
 | [**`nelua`**](packages/n/nelua/xmake.lua) | Statically-typed, meta-programmable systems programming language inspired by Lua that compiles to C and WebAssembly. |
+| [**`neko`**](packages/n/neko/xmake.lua) | High-level dynamically typed programming language and lightweight virtual machine. |
 | [**`pallene`**](packages/p/pallene/xmake.lua) | Pallene is a statically-typed, ahead-of-time compiled sister language to Lua. |
 | [**`pluto`**](packages/p/pluto/xmake.lua) | A modern general-purpose superset of Lua 5.5. |
 | [**`purescript`**](packages/p/purescript/xmake.lua) | Strongly-typed functional programming language that compiles to JavaScript and Lua (via backends). |
