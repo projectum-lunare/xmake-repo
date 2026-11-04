@@ -1,31 +1,82 @@
 # Projectum Lunare Xmake Repository
 
 > **Official package and addon repository for Projectum Lunare**  
-> Lua packages wired for the Recudo module model, plus the Recudo addon itself, for [Xmake](https://xmake.io).
-
-Every recipe here is written against Recudo's Lua subsystem: modules install
-where `require` looks, native extensions carry a runtime buildhash, and
-multi-runtime (PUC-Lua / LuaJIT / OpenResty) is a config, not a fork.
-
-Cross-compilation toolchains are **not** in this repository — they ship as
-package recipes inside
-[`projectum-lunare/recudo`](https://github.com/projectum-lunare/recudo)
-under `repository/tools/`, and are installed with `xmake recudo tool install`.
+> Lua packages wired for the Recudo module model, multi-runtime engines, language transpilers, and cross-platform native extensions for [Xmake](https://xmake.io).
 
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-blue.svg)](https://opensource.org/licenses/MPL-2.0)
 [![Xmake](https://img.shields.io/badge/Xmake-Repository-red.svg)](https://xmake.io)
+[![Packages](https://img.shields.io/badge/Packages-129%20Available-green.svg)](#package-directory)
+[![Addon: Recudo](https://img.shields.io/badge/Addon-Recudo%20v0.2.3-orange.svg)](addons/r/recudo/xmake.lua)
+[![Platforms](https://img.shields.io/badge/Platforms-Linux%20%7C%20macOS%20%7C%20Windows%20%7C%20BSD%20%7C%20WASM-lightgrey.svg)](#getting-started)
+
+Every recipe in this repository is designed around **Projectum Lunare**'s engineering principles:
+* **Recudo Module Model**: Modules install exactly where Lua's `require()` searches. Native extensions are identified by a deterministic runtime `buildhash`.
+* **Multi-Runtime ABI Isolation**: Seamlessly switch between PUC-Rio Lua (5.1 / 5.2 / 5.3 / 5.4), LuaJIT 2.1, and OpenResty LuaJIT without ABI conflicts or recipe forks.
+* **Dialect & Transpiler Ecosystem**: Native Xmake integration for modern languages transpiling to Lua (Pluto, Teal, Nelua, TypeScript-to-Lua, Erde, Pallene, Fennel, MoonScript, Yuescript, PureScript, CSharp.lua).
+* **Multi-Backend Compilers**: First-class support for Haxe and NekoVM compiled from source with modular configurations.
+* **Deterministic Source Builds**: Builds tools and native extensions directly from upstream source code with reproducible dependency graphs and zero system pollution.
+
+> [!NOTE]
+> Cross-compilation toolchains do **not** live in this repository — they ship inside [`projectum-lunare/recudo`](https://github.com/projectum-lunare/recudo) under `repository/tools/` and are installed with `xmake recudo tool install`.
 
 ---
 
-## Adding this Repository
+## Table of Contents
 
-To use packages and addons from this repository in your local environment:
+- [Getting Started](#getting-started)
+  - [Adding this Repository](#adding-this-repository)
+  - [Declaring in Project Manifest](#declaring-in-project-manifest)
+- [Package Directory](#package-directory)
+  - [Build System & Toolchains (Addons)](#build-system--toolchains-addons)
+  - [Runtimes & Virtual Machines](#runtimes--virtual-machines)
+  - [Languages, Compilers & Transpilers](#languages-compilers--transpilers)
+  - [Game Development & Creative Coding](#game-development--creative-coding)
+    - [Game Engines & Frameworks](#game-engines--frameworks)
+    - [LÖVE (Love2D) Ecosystem](#löve-love2d-ecosystem)
+    - [Game Math, Physics & Utilities (Engine-Agnostic)](#game-math-physics--utilities-engine-agnostic)
+  - [GUI, Canvas & Graphics (Tecgraf Suite)](#gui-canvas--graphics-tecgraf-suite)
+  - [Parsing, Data Formats & Serialization](#parsing-data-formats--serialization)
+  - [Networking, Web & Services](#networking-web--services)
+    - [Core Networking, Sockets & TLS](#core-networking-sockets--tls)
+    - [Web Frameworks & Server Interfaces (WSAPI & Kepler)](#web-frameworks--server-interfaces-wsapi--kepler)
+    - [OpenResty & NGINX Ecosystem](#openresty--nginx-ecosystem)
+  - [Databases & Storage](#databases--storage)
+  - [System, Hardware & Native Extensions](#system-hardware--native-extensions)
+  - [Testing, Quality & Tooling](#testing-quality--tooling)
+  - [CLI, Terminal & Text UI](#cli-terminal--text-ui)
+  - [Data Structures, Concurrency & Utilities](#data-structures-concurrency--utilities)
+- [Usage & Architecture Examples](#usage--architecture-examples)
+  - [1. Installing & Using the Recudo Addon](#1-installing--using-the-recudo-addon)
+  - [2. Multi-Runtime Selection (PUC-Lua vs LuaJIT vs OpenResty)](#2-multi-runtime-selection-puc-lua-vs-luajit-vs-openresty)
+  - [3. Requiring Dialects & Transpilers in `xmake.lua`](#3-requiring-dialects--transpilers-in-xmakelua)
+  - [4. NekoVM & Haxe Multi-Target Tooling](#4-nekovm--haxe-multi-target-tooling)
+  - [5. Building Standalone Games with LÖVE & Libraries](#5-building-standalone-games-with-löve--libraries)
+  - [6. Native C & C++ Libraries in `xmake.lua`](#6-native-c--c-libraries-in-xmakelua)
+  - [7. Embedded Lua & Retro Platform Configurations](#7-embedded-lua--retro-platform-configurations)
+  - [8. Auditing Recipes with Package Linter](#8-auditing-recipes-with-package-linter)
+- [License](#license)
+
+---
+
+## Getting Started
+
+### Adding this Repository
+
+Register the repository in your local Xmake environment:
 
 ```bash
 xmake repo --add projectum-lunare https://github.com/projectum-lunare/xmake-repo.git
 ```
 
-Or declare it directly in your project's `xmake.lua`:
+Update your registered repositories anytime with:
+
+```bash
+xmake repo -u
+```
+
+### Declaring in Project Manifest
+
+Declare this repository directly in your project's `xmake.lua` to ensure fully reproducible, portable builds across machines and CI pipelines:
 
 ```lua
 add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-repo.git")
@@ -33,308 +84,374 @@ add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-rep
 
 ---
 
-## Available Packages & Addons
-
-### Categories
-
-- [Projectum Lunare Xmake Repository](#projectum-lunare-xmake-repository)
-  - [Adding this Repository](#adding-this-repository)
-  - [Available Packages \& Addons](#available-packages--addons)
-    - [Categories](#categories)
-    - [Build System \& Toolchains (Addons)](#build-system--toolchains-addons)
-    - [Runtimes \& Core Language](#runtimes--core-language)
-    - [OpenResty \& NGINX Ecosystem](#openresty--nginx-ecosystem)
-    - [Game Engines \& Creative Coding](#game-engines--creative-coding)
-      - [LÖVE (Love2D)](#löve-love2d)
-    - [Languages \& Transpilers](#languages--transpilers)
-    - [Parsing, Data Formats \& Templates](#parsing-data-formats--templates)
-    - [Testing, Code Quality \& Documentation](#testing-code-quality--documentation)
-    - [Networking, Web \& Services](#networking-web--services)
-    - [Databases \& Storage](#databases--storage)
-    - [System, Hardware \& Native Bindings](#system-hardware--native-bindings)
-    - [CLI, Terminal \& Text UI](#cli-terminal--text-ui)
-    - [Data Structures, Concurrency \& Utilities](#data-structures-concurrency--utilities)
-  - [Usage Examples](#usage-examples)
-    - [Installing Recudo Addon](#installing-recudo-addon)
-    - [Requiring Greatest in `xmake.lua`](#requiring-greatest-in-xmakelua)
-    - [Requiring LPeg in `xmake.lua`](#requiring-lpeg-in-xmakelua)
-    - [Multi-Runtime Selection (PUC-Lua vs LuaJIT)](#multi-runtime-selection-puc-lua-vs-luajit)
-    - [Requiring Lua (with Retro \& Embedded Patches) in `xmake.lua`](#requiring-lua-with-retro--embedded-patches-in-xmakelua)
-    - [Building a Standalone Game with LÖVE \& Libraries in `xmake.lua`](#building-a-standalone-game-with-löve--libraries-in-xmakelua)
-    - [Compiling Typed Code with Teal (`tl`) in `xmake.lua`](#compiling-typed-code-with-teal-tl-in-xmakelua)
-    - [Compiling Systems Code with Nelua in `xmake.lua`](#compiling-systems-code-with-nelua-in-xmakelua)
-    - [Compiling Multi-Backend Haxe in `xmake.lua`](#compiling-multi-backend-haxe-in-xmakelua)
-    - [Transpiling Dialects (Pluto, TypeScriptToLua, Erde, Pallene) in `xmake.lua`](#transpiling-dialects-pluto-typescripttolua-erde-pallene-in-xmakelua)
-    - [Auditing Recipes with Package Linter](#auditing-recipes-with-package-linter)
-  - [License](#license)
-
----
+## Package Directory
 
 ### Build System & Toolchains (Addons)
 
 | Package | Description |
 | :--- | :--- |
-| [**`recudo`**](addons/r/recudo/xmake.lua) | Projectum Lunare Unified Build, Toolchain & Cross-Compilation Addon |
+| [**`recudo`**](addons/r/recudo/xmake.lua) | Projectum Lunare Unified Build, Toolchain & Cross-Compilation Addon for Xmake. |
 
-### Runtimes & Core Language
+### Runtimes & Virtual Machines
 
 | Package | Description |
 | :--- | :--- |
-| [**`lua`**](packages/l/lua/xmake.lua) | A powerful, efficient, lightweight, embeddable scripting language. |
-| [**`openresty-luajit`**](packages/o/openresty-luajit/xmake.lua) | OpenResty's Branch of LuaJIT 2 with string.buffer, table.new/clear and GC64 support. |
-| [**`elua`**](packages/e/elua/xmake.lua) | Embedded Lua (eLua) offers the full implementation of the Lua language to the embedded world. |
-| [**`luvit`**](packages/l/luvit/xmake.lua) | Asynchronous I/O for Lua - Node.js style APIs for luvi as either a luvi app or library. |
-| [**`lit`**](packages/l/lit/xmake.lua) | The Luvit Invention Toolkit is a luvi app that handles dependencies and luvi builds. |
-| [**`rings`**](packages/r/rings/xmake.lua) | Multiple Lua states from Lua. |
-| [**`lua-compat-5.3`**](packages/l/lua-compat-5.3/xmake.lua) | Compatibility module providing Lua-5.3-style APIs for Lua 5.2 and 5.1. |
+| [**`lua`**](packages/l/lua/xmake.lua) | A powerful, efficient, lightweight, embeddable scripting language (PUC-Rio Lua 5.1, 5.2, 5.3, 5.4). |
+| [**`openresty-luajit`**](packages/o/openresty-luajit/xmake.lua) | OpenResty's branch of LuaJIT 2 with `string.buffer`, `table.new`/`clear`, and GC64 support. |
+| [**`neko`**](packages/n/neko/xmake.lua) | High-level dynamically typed programming language and lightweight virtual machine by Haxe Foundation. |
+| [**`elua`**](packages/e/elua/xmake.lua) | Embedded Lua (eLua) offering the full implementation of the Lua language to microcontrollers and bare metal. |
+| [**`luvit`**](packages/l/luvit/xmake.lua) | Asynchronous I/O for Lua - Node.js style APIs for luvi as either a standalone binary or library. |
+| [**`lit`**](packages/l/lit/xmake.lua) | The Luvit Invention Toolkit - packaging and dependency management for luvi applications. |
+| [**`rings`**](packages/r/rings/xmake.lua) | Multiple isolated Lua states executed safely from within a master Lua state. |
+| [**`lua-compat-5.3`**](packages/l/lua-compat-5.3/xmake.lua) | Comprehensive compatibility module providing Lua-5.3-style C and Lua APIs for Lua 5.2 and 5.1. |
 | [**`bit32`**](packages/b/bit32/xmake.lua) | Lua 5.2 bit manipulation library backported to Lua 5.1. |
 
-### OpenResty & NGINX Ecosystem
-
-| Package | Description |
-| :--- | :--- |
-| [**`lua-cjson`**](packages/l/lua-cjson/xmake.lua) | A fast JSON encoding/parsing module for Lua (OpenResty fork). |
-| [**`lua-radix-router`**](packages/l/lua-radix-router/xmake.lua) | Fast, lightweight API router based on radix tree for Lua and OpenResty. |
-| [**`lua-resty-cookie`**](packages/l/lua-resty-cookie/xmake.lua) | HTTP cookie manipulation for OpenResty/ngx_lua. |
-| [**`lua-resty-core`**](packages/l/lua-resty-core/xmake.lua) | New FFI-based Lua API for the ngx_lua module. |
-| [**`lua-resty-dns`**](packages/l/lua-resty-dns/xmake.lua) | DNS resolver for the OpenResty / ngx_lua cosocket API. |
-| [**`lua-resty-etcd`**](packages/l/lua-resty-etcd/xmake.lua) | Nonblocking Lua etcd driver library for OpenResty. |
-| [**`lua-resty-http`**](packages/l/lua-resty-http/xmake.lua) | Lua HTTP client cosocket driver for OpenResty / ngx_lua. |
-| [**`lua-resty-http2`**](packages/l/lua-resty-http2/xmake.lua) | HTTP/2 protocol implementation for OpenResty. |
-| [**`lua-resty-jwt`**](packages/l/lua-resty-jwt/xmake.lua) | JWT (JSON Web Tokens) for ngx_lua and LuaJIT. |
-| [**`lua-resty-limit-traffic`**](packages/l/lua-resty-limit-traffic/xmake.lua) | Lua library to limit and traffic shape in OpenResty/ngx_lua. |
-| [**`lua-resty-lock`**](packages/l/lua-resty-lock/xmake.lua) | Simple nonblocking mutex lock for OpenResty based on shared memory. |
-| [**`lua-resty-lrucache`**](packages/l/lua-resty-lrucache/xmake.lua) | Lua-land LRU cache based on the LuaJIT FFI. |
-| [**`lua-resty-maxminddb`**](packages/l/lua-resty-maxminddb/xmake.lua) | MaxMind GeoIP2 / GeoLite2 database reader library for OpenResty. |
-| [**`lua-resty-memcached`**](packages/l/lua-resty-memcached/xmake.lua) | Lua memcached client driver for the ngx_lua based on the cosocket API. |
-| [**`lua-resty-mysql`**](packages/l/lua-resty-mysql/xmake.lua) | Nonblocking Lua MySQL driver library for OpenResty. |
-| [**`lua-resty-openidc`**](packages/l/lua-resty-openidc/xmake.lua) | OpenID Connect Relying Party and OAuth 2.0 Resource Server for OpenResty. |
-| [**`lua-resty-redis`**](packages/l/lua-resty-redis/xmake.lua) | Lua Redis client driver for the ngx_lua based on the cosocket API. |
-| [**`lua-resty-requests`**](packages/l/lua-resty-requests/xmake.lua) | Yet Another HTTP library for OpenResty - HTTP library for Humans. |
-| [**`lua-resty-session`**](packages/l/lua-resty-session/xmake.lua) | Session library for OpenResty - Flexible and secure sessions. |
-| [**`lua-resty-shell`**](packages/l/lua-resty-shell/xmake.lua) | Lua module for nonblocking system shell command executions in OpenResty. |
-| [**`lua-resty-signal`**](packages/l/lua-resty-signal/xmake.lua) | POSIX signal library for OpenResty. |
-| [**`lua-resty-socket`**](packages/l/lua-resty-socket/xmake.lua) | Automatic LuaSocket/ngx.socket.tcp fallback with identical API. |
-| [**`lua-resty-string`**](packages/l/lua-resty-string/xmake.lua) | String utilities and common hash functions for OpenResty. |
-| [**`lua-resty-upload`**](packages/l/lua-resty-upload/xmake.lua) | Streaming reading and parsing for HTTP file uploading based on ngx_lua cosockets. |
-| [**`lua-resty-websocket`**](packages/l/lua-resty-websocket/xmake.lua) | Lua WebSocket implementation for the ngx_lua module in OpenResty. |
-| [**`lua-tablepool`**](packages/l/lua-tablepool/xmake.lua) | Lua table recycling pools for LuaJIT and OpenResty. |
-| [**`openresty-luajit`**](packages/o/openresty-luajit/xmake.lua) | OpenResty's Branch of LuaJIT 2 with string.buffer, table.new/clear and GC64 support. |
-
-### Game Engines & Creative Coding
-
-| Package | Description |
-| :--- | :--- |
-| [**`amulet`**](packages/a/amulet/xmake.lua) | A Lua-based audio/visual game toolkit for small games, rapid prototyping and experimentation. |
-
-#### LÖVE (Love2D)
-
-| Package | Description |
-| :--- | :--- |
-| [**`love`**](packages/l/love/xmake.lua) | LÖVE is an awesome 2D game framework for Lua (supports both LuaJIT and PUC-Rio Lua 5.1). |
-| [**`anim8`**](packages/a/anim8/xmake.lua) | Grid-based 2D sprite animation library for LÖVE. |
-| [**`bump`**](packages/b/bump/xmake.lua) | Fast, simple AABB (axis-aligned bounding box) 2D collision detection and resolution library. |
-| [**`flux`**](packages/f/flux/xmake.lua) | Fast, lightweight tweening library for Lua. |
-| [**`hump`**](packages/h/hump/xmake.lua) | Lightweight game development utilities for LÖVE (camera, timer, vector, gamestate, class, signal). |
-| [**`lume`**](packages/l/lume/xmake.lua) | Essential math, table and functional utilities for gamedev in Lua. |
-| [**`tween`**](packages/t/tween/xmake.lua) | Small tweening and easing library for Lua with custom interpolation functions. |
-
-### Languages & Transpilers
+### Languages, Compilers & Transpilers
 
 | Package | Description |
 | :--- | :--- |
 | [**`csharp-lua`**](packages/c/csharp-lua/xmake.lua) | C# to Lua compiler for Unity and general Lua game engines. |
-| [**`erde`**](packages/e/erde/xmake.lua) | An ergonomic, modern language that transpiles to Lua. |
-| [**`fennel`**](packages/f/fennel/xmake.lua) | A lisp that compiles to Lua. |
-| [**`haxe`**](packages/h/haxe/xmake.lua) | A high-level, strictly-typed multi-target programming language. |
-| [**`hxcpp`**](packages/h/hxcpp/xmake.lua) | Runtime support and C++ backend for the Haxe compiler. |
-| [**`moonscript`**](packages/m/moonscript/xmake.lua) | A programmer friendly language that compiles to Lua. |
-| [**`nelua`**](packages/n/nelua/xmake.lua) | Statically-typed, meta-programmable systems programming language inspired by Lua that compiles to C and WebAssembly. |
-| [**`neko`**](packages/n/neko/xmake.lua) | High-level dynamically typed programming language and lightweight virtual machine. |
-| [**`pallene`**](packages/p/pallene/xmake.lua) | Pallene is a statically-typed, ahead-of-time compiled sister language to Lua. |
-| [**`pluto`**](packages/p/pluto/xmake.lua) | A modern general-purpose superset of Lua 5.5. |
-| [**`purescript`**](packages/p/purescript/xmake.lua) | Strongly-typed functional programming language that compiles to JavaScript and Lua (via backends). |
-| [**`tl`**](packages/t/tl/xmake.lua) | Teal, a typed dialect of Lua with compile-time type-checking and transpilation to Lua. |
-| [**`typescript-to-lua`**](packages/t/typescript-to-lua/xmake.lua) | TypeScript to Lua transpiler for modern type-safe Lua programming. |
-| [**`yuescript`**](packages/y/yuescript/xmake.lua) | Yuescript is an expressive, concise language transpiling to Lua. |
+| [**`erde`**](packages/e/erde/xmake.lua) | Ergonomic, modern language that transpiles to efficient Lua. |
+| [**`fennel`**](packages/f/fennel/xmake.lua) | A clean, elegant Lisp dialect that compiles to Lua with zero runtime overhead. |
+| [**`haxe`**](packages/h/haxe/xmake.lua) | High-level, strictly-typed multi-target programming language with C++, Lua, and Neko backends. |
+| [**`hxcpp`**](packages/h/hxcpp/xmake.lua) | Runtime support and native C++ backend for the Haxe compiler. |
+| [**`moonscript`**](packages/m/moonscript/xmake.lua) | Expressive programmer-friendly language that compiles into Lua code. |
+| [**`nelua`**](packages/n/nelua/xmake.lua) | Statically-typed, meta-programmable systems programming language inspired by Lua that compiles to C and WASM. |
+| [**`pallene`**](packages/p/pallene/xmake.lua) | Ahead-of-time compiled, statically-typed sister language to Lua designed for high performance. |
+| [**`pluto`**](packages/p/pluto/xmake.lua) | Modern, general-purpose superset of Lua 5.5 featuring classes, type annotations, and pattern matching. |
+| [**`purescript`**](packages/p/purescript/xmake.lua) | Strongly-typed purely-functional programming language compiling to JavaScript and Lua. |
+| [**`tl`**](packages/t/tl/xmake.lua) | Teal, a typed dialect of Lua with compile-time type checking and transpilation to standard Lua. |
+| [**`typescript-to-lua`**](packages/t/typescript-to-lua/xmake.lua) | TypeScript to Lua transpiler for modern, type-safe Lua game and application development. |
+| [**`yuescript`**](packages/y/yuescript/xmake.lua) | Concise and expressive language transpiling to Lua (modern MoonScript successor in C++). |
 
-### Parsing, Data Formats & Templates
+### Game Development & Creative Coding
+
+#### Game Engines & Frameworks
 
 | Package | Description |
 | :--- | :--- |
-| [**`lpeg`**](packages/l/lpeg/xmake.lua) | Pattern-Matching for Lua that uses Parsing Expression Grammars (PEGs). |
-| [**`lpeglabel`**](packages/l/lpeglabel/xmake.lua) | Parsing Expression Grammars For Lua with Labeled Failures. |
-| [**`lrexlib-pcre2`**](packages/l/lrexlib-pcre2/xmake.lua) | PCRE2 regular expression library binding for Lua. |
+| [**`love`**](packages/l/love/xmake.lua) | LÖVE (Love2D) 2D game framework for Lua (supports both LuaJIT and PUC-Rio Lua 5.1). |
+| [**`amulet`**](packages/a/amulet/xmake.lua) | Lua-based audio/visual game toolkit and engine for small games, rapid prototyping, and creative coding. |
+
+#### LÖVE (Love2D) Ecosystem
+
+| Package | Description |
+| :--- | :--- |
+| [**`anim8`**](packages/a/anim8/xmake.lua) | Grid-based 2D sprite animation library designed for LÖVE and generic 2D games. |
+| [**`hump`**](packages/h/hump/xmake.lua) | Essential game development utilities for LÖVE (camera, timer, vector, gamestate, class, signal). |
+
+#### Game Math, Physics & Utilities (Engine-Agnostic)
+
+| Package | Description |
+| :--- | :--- |
+| [**`bump`**](packages/b/bump/xmake.lua) | Fast, simple AABB (axis-aligned bounding box) 2D collision detection and resolution library. |
+| [**`flux`**](packages/f/flux/xmake.lua) | Fast, lightweight tweening and animation library for Lua. |
+| [**`lume`**](packages/l/lume/xmake.lua) | Essential mathematical, functional, and table utility collection tailored for game developers. |
+| [**`tween`**](packages/t/tween/xmake.lua) | Small tweening and easing library with custom interpolation curves. |
+
+### GUI, Canvas & Graphics (Tecgraf Suite)
+
+| Package | Description |
+| :--- | :--- |
+| [**`iup`**](packages/i/iup/xmake.lua) | Multi-platform toolkit for building native graphical user interfaces (Tecgraf/PUC-Rio). |
+| [**`cd`**](packages/c/cd/xmake.lua) | 2D Graphics Canvas Draw toolkit supporting multiple display drivers (Tecgraf/PUC-Rio). |
+| [**`im`**](packages/i/im/xmake.lua) | Image representation, storage, capture, processing, and analysis toolkit (Tecgraf/PUC-Rio). |
+| [**`magick`**](packages/m/magick/xmake.lua) | Lua bindings to ImageMagick & GraphicsMagick for LuaJIT using FFI. |
+
+### Parsing, Data Formats & Serialization
+
+| Package | Description |
+| :--- | :--- |
+| [**`lua-cjson`**](packages/l/lua-cjson/xmake.lua) | Ultra-fast JSON encoding and parsing module for Lua in pure C (maintained OpenResty fork). |
 | [**`hx-lua-simdjson`**](packages/h/hx-lua-simdjson/xmake.lua) | High-performance JSON parsing binding based on simdjson for Lua and Haxe. |
-| [**`dkjson`**](packages/d/dkjson/xmake.lua) | David Kolf's JSON module for Lua. |
+| [**`dkjson`**](packages/d/dkjson/xmake.lua) | David Kolf's pure-Lua JSON encoder and decoder with LPeg acceleration. |
+| [**`lpeg`**](packages/l/lpeg/xmake.lua) | Pattern-Matching for Lua using Parsing Expression Grammars (PEGs). |
+| [**`lpeglabel`**](packages/l/lpeglabel/xmake.lua) | Parsing Expression Grammars with labeled failures for syntax error reporting. |
+| [**`lrexlib-pcre2`**](packages/l/lrexlib-pcre2/xmake.lua) | High-performance PCRE2 regular expression library bindings for Lua. |
 | [**`lyaml`**](packages/l/lyaml/xmake.lua) | LibYAML binding for Lua. |
-| [**`libyaml`**](packages/l/libyaml/xmake.lua) | A C library for parsing and emitting YAML. |
-| [**`luaexpat`**](packages/l/luaexpat/xmake.lua) | XML Expat parsing for the Lua language. |
-| [**`expadom`**](packages/e/expadom/xmake.lua) | Expat based XML DOM level 2 handling for Lua. |
-| [**`markdown`**](packages/m/markdown/xmake.lua) | Pure Lua implementation of the Markdown text-to-html markup system. |
-| [**`inifile`**](packages/i/inifile/xmake.lua) | Simple, complete INI parser for Lua. |
-| [**`serpent`**](packages/s/serpent/xmake.lua) | Lua serializer and pretty printer. |
-| [**`cosmo`**](packages/c/cosmo/xmake.lua) | Safe templates for Lua. |
-| [**`etlua`**](packages/e/etlua/xmake.lua) | Embedded templates for Lua. |
-
-### Testing, Code Quality & Documentation
-
-| Package | Description |
-| :--- | :--- |
-| [**`busted`**](packages/b/busted/xmake.lua) | An elegant, extensible testing framework for Lua. |
-| [**`luassert`**](packages/l/luassert/xmake.lua) | Lua assertions extension library. |
-| [**`say`**](packages/s/say/xmake.lua) | Simple string key/value store for i18n or any other case where strings need to be stored. |
-| [**`greatest`**](packages/g/greatest/xmake.lua) | A C testing system in one header file |
-| [**`luacheck`**](packages/l/luacheck/xmake.lua) | A static analyzer and a linter for Lua. |
-| [**`luacov`**](packages/l/luacov/xmake.lua) | Coverage analysis tool for Lua scripts. |
-| [**`cluacov`**](packages/c/cluacov/xmake.lua) | C extensions for LuaCov, improving coverage analysis performance. |
-| [**`luacov-reporter-lcov`**](packages/l/luacov-reporter-lcov/xmake.lua) | A luacov reporter for use with lcov. |
-| [**`ldoc`**](packages/l/ldoc/xmake.lua) | A Lua Documentation Tool. |
+| [**`libyaml`**](packages/l/libyaml/xmake.lua) | Fast C library for parsing and emitting YAML. |
+| [**`luaexpat`**](packages/l/luaexpat/xmake.lua) | XML parsing library based on the Expat stream parser for Lua. |
+| [**`expadom`**](packages/e/expadom/xmake.lua) | Expat-based XML DOM Level 2 parser and tree representation for Lua. |
+| [**`markdown`**](packages/m/markdown/xmake.lua) | Pure-Lua implementation of the Markdown text-to-HTML markup system. |
+| [**`inifile`**](packages/i/inifile/xmake.lua) | Complete, simple INI configuration parser and writer for Lua. |
+| [**`serpent`**](packages/s/serpent/xmake.lua) | Lua table serializer, deserializer, and human-readable pretty printer. |
+| [**`cosmo`**](packages/c/cosmo/xmake.lua) | Safe, expressive template engine for Lua. |
+| [**`etlua`**](packages/e/etlua/xmake.lua) | Embedded Lua templates (ERB/EJS style) compiled to efficient Lua code. |
 
 ### Networking, Web & Services
 
+#### Core Networking, Sockets & TLS
+
 | Package | Description |
 | :--- | :--- |
-| [**`luasocket`**](packages/l/luasocket/xmake.lua) | Network support for the Lua language. |
-| [**`luasec`**](packages/l/luasec/xmake.lua) | A binding for OpenSSL library to provide TLS/SSL communication over LuaSocket. |
-| [**`luaossl`**](packages/l/luaossl/xmake.lua) | Most comprehensive OpenSSL binding in the Lua universe. |
-| [**`copas`**](packages/c/copas/xmake.lua) | Coroutine Oriented Portable Asynchronous Services for Lua. |
-| [**`lapis`**](packages/l/lapis/xmake.lua) | A web framework for MoonScript and Lua. |
-| [**`wsapi`**](packages/w/wsapi/xmake.lua) | WSAPI is an API that abstracts the web server from Lua web applications. |
-| [**`cgilua`**](packages/c/cgilua/xmake.lua) | Tool for creating dynamic Web pages and manipulating data from Web forms. |
-| [**`orbit`**](packages/o/orbit/xmake.lua) | MVC Web Development for the Kepler platform. |
-| [**`lua-mimetypes`**](packages/l/lua-mimetypes/xmake.lua) | A simple library for looking up the MIME types of files. |
-| [**`lua-lace`**](packages/l/lua-lace/xmake.lua) | A simple access control engine modelled on Squid's acl syntax. |
+| [**`luasocket`**](packages/l/luasocket/xmake.lua) | Foundational networking support (TCP, UDP, HTTP, FTP, SMTP, DNS, MIME) for Lua. |
+| [**`luasec`**](packages/l/luasec/xmake.lua) | OpenSSL binding providing TLS/SSL secure communication over LuaSocket. |
+| [**`luaossl`**](packages/l/luaossl/xmake.lua) | Comprehensive, modern OpenSSL binding for Lua (crypto, x509, bignum, ssl). |
+| [**`copas`**](packages/c/copas/xmake.lua) | Coroutine Oriented Portable Asynchronous Services and dispatcher for LuaSocket. |
+| [**`lua-mimetypes`**](packages/l/lua-mimetypes/xmake.lua) | Fast MIME type lookup table for file extensions and media types. |
+
+#### Web Frameworks & Server Interfaces (WSAPI & Kepler)
+
+| Package | Description |
+| :--- | :--- |
+| [**`lapis`**](packages/l/lapis/xmake.lua) | High-performance full-stack web framework for MoonScript and Lua (OpenResty / Server). |
+| [**`wsapi`**](packages/w/wsapi/xmake.lua) | WSAPI abstracts the web server from Lua web applications (WSGI/Rack equivalent). |
+| [**`cgilua`**](packages/c/cgilua/xmake.lua) | Tool for creating dynamic web pages and processing web forms across CGI/FastCGI. |
+| [**`orbit`**](packages/o/orbit/xmake.lua) | MVC web development framework built upon WSAPI for the Kepler platform. |
+| [**`lua-lace`**](packages/l/lua-lace/xmake.lua) | Access control and ACL evaluation engine modelled on Squid syntax. |
+
+#### OpenResty & NGINX Ecosystem
+
+| Package | Description |
+| :--- | :--- |
+| [**`lua-radix-router`**](packages/l/lua-radix-router/xmake.lua) | Fast, lightweight API router based on radix tree for OpenResty and Lua. |
+| [**`lua-resty-cookie`**](packages/l/lua-resty-cookie/xmake.lua) | HTTP cookie manipulation and parsing for OpenResty / ngx_lua. |
+| [**`lua-resty-core`**](packages/l/lua-resty-core/xmake.lua) | FFI-based Lua API for the ngx_lua module replacing the classic C-API. |
+| [**`lua-resty-dns`**](packages/l/lua-resty-dns/xmake.lua) | Nonblocking DNS resolver for the OpenResty / ngx_lua cosocket API. |
+| [**`lua-resty-etcd`**](packages/l/lua-resty-etcd/xmake.lua) | Nonblocking Lua etcd v3 client driver for OpenResty. |
+| [**`lua-resty-http`**](packages/l/lua-resty-http/xmake.lua) | Nonblocking Lua HTTP client cosocket driver for OpenResty. |
+| [**`lua-resty-http2`**](packages/l/lua-resty-http2/xmake.lua) | HTTP/2 protocol implementation and client for OpenResty. |
+| [**`lua-resty-jwt`**](packages/l/lua-resty-jwt/xmake.lua) | JSON Web Tokens (JWT) encode, decode, and verification for ngx_lua and LuaJIT. |
+| [**`lua-resty-limit-traffic`**](packages/l/lua-resty-limit-traffic/xmake.lua) | Traffic shaping, rate limiting, and concurrency limiting library for OpenResty. |
+| [**`lua-resty-lock`**](packages/l/lua-resty-lock/xmake.lua) | Simple nonblocking mutex lock based on shared memory dictionaries in OpenResty. |
+| [**`lua-resty-lrucache`**](packages/l/lua-resty-lrucache/xmake.lua) | High-performance LRU cache based on LuaJIT FFI. |
+| [**`lua-resty-maxminddb`**](packages/l/lua-resty-maxminddb/xmake.lua) | MaxMind GeoIP2 / GeoLite2 binary database reader library for OpenResty. |
+| [**`lua-resty-memcached`**](packages/l/lua-resty-memcached/xmake.lua) | Nonblocking Lua memcached client driver based on the cosocket API. |
+| [**`lua-resty-mysql`**](packages/l/lua-resty-mysql/xmake.lua) | Nonblocking Lua MySQL client driver for OpenResty. |
+| [**`lua-resty-openidc`**](packages/l/lua-resty-openidc/xmake.lua) | OpenID Connect Relying Party and OAuth 2.0 Resource Server implementation for OpenResty. |
+| [**`lua-resty-redis`**](packages/l/lua-resty-redis/xmake.lua) | Nonblocking Lua Redis client driver based on the cosocket API. |
+| [**`lua-resty-requests`**](packages/l/lua-resty-requests/xmake.lua) | Human-friendly HTTP library with pooling and session management for OpenResty. |
+| [**`lua-resty-session`**](packages/l/lua-resty-session/xmake.lua) | Secure and flexible HTTP session management library for OpenResty. |
+| [**`lua-resty-shell`**](packages/l/lua-resty-shell/xmake.lua) | Nonblocking system shell command execution in OpenResty using sub-processes. |
+| [**`lua-resty-signal`**](packages/l/lua-resty-signal/xmake.lua) | POSIX signal emitting and management library for OpenResty. |
+| [**`lua-resty-socket`**](packages/l/lua-resty-socket/xmake.lua) | Transparent fallback wrapper between LuaSocket and `ngx.socket.tcp` with identical API. |
+| [**`lua-resty-string`**](packages/l/lua-resty-string/xmake.lua) | String utilities and cryptographic hash functions (SHA1, SHA256, MD5) for OpenResty. |
+| [**`lua-resty-upload`**](packages/l/lua-resty-upload/xmake.lua) | Streaming reading and parsing for HTTP file uploading via cosockets. |
+| [**`lua-resty-websocket`**](packages/l/lua-resty-websocket/xmake.lua) | WebSocket client and server implementation for ngx_lua in OpenResty. |
+| [**`lua-tablepool`**](packages/l/lua-tablepool/xmake.lua) | High-performance Lua table recycling pools for LuaJIT and OpenResty. |
 
 ### Databases & Storage
 
 | Package | Description |
 | :--- | :--- |
-| [**`luasql`**](packages/l/luasql/xmake.lua) | Database connectivity for Lua. |
-| [**`pgmoon`**](packages/p/pgmoon/xmake.lua) | PostgreSQL driver written in pure Lua. |
-| [**`redis-lua`**](packages/r/redis-lua/xmake.lua) | A Lua client library for the Redis key-value storage system. |
+| [**`luasql`**](packages/l/luasql/xmake.lua) | Unified database connectivity for Lua supporting SQLite3, PostgreSQL, MySQL, and ODBC. |
+| [**`pgmoon`**](packages/p/pgmoon/xmake.lua) | Pure-Lua PostgreSQL driver with SSL support for OpenResty, cqueues, and LuaSocket. |
+| [**`redis-lua`**](packages/r/redis-lua/xmake.lua) | Fast, pure-Lua client library for the Redis in-memory storage engine. |
 
-### System, Hardware & Native Bindings
+### System, Hardware & Native Extensions
 
 | Package | Description |
 | :--- | :--- |
-| [**`luafilesystem`**](packages/l/luafilesystem/xmake.lua) | File System Library for the Lua Language. |
-| [**`luasystem`**](packages/l/luasystem/xmake.lua) | Platform independent system calls for Lua. |
-| [**`cd`**](packages/c/cd/xmake.lua) | A 2D Graphics Canvas Draw Toolkit (Tecgraf/PUC-Rio). |
-| [**`cffi-lua`**](packages/c/cffi-lua/xmake.lua) | A portable C FFI for Lua 5.1+, based on libffi. |
-| [**`solo`**](packages/s/solo/xmake.lua) | Physical I/O, System Foundations & Hardware Abstractions |
-| [**`luv`**](packages/l/luv/xmake.lua) | Bare libuv bindings for Lua. |
-| [**`lua-bz2`**](packages/l/lua-bz2/xmake.lua) | A Lua binding to Julian Seward's libbzip2. |
-| [**`luazip`**](packages/l/luazip/xmake.lua) | Lua extension library used to read files stored inside zip files. |
-| [**`lua-iconv`**](packages/l/lua-iconv/xmake.lua) | Lua binding to the POSIX 'iconv' library. |
-| [**`lualogging`**](packages/l/lualogging/xmake.lua) | A simple API to use logging features in Lua. |
+| [**`luafilesystem`**](packages/l/luafilesystem/xmake.lua) | File system directory traversal, file attributes, and permissions for Lua. |
+| [**`luasystem`**](packages/l/luasystem/xmake.lua) | Platform-independent system calls, sleep, high-resolution timers, and terminal state. |
+| [**`cffi-lua`**](packages/c/cffi-lua/xmake.lua) | Portable C Foreign Function Interface (FFI) for Lua 5.1+ based on libffi. |
+| [**`solo`**](packages/s/solo/xmake.lua) | Physical I/O, system foundations, and low-level hardware abstractions for embedded targets. |
+| [**`luv`**](packages/l/luv/xmake.lua) | Bare libuv bindings providing asynchronous I/O and event loop integration for Lua. |
+| [**`lua-bz2`**](packages/l/lua-bz2/xmake.lua) | Lua binding to Julian Seward's libbzip2 compression library. |
+| [**`luazip`**](packages/l/luazip/xmake.lua) | Lua extension library used to inspect and read files stored inside ZIP archives. |
+| [**`lua-iconv`**](packages/l/lua-iconv/xmake.lua) | Lua binding to POSIX `iconv` for character encoding conversion. |
+| [**`lualogging`**](packages/l/lualogging/xmake.lua) | Unified logging API with multiple appenders (file, rolling, console, email, socket). |
 | [**`luasyslog`**](packages/l/luasyslog/xmake.lua) | Syslog logging addon for LuaLogging and standalone syslog access. |
-| [**`magick`**](packages/m/magick/xmake.lua) | Lua bindings to ImageMagick & GraphicsMagick for LuaJIT using FFI. |
-| [**`monocypher`**](packages/m/monocypher/xmake.lua) | A small, easy-to-use, easy-to-audit crypto library. |
-| [**`openal-soft`**](packages/o/openal-soft/xmake.lua) | A software implementation of the OpenAL 3D audio API. |
-| [**`im`**](packages/i/im/xmake.lua) | Image Representation, Storage, Capture and Processing Toolkit (Tecgraf/PUC-Rio). |
-| [**`iup`**](packages/i/iup/xmake.lua) | A Multi-platform Toolkit for Building Graphical User Interfaces (Tecgraf/PUC-Rio). |
+| [**`monocypher`**](packages/m/monocypher/xmake.lua) | Small, easy-to-use, easy-to-audit cryptographic library (Blake2b, Poly1305, Ed25519). |
+| [**`openal-soft`**](packages/o/openal-soft/xmake.lua) | Software implementation of the OpenAL 3D audio API for multimedia and games. |
+
+### Testing, Quality & Tooling
+
+| Package | Description |
+| :--- | :--- |
+| [**`busted`**](packages/b/busted/xmake.lua) | Elegant, extensible Behavior-Driven Development (BDD) testing framework for Lua. |
+| [**`luassert`**](packages/l/luassert/xmake.lua) | Assertion, matcher, and test spy library for Lua. |
+| [**`say`**](packages/s/say/xmake.lua) | Key/value string store for internationalization (i18n) and assertion failure messages. |
+| [**`greatest`**](packages/g/greatest/xmake.lua) | Lightweight, single-header C unit testing system with zero external dependencies. |
+| [**`luacheck`**](packages/l/luacheck/xmake.lua) | Fast static analyzer and linter for Lua code detecting undefined variables and shadows. |
+| [**`luacov`**](packages/l/luacov/xmake.lua) | Line and statement code coverage analysis tool for Lua scripts. |
+| [**`cluacov`**](packages/c/cluacov/xmake.lua) | C acceleration extension for LuaCov improving coverage analysis performance. |
+| [**`luacov-reporter-lcov`**](packages/l/luacov-reporter-lcov/xmake.lua) | Coverage reporter exporting LuaCov results into standard LCOV tracefile format. |
+| [**`ldoc`**](packages/l/ldoc/xmake.lua) | Modern documentation generation tool for Lua codebases compatible with LuaDoc. |
 
 ### CLI, Terminal & Text UI
 
 | Package | Description |
 | :--- | :--- |
-| [**`argparse`**](packages/a/argparse/xmake.lua) | A feature-rich command line parser for Lua. |
-| [**`lua-cliargs`**](packages/l/lua-cliargs/xmake.lua) | A command-line argument parsing module for Lua. |
-| [**`ansicolors`**](packages/a/ansicolors/xmake.lua) | ANSI terminal color manipulation for Lua. |
-| [**`lua-term`**](packages/l/lua-term/xmake.lua) | Terminal manipulation library for Lua. |
-| [**`terminal.lua`**](packages/t/terminal.lua/xmake.lua) | Cross platform terminal library for Lua (Windows/Unix/Mac). |
+| [**`argparse`**](packages/a/argparse/xmake.lua) | Feature-rich command-line argument parser with subcommands, flags, and help generation. |
+| [**`lua-cliargs`**](packages/l/lua-cliargs/xmake.lua) | Command-line argument parsing module supporting typed arguments and short/long options. |
+| [**`ansicolors`**](packages/a/ansicolors/xmake.lua) | ANSI terminal colors and text styling manipulation for Lua. |
+| [**`lua-term`**](packages/l/lua-term/xmake.lua) | Terminal manipulation library (cursor movement, clear screen, colors) for Lua. |
+| [**`terminal.lua`**](packages/t/terminal.lua/xmake.lua) | Cross-platform terminal library for Lua (Windows Virtual Terminal / Unix VT100). |
 
 ### Data Structures, Concurrency & Utilities
 
 | Package | Description |
 | :--- | :--- |
-| [**`penlight`**](packages/p/penlight/xmake.lua) | Lua utility libraries loosely based on the Python standard libraries. |
-| [**`middleclass`**](packages/m/middleclass/xmake.lua) | Object orientation for Lua. |
-| [**`moses`**](packages/m/moses/xmake.lua) | Utility library for Lua centered around functional programming, similar to Underscore.js. |
-| [**`inspect`**](packages/i/inspect/xmake.lua) | Human-readable representation of Lua tables. |
-| [**`date`**](packages/d/date/xmake.lua) | Date & Time module for Lua 5.x. |
-| [**`basexx`**](packages/b/basexx/xmake.lua) | A base2, base16, base32, base64 and base85 library for Lua. |
+| [**`penlight`**](packages/p/penlight/xmake.lua) | Comprehensive pure-Lua utility library set inspired by Python's standard libraries. |
+| [**`middleclass`**](packages/m/middleclass/xmake.lua) | Simple, clean object-oriented programming (OOP) library with inheritance for Lua. |
+| [**`moses`**](packages/m/moses/xmake.lua) | Functional programming utility library for Lua (analogous to Underscore.js / Lodash). |
+| [**`inspect`**](packages/i/inspect/xmake.lua) | Human-readable representation, debugging, and deep inspection of Lua tables. |
+| [**`date`**](packages/d/date/xmake.lua) | Comprehensive date and time calculation, formatting, and parsing module for Lua 5.x. |
+| [**`basexx`**](packages/b/basexx/xmake.lua) | Base2, base16, base32, base64, and base85 encoding/decoding library for Lua. |
 | [**`md5`**](packages/m/md5/xmake.lua) | Cryptographic facilities for Lua: MD5 hash function and DES56 encryption. |
-| [**`binaryheap`**](packages/b/binaryheap/xmake.lua) | A Binary Heap implementation in pure Lua. |
-| [**`timerwheel`**](packages/t/timerwheel/xmake.lua) | A timer wheel implementation in pure Lua. |
-| [**`mediator-lua`**](packages/m/mediator-lua/xmake.lua) | A mediator pattern implementation for event-driven systems in Lua. |
-| [**`push`**](packages/p/push/xmake.lua) | Lua library implementing knockout.js-like observable properties. |
-| [**`loadkit`**](packages/l/loadkit/xmake.lua) | Load arbitrary files within the Lua package path. |
-| [**`lumen`**](packages/l/lumen/xmake.lua) | Simple concurrent task scheduling and multitasking environment for Lua. |
-| [**`coxpcall`**](packages/c/coxpcall/xmake.lua) | Coroutine-safe xpcall and pcall implementations for Lua. |
-| [**`lua-typeof`**](packages/l/lua-typeof/xmake.lua) | Type check library for Lua. |
-| [**`luautf8`**](packages/l/luautf8/xmake.lua) | A UTF-8 support library for Lua 5.x and LuaJIT compatible with standard Lua 5.3 string functions. |
+| [**`binaryheap`**](packages/b/binaryheap/xmake.lua) | Binary Heap priority queue implementation in pure Lua. |
+| [**`timerwheel`**](packages/t/timerwheel/xmake.lua) | High-performance, constant-time timer wheel implementation in pure Lua. |
+| [**`mediator-lua`**](packages/m/mediator-lua/xmake.lua) | Mediator pattern implementation for event-driven decoupled systems in Lua. |
+| [**`push`**](packages/p/push/xmake.lua) | Observable properties and reactive state binding implementation for Lua. |
+| [**`loadkit`**](packages/l/loadkit/xmake.lua) | Load arbitrary resources and non-code files within the Lua package search path. |
+| [**`lumen`**](packages/l/lumen/xmake.lua) | Simple concurrent task scheduling and cooperative multitasking environment for Lua. |
+| [**`coxpcall`**](packages/c/coxpcall/xmake.lua) | Coroutine-safe `pcall` and `xpcall` implementations across Lua versions. |
+| [**`lua-typeof`**](packages/l/lua-typeof/xmake.lua) | Fast, comprehensive type checking and schema validation library for Lua. |
+| [**`luautf8`**](packages/l/luautf8/xmake.lua) | UTF-8 support library for Lua 5.1/LuaJIT matching Lua 5.3+ standard `utf8` functions. |
 
 ---
 
-## Usage Examples
+## Usage & Architecture Examples
 
-### Installing Recudo Addon
+### 1. Installing & Using the Recudo Addon
+
+The **Recudo Addon** provides unified project compilation, transpilation rules, runtime selection, and toolchain management:
+
 ```bash
-# from this repository
-xmake repo --add projectum-lunare https://github.com/projectum-lunare/xmake-repo.git
+# Install the addon directly from this repository:
 xmake addon --install recudo
 
-# or straight from the addon repository
+# Or install from GitHub:
 xmake addon --install github:projectum-lunare/recudo
 ```
 
-### Requiring Greatest in `xmake.lua`
-```lua
-add_requires("greatest")
+To use it in your project's `xmake.lua`:
 
-target("test_suite")
-    set_kind("binary")
-    add_files("tests/*.c")
-    add_packages("greatest")
+```lua
+add_repositories("projectum-lunare https://github.com/projectum-lunare/xmake-repo.git")
+add_requires("recudo master", {kind = "addon"})
+
+includes("@addon/recudo/recudo.lua")
 ```
 
-### Requiring LPeg in `xmake.lua`
-```lua
-add_requires("lpeg")
+---
 
-target("app")
-    set_kind("binary")
-    add_files("src/*.c")
-    add_packages("lpeg")
-```
-
-### Multi-Runtime Selection (PUC-Lua vs LuaJIT)
+### 2. Multi-Runtime Selection (PUC-Lua vs LuaJIT vs OpenResty)
 
 Packages orchestrated via Recudo support multi-runtime selection with isolated `buildhash` cache keys, allowing seamless switching between engines without ABI collisions:
 
 ```bash
-# Install with default PUC-Lua:
+# Install package compiled against default PUC-Rio Lua:
 xrepo install luasocket
 
-# Install with LuaJIT:
+# Install package compiled against LuaJIT 2.1:
 xrepo install -f "runtime='luajit'" luasocket
+
+# Install package compiled against OpenResty LuaJIT:
+xrepo install -f "runtime='openresty-luajit'" luasocket
 ```
 
-Or declare runtime requirements directly in `xmake.lua`:
+Declare runtime requirements directly in your `xmake.lua`:
+
 ```lua
 add_requires("luasocket", {configs = {runtime = "luajit"}})
-add_requires("lua-cjson", {configs = {runtime = "lua"}})
+add_requires("lua-cjson", {configs = {runtime = "openresty-luajit"}})
 ```
 
-### Requiring Lua (with Retro & Embedded Patches) in `xmake.lua`
-```lua
-add_requires("lua", {configs = {c89 = true, ["32bits"] = true}})
+---
 
-target("app")
-    set_kind("binary")
-    add_files("src/*.c")
-    add_packages("lua")
-```
+### 3. Requiring Dialects & Transpilers in `xmake.lua`
 
-### Building a Standalone Game with LÖVE & Libraries in `xmake.lua`
+Recudo provides declarative build rules for transpiled dialects:
+
 ```lua
 add_rules("mode.debug", "mode.release")
 
+add_requires("recudo master", {kind = "addon"})
+add_requires("pluto", "tl", "typescript-to-lua", "erde", "pallene", "nelua")
+
+includes("@addon/recudo/recudo.lua")
+
+-- Pluto Dialect Application
+target("pluto_app")
+    add_rules("recudo.lua.app", "recudo.lang.pluto")
+    add_files("src/*.pluto")
+    add_packages("pluto")
+
+-- Typed Lua with Teal
+target("teal_module")
+    add_rules("recudo.lua.module", "recudo.lang.teal")
+    add_files("src/*.tl")
+    add_packages("tl")
+
+-- TypeScript to Lua
+target("ts_app")
+    add_rules("recudo.lua.app", "recudo.lang.typescript")
+    add_files("src/*.ts")
+    add_packages("typescript-to-lua")
+
+-- Nelua Systems Application
+target("systems_app")
+    add_rules("recudo.lang.nelua")
+    add_files("src/*.nelua")
+    add_packages("nelua")
+```
+
+---
+
+### 4. NekoVM & Haxe Multi-Target Tooling
+
+#### NekoVM (Compiled from Source)
+[**`neko`**](packages/n/neko/xmake.lua) compiles in ~4 seconds and provides modular configurations:
+
+```bash
+# Default install (Core VM, Compiler, NekoML, JIT, SQLite, Regexp):
+xrepo install neko
+
+# Modular installs enabling SSL (MbedTLS) and MySQL (MariaDB Connector):
+xrepo install neko -k ssl,mysql
+
+# Run code directly in the Neko environment:
+xrepo env -b neko neko -version
+xrepo env -b neko sh -c 'nekoc main.neko && neko main.n'
+```
+
+#### Embedding NekoVM in C/C++ (`xmake.lua`):
+```lua
+add_requires("neko")
+
+target("neko_embedded_host")
+    set_kind("binary")
+    add_files("src/*.c")
+    add_packages("neko")
+```
+
+#### Multi-Backend Haxe Compilation:
+```lua
+add_requires("haxe", "hxcpp", "neko")
+add_requires("recudo master", {kind = "addon"})
+includes("@addon/recudo/recudo.lua")
+
+-- Compile native C++ binary via Haxe and hxcpp
+target("haxe_native")
+    set_kind("binary")
+    add_rules("recudo.lang.haxe")
+    add_files("src/NativeMain.hx")
+    set_values("recudo.lang.haxe.backend", "cpp")
+    set_values("recudo.lang.haxe.main", "NativeMain")
+    add_packages("haxe", "hxcpp")
+
+-- Transpile Haxe directly to portable Lua
+target("haxe_lua")
+    add_rules("recudo.lua.app", "recudo.lang.haxe")
+    add_files("src/LuaMain.hx")
+    set_values("recudo.lang.haxe.main", "LuaMain")
+    add_packages("haxe")
+```
+
+---
+
+### 5. Building Standalone Games with LÖVE & Libraries
+
+Create standalone, distributable games using the official LÖVE engine and curated libraries:
+
+```lua
+add_rules("mode.debug", "mode.release")
+
+add_requires("recudo master", {kind = "addon"})
 add_requires("love")
 add_requires("anim8", "bump", "hump", "flux", "tween", "lume")
-add_requires("recudo master", {kind = "addon"})
 
 includes("@addon/recudo/recudo.lua")
 
@@ -344,85 +461,64 @@ target("mygame")
     add_files("src/main.lua")
 ```
 
-- **Dev mode (`xmake run`)**: runs your game interpreting directly from `src/` with automatic package search paths.
-- **Release mode (`xmake -m release`)**: fuses the executable with all game assets and bundled Lua modules into a standalone binary.
+* **Development mode (`xmake run`)**: Runs your game interpreted directly from source with automatic search paths.
+* **Release mode (`xmake -m release`)**: Fuses the executable with all game assets and bundled Lua modules into a single standalone binary.
 
-### Compiling Typed Code with Teal (`tl`) in `xmake.lua`
+---
+
+### 6. Native C & C++ Libraries in `xmake.lua`
+
+Requiring single-header test frameworks or compiled native extensions:
+
 ```lua
-add_requires("tl")
-add_requires("recudo master", {kind = "addon"})
-includes("@addon/recudo/recudo.lua")
+add_requires("greatest", "lpeg", "monocypher")
 
-target("typed_module")
-    add_rules("recudo.lua.module", "recudo.lang.teal")
-    add_files("src/*.tl")
-```
-
-### Compiling Systems Code with Nelua in `xmake.lua`
-```lua
-add_requires("nelua")
-add_requires("recudo master", {kind = "addon"})
-includes("@addon/recudo/recudo.lua")
-
-target("systems_app")
-    add_rules("recudo.lang.nelua")
-    add_files("src/*.nelua")
-```
-
-### Compiling Multi-Backend Haxe in `xmake.lua`
-```lua
-add_requires("haxe", "hxcpp")
-add_requires("recudo master", {kind = "addon"})
-includes("@addon/recudo/recudo.lua")
-
--- Compile native C++ executable via Xmake toolchain & hxcpp runtime
-target("haxe_native")
+target("test_runner")
     set_kind("binary")
-    add_rules("recudo.lang.haxe")
-    add_files("src/NativeMain.hx")
-    set_values("recudo.lang.haxe.backend", "cpp")
-    set_values("recudo.lang.haxe.main", "NativeMain")
-    add_packages("haxe", "hxcpp")
-
--- Transpile and run as portable Lua app
-target("haxe_lua")
-    add_rules("recudo.lua.app", "recudo.lang.haxe")
-    add_files("src/LuaMain.hx")
-    set_values("recudo.lang.haxe.main", "LuaMain")
-    add_packages("haxe")
+    add_files("tests/*.c")
+    add_packages("greatest", "lpeg", "monocypher")
 ```
 
-### Transpiling Dialects (Pluto, TypeScriptToLua, Erde, Pallene) in `xmake.lua`
+---
+
+### 7. Embedded Lua & Retro Platform Configurations
+
+PUC-Rio Lua supports embedded and retro patches for restricted environments (C89 compliance, 32-bit integers, parser disabling):
+
 ```lua
-add_requires("pluto", "typescript-to-lua", "erde", "pallene")
-add_requires("recudo master", {kind = "addon"})
-includes("@addon/recudo/recudo.lua")
+-- Target embedded or retro architectures
+add_requires("lua", {
+    configs = {
+        c89 = true,         -- Strict ANSI C89 / ISO C90 compatibility
+        ["32bits"] = true,  -- Force 32-bit integer/float size
+        no_parser = false   -- Retain or strip the Lua compiler
+    }
+})
 
--- Build a Pluto superset app
-target("pluto_app")
-    add_rules("recudo.lua.app", "recudo.lang.pluto")
-    add_files("src/*.pluto")
-    add_packages("pluto")
-
--- Transpile TypeScript to Lua
-target("ts_app")
-    add_rules("recudo.lua.app", "recudo.lang.typescript")
-    add_files("src/*.ts")
-    add_packages("typescript-to-lua")
+target("embedded_firmware")
+    set_kind("binary")
+    add_files("src/*.c")
+    add_packages("lua")
 ```
 
-### Auditing Recipes with Package Linter
+---
+
+### 8. Auditing Recipes with Package Linter
+
 Ensure all package manifests comply with repository metadata, checksum formats, `on_test` hooks, and Recudo conventions:
+
 ```bash
-# Validate all packages across the entire repository
+# Validate all packages across the entire repository:
 xmake l scripts/check_packages.lua
 
-# Validate a specific package recipe
-xmake l scripts/check_packages.lua luasocket
+# Validate a specific package recipe:
+xmake l scripts/check_packages.lua neko
+xmake l scripts/check_packages.lua pluto
 ```
 
 ---
 
 ## License
 
-Mozilla Public License Version 2.0 (MPL-2.0). See [LICENSE](LICENSE) for details.
+This repository is licensed under the [Mozilla Public License Version 2.0 (MPL-2.0)](LICENSE).
+Individual package recipes build software subject to their respective upstream licenses.
