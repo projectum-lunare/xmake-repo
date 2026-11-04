@@ -59,12 +59,15 @@ package("moonscript")
     end)
 
     on_test(function (package)
-        if package:is_plat("linux", "macosx", "bsd", "windows", "mingw") and not package:config("shared") then
-            return
+        if package:config("shared") or not package:is_plat("linux", "macosx", "bsd", "windows", "mingw") then
+            import("@addon.recudo.lua.module").lua_test(package, [[
+                local moonscript = require("moonscript.base")
+                local code = moonscript.to_lua("x = 10\nprint x")
+                assert(code:find("local x = 10"))
+            ]])
         end
-        import("@addon.recudo.lua.module").lua_test(package, [[
-            local moonscript = require("moonscript.base")
-            local code = moonscript.to_lua("x = 10\nprint x")
-            assert(code:find("local x = 10"))
+        import("@addon.recudo.lang.moonscript").test(package, [[
+            x = 10
+            assert x == 10
         ]])
     end)

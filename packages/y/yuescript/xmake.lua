@@ -112,14 +112,13 @@ package("yuescript")
                 local res = yue.to_lua("local x = 123")
                 assert(res:find("123"), "failed to compile yue")
             ]])
-        else
-            assert(package:check_cxxsnippets({test = [[
-                struct lua_State;
-                extern "C" int luaopen_yue(struct lua_State *L);
-                void test() {
-                    luaopen_yue((struct lua_State *)0);
-                }
-            ]]}))
         end
-        os.vrun("yue -v")
+        import("@addon.recudo.lang.yuescript").test(package, [[
+            add = (a, b) -> a + b
+            assert add(10, 20) == 30
+            yue = require "yue"
+            assert yue.version
+            res = yue.to_lua "x = 123"
+            assert res\find "123"
+        ]])
     end)

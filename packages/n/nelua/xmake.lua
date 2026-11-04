@@ -23,17 +23,5 @@ package("nelua")
     end)
 
     on_test(function (package)
-        if not package:is_cross() then
-            local nelua_bin = path.join(package:installdir("bin"), package:is_plat("windows") and "nelua.bat" or "nelua")
-            local out = os.iorunv(nelua_bin, {"-v"})
-            assert(out and (out:find("Nelua", 1, true) or out:find("0.", 1, true)), "unexpected nelua version: " .. tostring(out))
-
-            local test_file = path.join(os.tmpdir(), "test_pkg_nelua.nelua")
-            local out_c = path.join(os.tmpdir(), "test_pkg_nelua.c")
-            io.writefile(test_file, "print 'hello from nelua package'\n")
-            os.vrunv(nelua_bin, {"-c", test_file, "-o", out_c})
-            assert(os.isfile(out_c), "nelua failed to emit C code")
-            os.rm(test_file)
-            os.rm(out_c)
-        end
+        import("@addon.recudo.lang.nelua").test(package, "print 'hello from nelua package'")
     end)

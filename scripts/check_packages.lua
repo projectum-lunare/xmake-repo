@@ -83,6 +83,7 @@ local function check_package(pkg_path)
         if block then
             local verifies = block:find("assert", 1, true)
                 or block:find("lua_test", 1, true)
+                or block:find("@addon.recudo.lang.", 1, true)
                 or block:find("has_cincludes", 1, true)
                 or block:find("has_cxxincludes", 1, true)
                 or block:find("has_cfuncs", 1, true)

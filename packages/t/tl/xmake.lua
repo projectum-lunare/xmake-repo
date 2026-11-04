@@ -84,11 +84,5 @@ package("tl")
             assert(output and output:find("local x = 10", 1, true))
         ]])
 
-        if not package:is_cross() then
-            local tl_bin = path.join(package:installdir("bin"), "tl")
-            if os.isexec(tl_bin) then
-                local out = os.iorunv(tl_bin, {"--version"})
-                assert(out and (out:find("Teal", 1, true) or out:find("0.", 1, true)), "unexpected tl version: " .. tostring(out))
-            end
-        end
+        import("@addon.recudo.lang.teal").test(package, "local x: number = 10\nassert(x == 10)")
     end)

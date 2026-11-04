@@ -55,7 +55,5 @@ package("fennel")
 
     on_test(function (package)
         import("@addon.recudo.lua.module").lua_test(package, "local fennel = require('fennel'); assert(fennel.eval('(+ 1 2)') == 3)")
-        if not package:is_cross() then
-            os.vrunv("fennel", {"--eval", "(+ 1 2)"})
-        end
+        import("@addon.recudo.lang.fennel").test(package, "(+ 1 2)")
     end)
