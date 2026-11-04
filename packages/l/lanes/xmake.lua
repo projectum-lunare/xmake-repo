@@ -13,6 +13,8 @@ package("lanes")
 
     add_versions("4.0.0", "e680253ce5d64da1fd5c8d44d31dd1eb4fe7e24cfa5ddded10fa34cbee92d179")
 
+    add_patches("4.0.0", "patches/4.0.0/unistd.patch", "0a5b23edbf5d7af59c7cdf0eaf3887acbae0f9047889ab57e6f920e830189d5d")
+
     if is_plat("linux", "macosx", "bsd", "haiku") then
         add_syslinks("pthread")
     end
@@ -24,8 +26,6 @@ package("lanes")
     end)
 
     on_install(function (package)
-        io.replace("src/universe.hpp", '#include "allocator.hpp"', '#include <unistd.h>\n#include "allocator.hpp"', {plain = true})
-
         io.writefile("xmake.lua", [[
             add_rules("mode.release", "mode.debug")
             set_languages("c++20")

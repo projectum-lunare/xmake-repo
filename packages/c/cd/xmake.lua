@@ -11,7 +11,7 @@ package("cd")
     add_urls("https://downloads.sourceforge.net/project/canvasdraw/$(version)/Docs%20and%20Sources/cd-$(version)_Sources.tar.gz")
     add_versions("5.14", "c44edc041131c9a6a42933c879a644d6bd828d60b28a4b855a9cde615fc5af4f")
 
-    add_patches("5.14", path.join(os.scriptdir(), "patches", "5.14", "cdlua.patch"), "a620f4f24d7ecfdc6f2e77e2522030a4a3794a45896f9e66426323fb77c9f9f6")
+    add_patches("5.14", "patches/5.14/cdlua.patch", "a620f4f24d7ecfdc6f2e77e2522030a4a3794a45896f9e66426323fb77c9f9f6")
 
     add_configs("lua", {description = "Build Lua bindings (cdlua and cdluaim)", default = true, type = "boolean"})
 

@@ -11,7 +11,7 @@ package("im")
     add_urls("https://downloads.sourceforge.net/project/imtoolkit/$(version)/Docs%20and%20Sources/im-$(version)_Sources.tar.gz")
     add_versions("3.15", "36cc4257f8f5f81128b854bb3be29c5cbdd091476528f315af666d0930b9b57e")
 
-    add_patches("3.15", path.join(os.scriptdir(), "patches", "3.15", "imlua.patch"), "65e1aeebaa1c1710ef89bf1d7a071f818b3285ca19470a87961a4d56e094e2dd")
+    add_patches("3.15", "patches/3.15/imlua.patch", "65e1aeebaa1c1710ef89bf1d7a071f818b3285ca19470a87961a4d56e094e2dd")
 
     add_configs("lua", {description = "Build Lua bindings (imlua and imlua_process)", default = true, type = "boolean"})
 

@@ -1,0 +1,49 @@
+diff --git a/class.lua b/class.lua
+index ce9a679..4e284a9 100644
+--- a/class.lua
++++ b/class.lua
+@@ -1,3 +1,4 @@
++local unpack = rawget(_G, 'unpack') or rawget(table, 'unpack')
+ --[[
+ Copyright (c) 2010-2011 Matthias Richter
+ 
+diff --git a/gjk.lua b/gjk.lua
+index e792f19..3ede3ce 100644
+--- a/gjk.lua
++++ b/gjk.lua
+@@ -1,3 +1,4 @@
++local unpack = rawget(_G, 'unpack') or rawget(table, 'unpack')
+ --[[
+ Copyright (c) 2012 Matthias Richter
+ 
+diff --git a/init.lua b/init.lua
+index 2394045..169d1f3 100644
+--- a/init.lua
++++ b/init.lua
+@@ -1,3 +1,4 @@
++local unpack = rawget(_G, 'unpack') or rawget(table, 'unpack')
+ --[[
+ Copyright (c) 2011 Matthias Richter
+ 
+diff --git a/polygon.lua b/polygon.lua
+index aa93e00..982537f 100644
+--- a/polygon.lua
++++ b/polygon.lua
+@@ -1,3 +1,4 @@
++local unpack = rawget(_G, 'unpack') or rawget(table, 'unpack')
+ --[[
+ Copyright (c) 2011 Matthias Richter
+ 
+@@ -351,9 +352,9 @@ function Polygon:mergedWith(other)
+ 	end
+ 
+ 	for i = 0,#other.vertices-2 do
+-		i = ((i-1 + q) % #other.vertices) + 1
+-		ret[#ret+1] = other.vertices[i].x
+-		ret[#ret+1] = other.vertices[i].y
++		local idx = ((i-1 + q) % #other.vertices) + 1
++		ret[#ret+1] = other.vertices[idx].x
++		ret[#ret+1] = other.vertices[idx].y
+ 	end
+ 
+ 	for i = p+1,#self.vertices do

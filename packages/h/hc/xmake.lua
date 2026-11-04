@@ -19,6 +19,8 @@ package("hc")
 
     add_versions("0.1.0", "312c086af029156cabffd04d66c09904da68f0431b2cedecfbf9b524a42a7ebc")
 
+    add_patches("0.1.0", "patches/0.1.0/lua54-compat.patch", "a5647d32326cb9a2e06d3fe9a7104b317e673ff932c1693fff9b477721f6066a")
+
     on_load(function (package)
         import("@addon.recudo.lua.runtime").setup(package, {
             runtime = {"lua", "luajit"},
@@ -27,15 +29,6 @@ package("hc")
     end)
 
     on_install(function (package)
-        io.replace("polygon.lua", "i = ((i-1 + q) % #other.vertices) + 1\n\t\tret[#ret+1] = other.vertices[i].x\n\t\tret[#ret+1] = other.vertices[i].y", "local idx = ((i-1 + q) % #other.vertices) + 1\n\t\tret[#ret+1] = other.vertices[idx].x\n\t\tret[#ret+1] = other.vertices[idx].y", {plain = true})
-
-        for _, f in ipairs({"class.lua", "gjk.lua", "init.lua", "polygon.lua"}) do
-            local content = io.readfile(f)
-            if not content:find("table.unpack", 1, true) then
-                io.writefile(f, "local unpack = rawget(_G, 'unpack') or rawget(table, 'unpack')\n" .. content)
-            end
-        end
-
         os.mkdir("hc")
         for _, file in ipairs(os.files("*.lua")) do
             os.cp(file, "hc/")

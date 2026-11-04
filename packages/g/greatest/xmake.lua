@@ -7,22 +7,14 @@ package("greatest")
     set_description("A C testing system in one header file")
     set_license("ISC")
 
-    add_urls("https://raw.githubusercontent.com/silentbicycle/greatest/$(version)/greatest.h", {version = function (version) return version end})
+    add_urls("https://github.com/silentbicycle/greatest/archive/refs/tags/$(version).tar.gz")
     add_urls("https://github.com/silentbicycle/greatest.git")
 
-    add_versions("v1.5.0", "v1.5.0")
+    add_versions("v1.5.0", "33e4c93b1b7f631fec173b8675582d1739b1238a5440b7f4ad50582f0cf38c34")
 
     on_install(function (package)
-        local incdir = package:installdir("include/greatest")
-        os.mkdir(incdir)
-        if os.isfile("greatest.h") then
-            os.cp("greatest.h", path.join(incdir, "greatest.h"))
-            os.cp("greatest.h", package:installdir("include/greatest.h"))
-        else
-            import("net.http")
-            http.download("https://raw.githubusercontent.com/silentbicycle/greatest/release/greatest.h", path.join(incdir, "greatest.h"))
-            os.cp(path.join(incdir, "greatest.h"), package:installdir("include/greatest.h"))
-        end
+        os.cp("greatest.h", package:installdir("include"))
+        os.cp("greatest.h", package:installdir("include/greatest"))
     end)
 
     on_test(function (package)
