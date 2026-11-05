@@ -40,15 +40,17 @@ package("lpeg")
     end)
 
     on_test(function (package)
-        if package:config("shared") then
-            import("@addon.recudo.lua.module").lua_test(package, "assert(require('lpeg'))")
-        else
-            assert(package:check_csnippets({test = [[
-                struct lua_State;
-                int luaopen_lpeg(struct lua_State *L);
-                void test(void) {
-                    luaopen_lpeg(0);
-                }
-            ]]}))
+        if not package:is_cross() and not package:is_plat("wince", "dos", "os2", "amiga", "atari", "kolibri", "plan9") then
+            if package:config("shared") then
+                import("@addon.recudo.lua.module").lua_test(package, "assert(require('lpeg'))")
+            else
+                assert(package:check_csnippets({test = [[
+                    struct lua_State;
+                    int luaopen_lpeg(struct lua_State *L);
+                    void test(void) {
+                        luaopen_lpeg(0);
+                    }
+                ]]}))
+            end
         end
     end)
