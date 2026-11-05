@@ -9,12 +9,21 @@ package("cais")
     set_license("MPL-2.0")
 
     add_urls("https://github.com/projectum-lunare/cais.git")
-    add_versions("0.2.0", "5b25ee177c43fb591aff6846af0c80616d669c27")
+    add_versions("0.2.0", "f9100f86fb0d2a6359b6e45daac8e1c25e6c56e6")
+    add_versions("3.0.0", "v3.0.0")
 
     on_load(function (package)
         import("@addon.recudo.lua.runtime").setup(package, {
             runtime = {"lua", "luajit"},
         })
+        -- Link surface: the shared variant ships loadable modules (only the
+        -- C core is -l-linkable); the static variant ships embedding archives
+        -- (the umbrella bindings plus the C core; the consumer brings Lua).
+        if package:config("shared") then
+            package:add("links", "cais")
+        else
+            package:add("links", "cais_lua", "cais")
+        end
     end)
 
     on_install(function (package)
@@ -27,6 +36,19 @@ package("cais")
 
     on_test(function (package)
         if not package:is_cross() and not package:is_plat("wince", "dos", "os2", "amiga", "atari", "kolibri", "plan9") then
-            import("@addon.recudo.lua.module").lua_test(package, "assert(require('cais'))")
+            if package:config("shared") then
+                import("@addon.recudo.lua.module").lua_test(package, "assert(require('cais'))")
+            else
+                -- Static variant: no loadable modules are installed. Verify
+                -- the embedding path instead (the archive resolves the
+                -- umbrella opener).
+                assert(package:check_csnippets({test = [[
+                    struct lua_State;
+                    int luaopen_cais(struct lua_State *L);
+                    void test(void) {
+                        luaopen_cais(0);
+                    }
+                ]]}))
+            end
         end
     end)
