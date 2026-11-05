@@ -10,7 +10,7 @@ package("cais")
 
     add_urls("https://github.com/projectum-lunare/cais.git")
     add_versions("0.2.0", "f9100f86fb0d2a6359b6e45daac8e1c25e6c56e6")
-    add_versions("3.0.0", "v3.0.0")
+    add_versions("0.3.0", "v0.3.0")
 
     on_load(function (package)
         import("@addon.recudo.lua.runtime").setup(package, {
