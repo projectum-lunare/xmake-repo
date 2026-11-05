@@ -31,7 +31,7 @@ package("lua")
     add_deps("recudo master", {kind = "addon"})
 
     add_configs("c89",       {description = "Compile in strict ANSI C89 mode (LUA_USE_C89)", type = "boolean"})
-    add_configs("32bits",    {description = "Enable 32-bit integers and floats (LUA_32BITS)", type = "boolean"})
+    add_configs("bits32",    {description = "Enable 32-bit integers and floats (LUA_32BITS)", type = "boolean"})
     add_configs("no_parser", {description = "Disable compiler/parser (undump bytecode runtime only)", default = false, type = "boolean"})
 
     add_includedirs("include", "include/lua")
@@ -106,7 +106,7 @@ package("lua")
         end
 
         -- word size is an ABI fact of the target arch, not of the platform
-        local use_32b = package:config("32bits")
+        local use_32b = package:config("bits32")
         if use_32b == nil then
             use_32b = package:is_arch("m68k.*", "i386", "x86", "mips.*", "ppc.*", "powerpc", "armv4.*", "armv5.*", "sh.*")
         end
@@ -144,11 +144,14 @@ package("lua")
                 add_defines("LUA_NO_PARSER")
                 <% end %>
 
+                <% if not use_c89 then %>
                 if is_plat("linux", "bsd", "cross") then
                     add_defines("LUA_USE_LINUX", "LUA_DL_DLOPEN")
                 elseif is_plat("macosx", "iphoneos") then
                     add_defines("LUA_USE_MACOSX", "LUA_DL_DYLD")
-                elseif is_plat("windows", "mingw") then
+                end
+                <% end %>
+                if is_plat("windows", "mingw") then
                     if is_kind("shared") then
                         add_defines("LUA_BUILD_AS_DLL", {public = true})
                     end
@@ -175,11 +178,25 @@ package("lua")
                 add_rules("<%= tc.watcom.toolchain %>", {override = true})
             <% end %>
 
+            <% if has_interpreter then %>
             target("lua")
-                set_enabled(<%= has_interpreter %>)
                 set_kind("binary")
                 add_files(sourcedir .. "lua.c")
                 add_deps("lualib")
+                add_defines("LUA_COMPAT_5_3")
+                <% if use_c89 then %>
+                add_defines("LUA_USE_C89")
+                <% end %>
+                <% if use_32b then %>
+                add_defines("LUA_32BITS")
+                <% end %>
+                <% if not use_c89 then %>
+                if is_plat("linux", "bsd", "cross") then
+                    add_defines("LUA_USE_LINUX", "LUA_DL_DLOPEN")
+                elseif is_plat("macosx", "iphoneos") then
+                    add_defines("LUA_USE_MACOSX", "LUA_DL_DYLD")
+                end
+                <% end %>
                 if is_plat("linux", "bsd", "cross") then
                     add_ldflags("-Wl,-E")
                     add_rpathdirs("$ORIGIN/../lib")
@@ -192,6 +209,19 @@ package("lua")
                 if not is_plat("windows", "mingw", "wince", "dos", "kolibri", "wasm", "wasi") then
                     add_syslinks("dl")
                 end
+                <% if tc.evc3.enabled then %>
+                add_rules("<%= tc.evc3.toolchain %>", {override = true})
+                set_values("<%= tc.evc3.toolchain %>.compat", "c89")
+                <% end %>
+                <% if tc.vbcc.enabled then %>
+                add_rules("<%= tc.vbcc.toolchain %>", {override = true})
+                set_values("<%= tc.vbcc.toolchain %>.math", "msoft")
+                add_defines("LUA_USE_VBCC")
+                <% end %>
+                <% if tc.watcom.enabled then %>
+                add_rules("<%= tc.watcom.toolchain %>", {override = true})
+                <% end %>
+            <% end %>
         ]], {
             tc = tc,
             sourcedir = sourcedir,
@@ -216,6 +246,8 @@ package("lua")
         if not package:is_cross() and not package:config("no_parser") and not package:is_plat("wasm", "wasi") then
             os.vrun("lua -e \"print('Projectum Lunare Lua ready!')\"")
         end
-        assert(package:has_cfuncs("lua_getinfo", {includes = "lua/lua.h"}))
-        assert(package:has_cfuncs("lua_getinfo", {includes = "lua.h"}))
+        if not package:is_cross() and not package:is_plat("wince", "dos", "os2", "amiga", "atari", "kolibri", "plan9") then
+            assert(package:has_cfuncs("lua_getinfo", {includes = "lua/lua.h"}))
+            assert(package:has_cfuncs("lua_getinfo", {includes = "lua.h"}))
+        end
     end)

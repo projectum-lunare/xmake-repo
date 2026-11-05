@@ -486,7 +486,7 @@ PUC-Rio Lua supports embedded and retro patches for restricted environments (C89
 add_requires("lua", {
     configs = {
         c89 = true,         -- Strict ANSI C89 / ISO C90 compatibility
-        ["32bits"] = true,  -- Force 32-bit integer/float size
+        bits32 = true,      -- Force 32-bit integer/float size
         no_parser = false   -- Retain or strip the Lua compiler
     }
 })
