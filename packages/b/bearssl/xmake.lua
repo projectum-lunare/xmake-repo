@@ -11,7 +11,7 @@ package("bearssl")
     add_urls("https://www.bearssl.org/bearssl-$(version).tar.gz")
     add_versions("0.6", "6705bba1714961b41a728dfc5debbe348d2966c117649392f8c8139efc83ff14")
 
-    add_includedirs("include")
+    add_includedirs("include", "include/bearssl")
 
     on_install(function (package)
         local configs = {}
