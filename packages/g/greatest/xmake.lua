@@ -18,5 +18,7 @@ package("greatest")
     end)
 
     on_test(function (package)
-        assert(package:has_cincludes("greatest/greatest.h"))
+        if not package:is_cross() and not package:is_plat("wince", "dos", "os2", "amiga", "atari", "kolibri", "plan9") then
+            assert(package:has_cincludes("greatest/greatest.h"))
+        end
     end)
