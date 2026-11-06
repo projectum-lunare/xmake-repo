@@ -20,6 +20,7 @@ package("recudo")
     add_versions("v0.2.7", "v0.2.7")
     add_versions("v0.2.8", "v0.2.8")
     add_versions("v0.2.9", "v0.2.9")
+    add_versions("v0.2.10", "v0.2.10")
 
     on_test(function (package)
         assert(package:has_addon())
